@@ -29,6 +29,7 @@ void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 
     const std::vector<StrokePoint> points = add_ghost_points(stroke.points);
     const std::vector<Sample> samples = create_samples(points);
+    const size_t samples_count = samples.size();
 
     if (samples.size() < 2)
         return;
@@ -37,12 +38,17 @@ void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 
     draw_edges(edges, stroke.color, samples.size());
 
+    Vector2 dirStart = Vector2Normalize(samples[0].position - samples[1].position);
+    draw_cap(samples[0].position, dirStart * -1, samples[0].thickness * 0.5f, stroke.color);
 
-    if (debug_draw_points)
-        draw_points(points);
+    Vector2 dirEnd = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
+    draw_cap(samples[samples_count - 1].position, dirEnd * -1, samples[samples_count - 1].thickness * 0.5f, stroke.color);
 
-    if (debug_draw_edges)
-        draw_edges(edges);
+    if (should_debug_draw_points)
+        debug_draw_points(points);
+
+    if (should_debug_draw_edges)
+        debug_draw_edges(edges);
 }
 
 
@@ -72,14 +78,38 @@ void StrokeRenderer::draw_edges(const std::vector<Edge>& edges, const int sample
 
 
 
-void StrokeRenderer::draw_points(const std::vector<StrokePoint>& points) noexcept
+void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
+{
+    // dir aponta para FORA da extremidade (precisa ser normalizado)
+    // Giramos 90° para obter a normal inicial
+    const Vector2 normal = { -direction.y, direction.x };
+
+    constexpr int steps = 8; // mais steps = cap mais suave
+    const float angle_step = PI / steps;
+
+    for (size_t i = 0; i < steps; i++)
+    {
+        const float a0 = i       * angle_step;
+        const float a1 = (i + 1) * angle_step;
+
+        // Rotaciona a normal pelos dois ângulos do passo atual
+        const Vector2 v0 = { normal.x * cosf(a0) - normal.y * sinf(a0), normal.x * sinf(a0) + normal.y * cosf(a0) };
+        const Vector2 v1 = { normal.x * cosf(a1) - normal.y * sinf(a1), normal.x * sinf(a1) + normal.y * cosf(a1) };
+
+        DrawTriangle(center, center + v1 * radius, center + v0 * radius, color);
+    }
+}
+
+
+
+void StrokeRenderer::debug_draw_points(const std::vector<StrokePoint>& points) noexcept
 {
     for (const auto& point : points)
         DrawCircleV(point.position, 2, RED);
 }
 
 
-void StrokeRenderer::draw_edges(const std::vector<Edge>& edges) noexcept
+void StrokeRenderer::debug_draw_edges(const std::vector<Edge>& edges) noexcept
 {
     for (const auto& edge : edges)
     {

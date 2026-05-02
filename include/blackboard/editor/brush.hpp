@@ -19,6 +19,11 @@ private:
     bool draw_finished_ = false;
     bool draw_started_ = false;
 
+    float smooth_velocity_ = 0;
+    float velocity_smoothing_ = 0.05;
+    float max_velocity_ = 600;
+    int point_thickness_back_iterating_amount_ = 6;
+
 
 public:
     Color color;
@@ -41,6 +46,16 @@ public:
 
 
 private:
+    void update_smooth_velocity() noexcept;
     void update_drawing_state() noexcept;
     void draw_current_segment() noexcept;
+    void modify_previous_points_thickness(const float thickness) noexcept;
+
+    float current_velocity() const noexcept;
+    float thickness_from_velocity() const noexcept;
+
+    float min_thickness() const noexcept { return std::max(5.0f, thickness - 3); }
+    float max_thickness() const noexcept { return std::min(50.0f, thickness + 7); }
+
+    bool is_too_slow() const noexcept;
 };

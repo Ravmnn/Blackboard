@@ -52,8 +52,8 @@ private:
 public:
     int samples_per_segment;
 
-    bool debug_draw_points = false;
-    bool debug_draw_edges = false;
+    bool should_debug_draw_points = false;
+    bool should_debug_draw_edges = false;
 
 
     StrokeRenderer(const int samples_per_segment) noexcept
@@ -67,8 +67,10 @@ private:
     static void draw_edges(const std::vector<Edge>& edges, const Color& color, const int samples_count) noexcept;
     static void draw_edges(const std::vector<Edge>& edges, const int samples_count) noexcept;
 
-    static void draw_points(const std::vector<StrokePoint>& points) noexcept;
-    static void draw_edges(const std::vector<Edge>& edges) noexcept;
+    static void draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept;
+
+    static void debug_draw_points(const std::vector<StrokePoint>& points) noexcept;
+    static void debug_draw_edges(const std::vector<Edge>& edges) noexcept;
 
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     std::vector<Sample> create_samples(const std::vector<StrokePoint>& points) noexcept;
