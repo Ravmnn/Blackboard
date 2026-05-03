@@ -10,6 +10,8 @@
 void Brush::update() noexcept
 {
     update_drawing_state();
+    brush_cursor.update();
+
     update_smooth_velocity();
     draw_current_segment();
 }
@@ -56,7 +58,7 @@ void Brush::draw_current_segment() noexcept
         return;
 
     const float thickness = thickness_from_velocity();
-    stroke_.points.push_back(StrokePoint(GetMousePosition(), thickness));
+    stroke_.points.push_back(StrokePoint(brush_cursor.position(), thickness));
 
     modify_previous_points_thickness(thickness);
 }
@@ -81,7 +83,7 @@ float Brush::current_velocity() const noexcept
     if (stroke_.points.empty() || draw_started_)
         return 0;
 
-    return Vector2Length(GetMousePosition() - stroke_.points.back().position) / GetFrameTime();
+    return Vector2Length(brush_cursor.position() - stroke_.points.back().position) / GetFrameTime();
 }
 
 
@@ -89,8 +91,7 @@ float Brush::current_velocity() const noexcept
 
 float Brush::thickness_from_velocity() const noexcept
 {
-    float t = std::clamp(smooth_velocity_ / max_velocity_, 0.0f, 1.0f);
-    t = t * t;
+    const float t = std::clamp(smooth_velocity_ / max_velocity_, 0.0f, 1.0f);
     return max_thickness() + t * (min_thickness() - max_thickness());
 }
 

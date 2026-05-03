@@ -3,9 +3,8 @@
 #include <vector>
 #include <optional>
 
-#include <flustral/updateable.hpp>
-
 #include <blackboard/editor/stroke.hpp>
+#include <blackboard/editor/brush_cursor.hpp>
 
 
 
@@ -15,23 +14,26 @@ class Brush : public Updateable
 private:
     Stroke stroke_;
 
+
     bool should_draw_ = false;
     bool draw_finished_ = false;
     bool draw_started_ = false;
 
     float smooth_velocity_ = 0;
     float velocity_smoothing_ = 0.05;
-    float max_velocity_ = 600;
-    int point_thickness_back_iterating_amount_ = 6;
+    float max_velocity_ = 1000;
+    int point_thickness_back_iterating_amount_ = 5;
 
 
 public:
+    BrushCursor brush_cursor;
+
     Color color;
     float thickness;
 
 
     Brush(const Color& color, const float thickness) noexcept
-        : stroke_({}, color), color(color), thickness(thickness) {}
+        : stroke_({}, color), brush_cursor(*this, 2.5), color(color), thickness(thickness) {}
 
 
     void update() noexcept override;
@@ -55,7 +57,7 @@ private:
     float thickness_from_velocity() const noexcept;
 
     float min_thickness() const noexcept { return std::max(5.0f, thickness - 3); }
-    float max_thickness() const noexcept { return std::min(50.0f, thickness + 7); }
+    float max_thickness() const noexcept { return std::min(50.0f, thickness + 8); }
 
     bool is_too_slow() const noexcept;
 };
