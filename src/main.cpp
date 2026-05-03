@@ -7,21 +7,19 @@
 
 int main(int argc, char** argv)
 {
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
     int monitor = GetCurrentMonitor();
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
-    SetTargetFPS(60);
 
 
     Canvas canvas;
 
     while (!WindowShouldClose())
     {
-        canvas.update();
-
         BeginDrawing();
         ClearBackground(canvas.background_color());
 
+        canvas.update();
         canvas.draw();
 
         EndDrawing();

@@ -1,19 +1,25 @@
 #include <blackboard/editor/brush.hpp>
 
 #include <algorithm>
+#include <string>
 
 #include <raymath.h>
+
+#include <blackboard/editor/canvas.hpp>
 
 
 
 
 void Brush::update() noexcept
 {
+    if (draw_finished_)
+        stroke_.points.clear();
+
     update_drawing_state();
     brush_cursor.update();
 
     update_smooth_velocity();
-    draw_current_segment();
+    add_stroke_point();
 }
 
 
@@ -49,11 +55,8 @@ void Brush::update_drawing_state() noexcept
 }
 
 
-void Brush::draw_current_segment() noexcept
+void Brush::add_stroke_point() noexcept
 {
-    if (draw_started_)
-        stroke_.points.clear();
-
     if (!should_draw_ || is_too_slow())
         return;
 
@@ -83,7 +86,7 @@ float Brush::current_velocity() const noexcept
     if (stroke_.points.empty() || draw_started_)
         return 0;
 
-    return Vector2Length(brush_cursor.position() - stroke_.points.back().position) / GetFrameTime();
+    return Vector2Distance(brush_cursor.position(), stroke_.points.back().position);
 }
 
 

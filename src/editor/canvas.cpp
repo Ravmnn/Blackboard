@@ -1,16 +1,17 @@
 #include <blackboard/editor/canvas.hpp>
 
+#include <blackboard/tween.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 
 
 
 
 Canvas::Canvas()
-    : stroke_renderer_(8), brush(WHITE, 14)
+    : stroke_renderer_(12), canvas_camera_(0.05, 10, 0.3), brush(*this, WHITE, 14)
 {
-    stroke_renderer_.should_debug_draw_points = true;
-    stroke_renderer_.should_debug_draw_edges = true;
-    stroke_renderer_.should_debug_draw_samples = true;
+    stroke_renderer_.should_debug_draw_points = false;
+    stroke_renderer_.should_debug_draw_edges = false;
+    stroke_renderer_.should_debug_draw_samples = false;
 }
 
 
@@ -18,6 +19,7 @@ Canvas::Canvas()
 
 void Canvas::update() noexcept
 {
+    canvas_camera_.update();
     brush.update();
 
     if (brush.draw_finished())
@@ -35,8 +37,12 @@ void Canvas::update() noexcept
 
 void Canvas::draw() noexcept
 {
+    BeginMode2D(canvas_camera_.camera());
+
     stroke_renderer_.draw_stroke(brush.stroke());
 
     for (auto& stroke : strokes)
         stroke_renderer_.draw_stroke(stroke);
+
+    EndMode2D();
 }

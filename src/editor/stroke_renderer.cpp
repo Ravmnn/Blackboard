@@ -109,10 +109,9 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 {
     const Vector2 normal = { -direction.y, direction.x };
 
-    constexpr int steps = 8;
-    const float angle_step = PI / steps;
+    const float angle_step = PI / CapResolution;
 
-    for (size_t i = 0; i < steps; i++)
+    for (size_t i = 0; i < CapResolution; i++)
     {
         const float a0 = i * angle_step;
         const float a1 = (i + 1) * angle_step;

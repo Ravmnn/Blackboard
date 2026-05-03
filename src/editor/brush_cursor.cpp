@@ -4,7 +4,7 @@
 
 #include <raymath.h>
 
-#include <blackboard/editor/brush.hpp>
+#include <blackboard/editor/canvas.hpp>
 
 
 
@@ -13,7 +13,7 @@ void BrushCursor::update() noexcept
 {
     const Vector2 mouse_position = GetMousePosition();
 
-    if (!brush_.should_draw())
+    if (!brush.should_draw())
     {
         current_position_ = mouse_position;
         return;
@@ -25,4 +25,12 @@ void BrushCursor::update() noexcept
     const Vector2 velocity = direction * distance;
 
     current_position_ += velocity;
+}
+
+
+
+
+Vector2 BrushCursor::position() const noexcept
+{
+    return GetScreenToWorld2D(current_position_, brush.canvas.camera());
 }
