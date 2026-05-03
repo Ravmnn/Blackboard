@@ -11,6 +11,7 @@ class StrokeRenderer
 {
 private:
     static constexpr float DirectionEpsilon = 0.0001f;
+    static constexpr float DebugCircleRadius = 2;
 
 
     struct Sample
@@ -53,24 +54,31 @@ public:
     int samples_per_segment;
 
     bool should_debug_draw_points = false;
+    bool should_debug_draw_samples = false;
     bool should_debug_draw_edges = false;
 
 
     StrokeRenderer(const int samples_per_segment) noexcept
         : samples_per_segment(samples_per_segment) {}
 
-
     void draw_stroke(const Stroke& stroke) noexcept;
 
 
 private:
-    static void draw_edges(const std::vector<Edge>& edges, const Color& color, const int samples_count) noexcept;
-    static void draw_edges(const std::vector<Edge>& edges, const int samples_count) noexcept;
+    static void draw_edges(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept;
+    static void draw_edges_with_caps(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept;
+    static void draw_cap_if_intense_curve(const std::vector<Sample>& samples, const size_t i, const Color& color) noexcept;
 
+    static void draw_extreme_caps(const std::vector<Sample>& samples, const Color& color) noexcept;
     static void draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept;
 
+    void draw_debug_visualization(const std::vector<StrokePoint>& points, const std::vector<Sample>& samples, const std::vector<Edge>& edges) noexcept;
+
     static void debug_draw_points(const std::vector<StrokePoint>& points) noexcept;
+    static void debug_draw_samples(const std::vector<Sample>& samples) noexcept;
     static void debug_draw_edges(const std::vector<Edge>& edges) noexcept;
+
+    static float stroke_curvature(const Vector2& previous, const Vector2& curent, const Vector2& next) noexcept;
 
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     std::vector<Sample> create_samples(const std::vector<StrokePoint>& points) noexcept;

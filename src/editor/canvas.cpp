@@ -6,10 +6,11 @@
 
 
 Canvas::Canvas()
-    : stroke_renderer_(8), brush(WHITE, 10)
+    : stroke_renderer_(8), brush(WHITE, 14)
 {
-    // stroke_renderer_.should_debug_draw_points = true;
-    // stroke_renderer_.should_debug_draw_edges = true;
+    stroke_renderer_.should_debug_draw_points = true;
+    stroke_renderer_.should_debug_draw_edges = true;
+    stroke_renderer_.should_debug_draw_samples = true;
 }
 
 

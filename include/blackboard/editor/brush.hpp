@@ -22,7 +22,7 @@ private:
     float smooth_velocity_ = 0;
     float velocity_smoothing_ = 0.05;
     float max_velocity_ = 1000;
-    int point_thickness_back_iterating_amount_ = 5;
+    int point_thickness_back_iterating_amount_ = 4;
 
 
 public:
@@ -57,7 +57,7 @@ private:
     float thickness_from_velocity() const noexcept;
 
     float min_thickness() const noexcept { return std::max(5.0f, thickness - 3); }
-    float max_thickness() const noexcept { return std::min(50.0f, thickness + 8); }
+    float max_thickness() const noexcept { return std::min(50.0f, thickness + 10); }
 
     bool is_too_slow() const noexcept;
 };

@@ -5,6 +5,7 @@ cc = meson.get_compiler('c')
 
 raylib_lib = cc.find_library('raylib',
   dirs: [meson.current_source_dir() / 'lib'],
+  static: true,
   required: true
 )
 

@@ -1,9 +1,11 @@
 #include <blackboard/editor/stroke_renderer.hpp>
 
-#include <blackboard/editor/stroke.hpp>
+#include <algorithm>
 
-#include <raymath.h>
 #include <rlgl.h>
+#include <raymath.h>
+
+#include <blackboard/editor/stroke.hpp>
 
 
 
@@ -36,63 +38,85 @@ void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 
     const std::vector<Edge> edges = create_edges(samples);
 
-    draw_edges(edges, stroke.color, samples.size());
+    draw_edges(edges, samples, stroke.color);
+    draw_extreme_caps(samples, stroke.color);
 
-    Vector2 dirStart = Vector2Normalize(samples[0].position - samples[1].position);
-    draw_cap(samples[0].position, dirStart * -1, samples[0].thickness * 0.5f, stroke.color);
-
-    Vector2 dirEnd = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
-    draw_cap(samples[samples_count - 1].position, dirEnd * -1, samples[samples_count - 1].thickness * 0.5f, stroke.color);
-
-    if (should_debug_draw_points)
-        debug_draw_points(points);
-
-    if (should_debug_draw_edges)
-        debug_draw_edges(edges);
+    draw_debug_visualization(points, samples, edges);
 }
 
 
-void StrokeRenderer::draw_edges(const std::vector<Edge>& edges, const Color& color, const int samples_count) noexcept
+void StrokeRenderer::draw_edges(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept
 {
     rlSetTexture(rlGetTextureIdDefault());
     rlBegin(RL_QUADS);
     rlColor4ub(color.r, color.g, color.b, color.a);
 
-        draw_edges(edges, samples_count);
+        draw_edges_with_caps(edges, samples, color);
 
     rlEnd();
     rlSetTexture(0);
 }
 
 
-void StrokeRenderer::draw_edges(const std::vector<Edge>& edges, const int samples_count) noexcept
+void StrokeRenderer::draw_edges_with_caps(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept
 {
-    for (int i = 0; i < samples_count - 1; i++)
+    for (int i = 0; i < samples.size() - 1; i++)
     {
         rlVertex2f(edges[i].top.x, edges[i].top.y);
         rlVertex2f(edges[i + 1].top.x, edges[i + 1].top.y);
         rlVertex2f(edges[i + 1].bottom.x, edges[i + 1].bottom.y);
         rlVertex2f(edges[i].bottom.x, edges[i].bottom.y);
+
+        draw_cap_if_intense_curve(samples, i, color);
     }
 }
 
 
+void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<Sample>& samples, const size_t i, const Color& color) noexcept
+{
+    if (i == 0)
+        return;
+
+    const Vector2 previous = samples[i - 1].position, current = samples[i].position, next = samples[i + 1].position;
+    const float curvature  = stroke_curvature(previous, current, next);
+
+    if (curvature <= 0.8)
+        return;
+
+    const Vector2 dir1 = Vector2Normalize(Vector2Subtract(current, previous));
+    const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
+    const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
+
+    draw_cap(current, final_direction, samples[i].thickness * 0.5f, color);
+}
+
+
+
+
+void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeRenderer::Sample>& samples, const Color& color) noexcept
+{
+    const size_t samples_count = samples.size();
+
+    const Vector2 dirStart = Vector2Normalize(samples[0].position - samples[1].position);
+    draw_cap(samples[0].position, dirStart * -1, samples[0].thickness * 0.5f, color);
+
+    const Vector2 dirEnd = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
+    draw_cap(samples[samples_count - 1].position, dirEnd * -1, samples[samples_count - 1].thickness * 0.5f, color);
+}
+
 
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
 {
-    // dir aponta para FORA da extremidade (precisa ser normalizado)
-    // Giramos 90° para obter a normal inicial
     const Vector2 normal = { -direction.y, direction.x };
 
-    constexpr int steps = 8; // mais steps = cap mais suave
+    constexpr int steps = 8;
     const float angle_step = PI / steps;
 
     for (size_t i = 0; i < steps; i++)
     {
-        const float a0 = i       * angle_step;
+        const float a0 = i * angle_step;
         const float a1 = (i + 1) * angle_step;
 
-        // Rotaciona a normal pelos dois ângulos do passo atual
         const Vector2 v0 = { normal.x * cosf(a0) - normal.y * sinf(a0), normal.x * sinf(a0) + normal.y * cosf(a0) };
         const Vector2 v1 = { normal.x * cosf(a1) - normal.y * sinf(a1), normal.x * sinf(a1) + normal.y * cosf(a1) };
 
@@ -102,10 +126,31 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 
 
 
+
+void StrokeRenderer::draw_debug_visualization(const std::vector<StrokePoint>& points, const std::vector<Sample>& samples, const std::vector<Edge>& edges) noexcept
+{
+    if (should_debug_draw_samples)
+        debug_draw_samples(samples);
+
+    if (should_debug_draw_edges)
+        debug_draw_edges(edges);
+
+    if (should_debug_draw_points)
+        debug_draw_points(points);
+}
+
+
 void StrokeRenderer::debug_draw_points(const std::vector<StrokePoint>& points) noexcept
 {
     for (const auto& point : points)
-        DrawCircleV(point.position, 2, RED);
+        DrawCircleV(point.position, DebugCircleRadius, RED);
+}
+
+
+void StrokeRenderer::debug_draw_samples(const std::vector<Sample>& samples) noexcept
+{
+    for (const auto& sample : samples)
+        DrawCircleV(sample.position, DebugCircleRadius, BLUE);
 }
 
 
@@ -113,10 +158,25 @@ void StrokeRenderer::debug_draw_edges(const std::vector<Edge>& edges) noexcept
 {
     for (const auto& edge : edges)
     {
-        DrawCircleV(edge.top, 2, BLUE);
-        DrawCircleV(edge.bottom, 2, BLUE);
+        DrawCircleV(edge.top, DebugCircleRadius, BLUE);
+        DrawCircleV(edge.bottom, DebugCircleRadius, BLUE);
     }
 }
+
+
+
+
+float StrokeRenderer::stroke_curvature(const Vector2& previous, const Vector2& curent, const Vector2& next) noexcept
+{
+    const Vector2 d1 = Vector2Normalize(Vector2Subtract(curent, previous));
+    const Vector2 d2 = Vector2Normalize(Vector2Subtract(next, curent));
+
+    float dot = Vector2DotProduct(d1, d2);
+    dot = std::clamp(dot, -1.0f, 1.0f);
+
+    return acosf(dot);
+}
+
 
 
 

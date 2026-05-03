@@ -101,5 +101,5 @@ float Brush::thickness_from_velocity() const noexcept
 bool Brush::is_too_slow() const noexcept
 {
     const float velocity = current_velocity();
-    return !stroke_.points.empty() && velocity < 0.01;
+    return !stroke_.points.empty() && velocity < 1;
 }
