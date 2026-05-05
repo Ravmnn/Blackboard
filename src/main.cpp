@@ -14,12 +14,14 @@ int main(int argc, char** argv)
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
 
 
-    Canvas canvas;
-
-    while (!WindowShouldClose())
     {
-        canvas.update();
-        canvas.draw();
+        Canvas canvas;
+
+        while (!WindowShouldClose())
+        {
+            canvas.update();
+            canvas.draw();
+        }
     }
 
 

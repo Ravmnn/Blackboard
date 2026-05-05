@@ -1,9 +1,12 @@
 #pragma once
 
+#include <array>
+
 #include <flustral/drawable.hpp>
 #include <flustral/rendering/window_renderer.hpp>
 
 #include <blackboard/editor/brush.hpp>
+#include <blackboard/editor/eraser.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 
@@ -29,6 +32,12 @@ public:
 
 
     Brush brush;
+    Eraser eraser;
+
+
+
+    Tool* active_tool = nullptr;
+
     std::vector<Stroke> drawn_strokes;
 
 
@@ -40,21 +49,22 @@ public:
 
 
     const Camera2D camera() const noexcept { return canvas_camera_.camera(); }
-
     const Color& background_color() const noexcept { return background_color_; }
-
 
     Vector2 mouse_position() const noexcept { return GetScreenToWorld2D(screen_mouse_position(), canvas_camera_.target_camera()); }
     Vector2 screen_mouse_position() const noexcept { return GetMousePosition() * SuperSamplingFactor; }
 
 
+    void set_current_tool(Tool& tool) noexcept { active_tool = &tool; }
+
+    void alternate_tool() noexcept { active_tool = active_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
+
+
 private:
     void initialize() noexcept;
-
     void recreate_texture_renderer() noexcept;
 
-
-    void update_drawing() noexcept;
+    void update_tool_switch() noexcept;
 
 
     void draw_strokes() noexcept;

@@ -11,7 +11,7 @@
 
 void BrushCursor::update() noexcept
 {
-    const Vector2 mouse_position = brush.canvas.mouse_position();
+    const Vector2 mouse_position = brush.canvas().mouse_position();
 
     if (!brush.should_draw())
     {

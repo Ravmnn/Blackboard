@@ -3,8 +3,11 @@
 #include <vector>
 #include <optional>
 
+#include <flustral/spring.hpp>
+
 #include <blackboard/editor/stroke.hpp>
 #include <blackboard/editor/brush_cursor.hpp>
+#include <blackboard/editor/tool.hpp>
 
 
 
@@ -12,11 +15,10 @@
 class Canvas;
 
 
-class Brush : public Updateable
+class Brush : public Tool
 {
 private:
     Stroke stroke_;
-
 
     bool should_draw_ = false;
     bool draw_finished_ = false;
@@ -34,19 +36,21 @@ private:
     float thickness_max_increase_ = 15;
 
 
+    Spring<float> brush_body_thickness_;
+
+
 public:
-    Canvas& canvas;
     BrushCursor brush_cursor;
 
     Color color;
     float thickness;
 
 
-    Brush(Canvas& canvas, const Color& color, const float thickness) noexcept
-        : stroke_({}, color), canvas(canvas), brush_cursor(*this, 2), color(color), thickness(thickness) {}
+    Brush(Canvas& canvas, const Color& color, const float thickness) noexcept;
 
 
     void update() noexcept override;
+    void draw() noexcept override;
 
 
     const Stroke& stroke() const noexcept { return stroke_; }
@@ -58,6 +62,8 @@ public:
 
 
 private:
+    void update_canvas_actions() noexcept;
+
     void update_smooth_velocity() noexcept;
     void update_drawing_state() noexcept;
     void add_stroke_point() noexcept;

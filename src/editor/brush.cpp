@@ -5,7 +5,19 @@
 
 #include <raymath.h>
 
+#include <blackboard/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
+
+
+
+
+Brush::Brush(Canvas& canvas, const Color& color, const float thickness) noexcept : Tool(canvas),
+    stroke_({}, color),
+    brush_body_thickness_(thickness, thickness, 0.6, 25),
+    brush_cursor(*this, 2),
+    color(color),
+    thickness(thickness)
+{}
 
 
 
@@ -16,10 +28,19 @@ void Brush::update() noexcept
         stroke_.points.clear();
 
     update_drawing_state();
-    brush_cursor.update();
+    update_canvas_actions();
 
+    brush_cursor.update();
     update_smooth_velocity();
+
     add_stroke_point();
+}
+
+
+void Brush::update_canvas_actions() noexcept
+{
+    if (draw_finished_)
+        canvas_.drawn_strokes.push_back(stroke_);
 }
 
 
@@ -76,6 +97,21 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 
         stroke_.points[i].thickness = thickness;
     }
+}
+
+
+
+
+void Brush::draw() noexcept
+{
+    float target_thickness = thickness_from_velocity();
+    target_thickness = target_thickness == 0 ? thickness : target_thickness / 2.0;
+
+    // TODO: not working properly
+    brush_body_thickness_ = target_thickness;
+    brush_body_thickness_.update();
+
+    DrawCircleV(canvas_.mouse_position(), brush_body_thickness_, color);
 }
 
 

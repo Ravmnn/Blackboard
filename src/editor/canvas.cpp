@@ -2,21 +2,23 @@
 
 #include <flustral/rendering/effects/effect_pass.hpp>
 
-#include <blackboard/tween.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 
 
 
 
 Canvas::Canvas()
-    : stroke_renderer_(16), canvas_camera_(*this, 0.2, 15, 0.13),
-        brush(*this, Color(211, 211, 211, 255), 14)
+    : stroke_renderer_(16), canvas_camera_(*this, 0.2, 25, 0.13),
+        brush(*this, Color(211, 211, 211, 255), 14),
+        eraser(*this)
 {
     stroke_renderer_.should_debug_draw_points = false;
     stroke_renderer_.should_debug_draw_edges = false;
     stroke_renderer_.should_debug_draw_samples = false;
 
     window_renderer_.use_buffer_texture = false;
+
+    active_tool = &brush;
 }
 
 
@@ -31,8 +33,7 @@ void Canvas::update() noexcept
         recreate_texture_renderer();
 
     canvas_camera_.update();
-
-    update_drawing();
+    active_tool->update();
 }
 
 
@@ -51,19 +52,10 @@ void Canvas::recreate_texture_renderer() noexcept
 }
 
 
-
-void Canvas::update_drawing() noexcept
+void Canvas::update_tool_switch() noexcept
 {
-    brush.update();
-
-    if (brush.draw_finished())
-        drawn_strokes.push_back(brush.stroke());
-
-    if (!IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-        return;
-
-    drawn_strokes.clear();
-    brush.clear_stroke();
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+        alternate_tool();
 }
 
 
@@ -72,9 +64,13 @@ void Canvas::update_drawing() noexcept
 void Canvas::draw() noexcept
 {
     texture_renderer_.begin_render();
+    canvas_camera_.enable();
+
     draw_strokes();
+    active_tool->draw();
     texture_renderer_.end_render();
 
+    canvas_camera_.disable();
     texture_renderer_.generate_mipmaps();
 
     window_renderer_.begin_render();
@@ -85,14 +81,10 @@ void Canvas::draw() noexcept
 
 void Canvas::draw_strokes() noexcept
 {
-    canvas_camera_.enable();
-
     stroke_renderer_.draw_stroke(brush.stroke());
 
     for (auto& stroke : drawn_strokes)
         stroke_renderer_.draw_stroke(stroke);
-
-    canvas_camera_.disable();
 }
 
 

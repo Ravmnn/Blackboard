@@ -7,7 +7,7 @@
 
 
 
-class Tween
+class Interpolation
 {
 public:
     static float expolerp(const float start, const float target, const float smoothing, const float velocity = 1) noexcept

@@ -2,7 +2,7 @@
 
 #include <raymath.h>
 
-#include <blackboard/tween.hpp>
+#include <blackboard/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
 
 
@@ -57,6 +57,6 @@ void CanvasCamera::update_zoom() noexcept
 
 void CanvasCamera::update_interpolation() noexcept
 {
-    camera_.target = Tween::expolerp(camera_.target, target_camera_.target, interpolation_smoothing, movement_interpolation_velocity);
-    camera_.zoom = Tween::expolerp(camera_.zoom, target_camera_.zoom, interpolation_smoothing, zoom_interpolation_velocity);
+    camera_.target = Interpolation::expolerp(camera_.target, target_camera_.target, interpolation_smoothing, movement_interpolation_velocity);
+    camera_.zoom = Interpolation::expolerp(camera_.zoom, target_camera_.zoom, interpolation_smoothing, zoom_interpolation_velocity);
 }

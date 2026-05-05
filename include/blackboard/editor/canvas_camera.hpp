@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include <flustral/updateable.hpp>
+#include <flustral/activatable.hpp>
 
 
 
@@ -10,7 +11,7 @@
 class Canvas;
 
 
-class CanvasCamera : public Updateable
+class CanvasCamera : public Activatable, public Updateable
 {
 private:
     Camera2D camera_;
@@ -35,8 +36,8 @@ public:
     CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
 
 
-    void enable() const noexcept { BeginMode2D(camera_); }
-    void disable() const noexcept { EndMode2D(); }
+    void enable() noexcept override { Activatable::enable(); BeginMode2D(camera_); }
+    void disable() noexcept override { Activatable::disable(); EndMode2D(); }
 
 
     const Camera2D& camera() const noexcept { return camera_; }
