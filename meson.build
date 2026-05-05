@@ -30,7 +30,7 @@ flustral_lib = cc.find_library('flustral', required: true,
 
 flustral_dep = declare_dependency(
     dependencies: [flustral_lib],
-    include_directories: ['../Flustral/include']
+    include_directories: ['/home/ravmn/Documentos/programming/cpp/Flustral/include']
 )
 
 

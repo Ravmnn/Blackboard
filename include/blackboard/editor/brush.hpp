@@ -23,15 +23,15 @@ private:
     bool draw_started_ = false;
 
     float smooth_velocity_ = 0;
-    float velocity_smoothing_ = 0.075;
-    float max_velocity_ = 20;
+    float velocity_smoothing_ = 0.07;
+    float max_velocity_ = 30;
     int point_thickness_back_iterating_amount_ = 5;
 
     float min_thickness_ = 5;
     float max_thickness_ = 50;
 
-    float thickness_max_decrease_ = 5;
-    float thickness_max_increase_ = 10;
+    float thickness_max_decrease_ = 2;
+    float thickness_max_increase_ = 15;
 
 
 public:

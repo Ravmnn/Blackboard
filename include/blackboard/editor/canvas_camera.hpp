@@ -7,6 +7,9 @@
 
 
 
+class Canvas;
+
+
 class CanvasCamera : public Updateable
 {
 private:
@@ -15,21 +18,29 @@ private:
 
 
 public:
+    const Canvas& canvas;
+
     float min_zoom;
     float max_zoom;
     float zoom_factor;
 
-    float interpolation_velocity = 4;
+    float movement_interpolation_velocity = 6;
+    float zoom_interpolation_velocity = 5;
     float interpolation_smoothing = 0.01;
 
 
     void update() noexcept override;
 
 
-    CanvasCamera(const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
+    CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
+
+
+    void enable() const noexcept { BeginMode2D(camera_); }
+    void disable() const noexcept { EndMode2D(); }
 
 
     const Camera2D& camera() const noexcept { return camera_; }
+    const Camera2D& target_camera() const noexcept { return target_camera_; }
 
 
 private:

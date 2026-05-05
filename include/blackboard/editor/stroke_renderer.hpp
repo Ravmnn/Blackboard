@@ -12,7 +12,7 @@ class StrokeRenderer
 private:
     static constexpr float DirectionEpsilon = 0.0001f;
     static constexpr float DebugCircleRadius = 2;
-    static constexpr int CapResolution = 24;
+    static constexpr int CapResolution = 32;
 
 
     struct Sample

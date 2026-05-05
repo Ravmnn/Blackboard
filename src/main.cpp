@@ -7,7 +7,9 @@
 
 int main(int argc, char** argv)
 {
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+    SetTraceLogLevel(LOG_WARNING);
+
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     int monitor = GetCurrentMonitor();
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
 
@@ -16,13 +18,8 @@ int main(int argc, char** argv)
 
     while (!WindowShouldClose())
     {
-        BeginDrawing();
-        ClearBackground(canvas.background_color());
-
         canvas.update();
         canvas.draw();
-
-        EndDrawing();
     }
 
 

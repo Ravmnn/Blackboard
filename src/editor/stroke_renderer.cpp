@@ -95,13 +95,18 @@ void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<Sample>& sample
 
 void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeRenderer::Sample>& samples, const Color& color) noexcept
 {
+    if (samples.size() < 3)
+        return;
+
     const size_t samples_count = samples.size();
 
-    const Vector2 dirStart = Vector2Normalize(samples[0].position - samples[1].position);
-    draw_cap(samples[0].position, dirStart * -1, samples[0].thickness * 0.5f, color);
+    const float start_thickness_average = (samples[0].thickness / 2 + samples[1].thickness / 2 + samples[2].thickness / 2) / 3;
+    const Vector2 direction_start = Vector2Normalize(samples[0].position - samples[1].position);
+    draw_cap(samples[0].position, direction_start * -1, start_thickness_average, color);
 
-    const Vector2 dirEnd = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
-    draw_cap(samples[samples_count - 1].position, dirEnd * -1, samples[samples_count - 1].thickness * 0.5f, color);
+    const float end_thickness_average = (samples[samples_count - 1].thickness / 2 + samples[samples_count - 2].thickness / 2 + samples[samples_count - 3].thickness / 2) / 3;
+    const Vector2 direction_end = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
+    draw_cap(samples[samples_count - 1].position, direction_end * -1, end_thickness_average, color);
 }
 
 

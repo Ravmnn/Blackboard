@@ -11,7 +11,7 @@
 
 void BrushCursor::update() noexcept
 {
-    const Vector2 mouse_position = GetMousePosition();
+    const Vector2 mouse_position = brush.canvas.mouse_position();
 
     if (!brush.should_draw())
     {
@@ -32,5 +32,5 @@ void BrushCursor::update() noexcept
 
 Vector2 BrushCursor::position() const noexcept
 {
-    return GetScreenToWorld2D(current_position_, brush.canvas.camera());
+    return current_position_;
 }
