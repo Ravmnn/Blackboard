@@ -21,4 +21,15 @@ public:
     {
         return { expolerp(start.x, target.x, smoothing, velocity), expolerp(start.y, target.y, smoothing, velocity) };
     }
+
+
+    static Color expolerp(const Color& start, const Color& target, const float smoothing, const float velocity = 1) noexcept
+    {
+        return {
+            expolerp(start.r, target.r, smoothing, velocity),
+            expolerp(start.g, target.g, smoothing, velocity),
+            expolerp(start.b, target.b, smoothing, velocity),
+            expolerp(start.a, target.a, smoothing, velocity)
+        };
+    }
 };

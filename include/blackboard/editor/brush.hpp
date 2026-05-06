@@ -7,6 +7,7 @@
 
 #include <blackboard/editor/stroke.hpp>
 #include <blackboard/editor/brush_cursor.hpp>
+#include <blackboard/editor/brush_body.hpp>
 #include <blackboard/editor/tool.hpp>
 
 
@@ -24,10 +25,12 @@ private:
     bool draw_finished_ = false;
     bool draw_started_ = false;
 
+    float max_velocity_ = 70;
+
     float smooth_velocity_ = 0;
-    float velocity_smoothing_ = 0.07;
-    float max_velocity_ = 30;
-    int point_thickness_back_iterating_amount_ = 5;
+    float velocity_smoothing_ = 0.05;
+    float max_smooth_velocity_ = 25;
+    int point_thickness_back_iterating_amount_ = 8;
 
     float min_thickness_ = 5;
     float max_thickness_ = 50;
@@ -36,14 +39,15 @@ private:
     float thickness_max_increase_ = 15;
 
 
-    Spring<float> brush_body_thickness_;
-
-
 public:
-    BrushCursor brush_cursor;
+    BrushCursor cursor;
+    BrushBody body;
 
     Color color;
     float thickness;
+
+
+    friend class BrushBody;
 
 
     Brush(Canvas& canvas, const Color& color, const float thickness) noexcept;

@@ -13,8 +13,8 @@
 
 Brush::Brush(Canvas& canvas, const Color& color, const float thickness) noexcept : Tool(canvas),
     stroke_({}, color),
-    brush_body_thickness_(thickness, thickness, 0.6, 25),
-    brush_cursor(*this, 2),
+    cursor(*this, 2),
+    body(*this),
     color(color),
     thickness(thickness)
 {}
@@ -28,10 +28,12 @@ void Brush::update() noexcept
         stroke_.points.clear();
 
     update_drawing_state();
-    update_canvas_actions();
 
-    brush_cursor.update();
+    cursor.update();
+    body.update();
+
     update_smooth_velocity();
+    update_canvas_actions();
 
     add_stroke_point();
 }
@@ -82,7 +84,7 @@ void Brush::add_stroke_point() noexcept
         return;
 
     const float thickness = thickness_from_velocity();
-    stroke_.points.push_back(StrokePoint(brush_cursor.position(), thickness));
+    stroke_.points.push_back(StrokePoint(cursor.position(), thickness));
 
     modify_previous_points_thickness(thickness);
 }
@@ -104,14 +106,7 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 
 void Brush::draw() noexcept
 {
-    float target_thickness = thickness_from_velocity();
-    target_thickness = target_thickness == 0 ? thickness : target_thickness / 2.0;
-
-    // TODO: not working properly
-    brush_body_thickness_ = target_thickness;
-    brush_body_thickness_.update();
-
-    DrawCircleV(canvas_.mouse_position(), brush_body_thickness_, color);
+    body.draw();
 }
 
 
@@ -122,7 +117,8 @@ float Brush::current_velocity() const noexcept
     if (stroke_.points.empty() || draw_started_)
         return 0;
 
-    return Vector2Distance(brush_cursor.position(), stroke_.points.back().position);
+    const float velocity = Vector2Distance(cursor.position(), stroke_.points.back().position);
+    return std::min(velocity, max_velocity_);
 }
 
 
@@ -130,7 +126,7 @@ float Brush::current_velocity() const noexcept
 
 float Brush::thickness_from_velocity() const noexcept
 {
-    const float t = std::clamp(smooth_velocity_ / max_velocity_, 0.0f, 1.0f);
+    const float t = std::clamp(smooth_velocity_ / max_smooth_velocity_, 0.0f, 1.0f);
     return max_thickness() + t * (min_thickness() - max_thickness());
 }
 
