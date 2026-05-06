@@ -2,11 +2,10 @@
 
 #include <array>
 
-#include <flustral/drawable.hpp>
-#include <flustral/rendering/window_renderer.hpp>
-
-#include <blackboard/editor/brush.hpp>
-#include <blackboard/editor/eraser.hpp>
+#include <blackboard/drawable.hpp>
+#include <blackboard/rendering/window_renderer.hpp>
+#include <blackboard/editor/tools/brush.hpp>
+#include <blackboard/editor/tools/eraser.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 
@@ -25,6 +24,8 @@ private:
     Color background_color_ = Color{ 18, 18, 18, 255 };
 
     bool initialized_ = false;
+
+    bool draw_statistics_ = false;
 
 
 public:
@@ -70,9 +71,14 @@ private:
     void initialize() noexcept;
     void recreate_texture_renderer() noexcept;
 
+    void update_input() noexcept;
     void update_tool_switch() noexcept;
 
 
+    void draw_to_buffer_texture() noexcept;
+    void draw_buffer_texture_to_window() noexcept;
+
     void draw_strokes() noexcept;
     void draw_antialiased_contents() noexcept;
+    void draw_statistics() noexcept;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/editor/tool.hpp>
+#include <blackboard/editor/tools/tool.hpp>
 
 
 

@@ -3,7 +3,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
-#include <flustral/updateable.hpp>
+#include <blackboard/updateable.hpp>
 
 
 

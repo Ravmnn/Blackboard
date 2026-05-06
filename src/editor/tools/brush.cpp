@@ -1,11 +1,11 @@
-#include <blackboard/editor/brush.hpp>
+#include <blackboard/editor/tools/brush.hpp>
 
 #include <algorithm>
 #include <string>
 
 #include <raymath.h>
 
-#include <blackboard/interpolation.hpp>
+#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
 
 

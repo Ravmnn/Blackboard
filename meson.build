@@ -24,17 +24,7 @@ raylib_dep = dependency('raylib',
 )
 
 
-flustral_lib = cc.find_library('flustral', required: true,
-    dirs: ['/home/ravmn/Documentos/programming/cpp/Flustral/build/src']
-)
-
-flustral_dep = declare_dependency(
-    dependencies: [flustral_lib],
-    include_directories: ['/home/ravmn/Documentos/programming/cpp/Flustral/include']
-)
-
-
-global_deps = [project_dep, math_lib, raylib_dep, flustral_dep]
+global_deps = [project_dep, math_lib, raylib_dep]
 
 
 

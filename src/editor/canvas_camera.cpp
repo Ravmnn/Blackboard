@@ -2,7 +2,7 @@
 
 #include <raymath.h>
 
-#include <blackboard/interpolation.hpp>
+#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
 
 

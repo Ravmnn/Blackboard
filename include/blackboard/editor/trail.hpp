@@ -1,8 +1,7 @@
 #pragma once
 
-#include <flustral/updateable.hpp>
-#include <flustral/drawable.hpp>
-
+#include <blackboard/updateable.hpp>
+#include <blackboard/drawable.hpp>
 #include <blackboard/editor/stroke.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 

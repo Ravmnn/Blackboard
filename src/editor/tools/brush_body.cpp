@@ -1,7 +1,7 @@
-#include <blackboard/editor/brush_body.hpp>
+#include <blackboard/editor/tools/brush_body.hpp>
 
-#include <blackboard/interpolation.hpp>
-#include <blackboard/editor/brush.hpp>
+#include <blackboard/animation/interpolation.hpp>
+#include <blackboard/editor/tools/brush.hpp>
 #include <blackboard/editor/canvas.hpp>
 
 

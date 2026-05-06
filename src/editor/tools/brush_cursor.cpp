@@ -1,4 +1,4 @@
-#include <blackboard/editor/brush_cursor.hpp>
+#include <blackboard/editor/tools/brush_cursor.hpp>
 
 #include <algorithm>
 

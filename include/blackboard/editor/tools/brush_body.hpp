@@ -1,9 +1,8 @@
 #pragma once
 
-#include <flustral/spring.hpp>
-#include <flustral/rendering/texture_renderer.hpp>
-
-#include <blackboard/interpolation.hpp>
+#include <blackboard/animation/spring.hpp>
+#include <blackboard/rendering/texture_renderer.hpp>
+#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/trail.hpp>
 
 

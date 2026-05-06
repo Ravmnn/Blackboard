@@ -3,12 +3,11 @@
 #include <vector>
 #include <optional>
 
-#include <flustral/spring.hpp>
-
+#include <blackboard/animation/spring.hpp>
 #include <blackboard/editor/stroke.hpp>
-#include <blackboard/editor/brush_cursor.hpp>
-#include <blackboard/editor/brush_body.hpp>
-#include <blackboard/editor/tool.hpp>
+#include <blackboard/editor/tools/brush_cursor.hpp>
+#include <blackboard/editor/tools/brush_body.hpp>
+#include <blackboard/editor/tools/tool.hpp>
 
 
 

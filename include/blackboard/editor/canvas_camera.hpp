@@ -2,10 +2,9 @@
 
 #include <raylib.h>
 
-#include <flustral/updateable.hpp>
-#include <flustral/activatable.hpp>
-
-#include <blackboard/interpolation.hpp>
+#include <blackboard/updateable.hpp>
+#include <blackboard/activatable.hpp>
+#include <blackboard/animation/interpolation.hpp>
 
 
 

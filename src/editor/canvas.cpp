@@ -1,6 +1,6 @@
 #include <blackboard/editor/canvas.hpp>
 
-#include <flustral/rendering/effects/effect_pass.hpp>
+#include <blackboard/rendering/effects/effect_pass.hpp>
 
 #include <blackboard/editor/stroke_renderer.hpp>
 
@@ -29,8 +29,7 @@ void Canvas::update() noexcept
     if (!initialized_)
         initialize();
 
-    if (IsWindowResized())
-        recreate_texture_renderer();
+    update_input();
 
     canvas_camera_.update();
     active_tool->update();
@@ -52,6 +51,16 @@ void Canvas::recreate_texture_renderer() noexcept
 }
 
 
+void Canvas::update_input() noexcept
+{
+    if (IsWindowResized())
+        recreate_texture_renderer();
+
+    if (IsKeyPressed(KEY_ONE))
+        draw_statistics_ = !draw_statistics_;
+}
+
+
 void Canvas::update_tool_switch() noexcept
 {
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
@@ -63,6 +72,13 @@ void Canvas::update_tool_switch() noexcept
 
 void Canvas::draw() noexcept
 {
+    draw_to_buffer_texture();
+    draw_buffer_texture_to_window();
+}
+
+
+void Canvas::draw_to_buffer_texture() noexcept
+{
     texture_renderer_.begin_render();
     canvas_camera_.enable();
 
@@ -72,9 +88,14 @@ void Canvas::draw() noexcept
 
     canvas_camera_.disable();
     texture_renderer_.generate_mipmaps();
+}
 
+
+void Canvas::draw_buffer_texture_to_window() noexcept
+{
     window_renderer_.begin_render();
     draw_antialiased_contents();
+    draw_statistics();
     window_renderer_.end_render();
 }
 
@@ -99,4 +120,13 @@ void Canvas::draw_antialiased_contents() noexcept
     const Rectangle destination = { 0, 0, target_size.x, target_size.y };
 
     DrawTexturePro(contents, source, destination, {}, 0, WHITE);
+}
+
+
+void Canvas::draw_statistics() noexcept
+{
+    if (!draw_statistics_)
+        return;
+
+    DrawText(std::to_string(GetFPS()).c_str(), 0, 0, 30, WHITE);
 }

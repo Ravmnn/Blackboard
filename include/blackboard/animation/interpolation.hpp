@@ -1,8 +1,8 @@
 #pragma once
 
-#include <flustral/updateable.hpp>
+#include <blackboard/updateable.hpp>
 
-#include <blackboard/interpolate.hpp>
+#include <blackboard/animation/interpolate.hpp>
 
 
 
