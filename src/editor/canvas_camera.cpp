@@ -8,16 +8,19 @@
 
 
 
-CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept
-    : canvas(canvas), min_zoom(min_zoom), max_zoom(max_zoom), zoom_factor(zoom_factor)
+CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept :
+    canvas(canvas), min_zoom(min_zoom), max_zoom(max_zoom), zoom_factor(zoom_factor)
 {
     target_camera_ = {
         .target = 0,
         .rotation = 0,
-        .zoom = canvas.SuperSamplingFactor,
+        .zoom = canvas.SuperSamplingFactor
     };
 
     camera_ = target_camera_;
+
+    movement_interpolation_ = Interpolation(target_camera_.target, 0.01, 6);
+    zoom_interpolation_ = Interpolation(target_camera_.zoom, 0.01, 5);
 }
 
 
@@ -57,6 +60,6 @@ void CanvasCamera::update_zoom() noexcept
 
 void CanvasCamera::update_interpolation() noexcept
 {
-    camera_.target = Interpolation::expolerp(camera_.target, target_camera_.target, interpolation_smoothing, movement_interpolation_velocity);
-    camera_.zoom = Interpolation::expolerp(camera_.zoom, target_camera_.zoom, interpolation_smoothing, zoom_interpolation_velocity);
+    camera_.target = movement_interpolation_.set_target_and_update(target_camera_.target);
+    camera_.zoom = zoom_interpolation_.set_target_and_update(target_camera_.zoom);
 }

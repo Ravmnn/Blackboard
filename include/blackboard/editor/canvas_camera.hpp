@@ -5,6 +5,8 @@
 #include <flustral/updateable.hpp>
 #include <flustral/activatable.hpp>
 
+#include <blackboard/interpolation.hpp>
+
 
 
 
@@ -17,6 +19,9 @@ private:
     Camera2D camera_;
     Camera2D target_camera_;
 
+    Interpolation<Vector2> movement_interpolation_;
+    Interpolation<float> zoom_interpolation_;
+
 
 public:
     const Canvas& canvas;
@@ -25,9 +30,6 @@ public:
     float max_zoom;
     float zoom_factor;
 
-    float movement_interpolation_velocity = 6;
-    float zoom_interpolation_velocity = 5;
-    float interpolation_smoothing = 0.01;
 
 
     void update() noexcept override;

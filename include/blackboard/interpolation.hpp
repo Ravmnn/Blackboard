@@ -1,35 +1,36 @@
 #pragma once
 
-#include <math.h>
+#include <flustral/updateable.hpp>
 
-#include <raylib.h>
-
-
+#include <blackboard/interpolate.hpp>
 
 
-class Interpolation
+
+
+template <typename T>
+class Interpolation : public Updateable
 {
 public:
-    static float expolerp(const float start, const float target, const float smoothing, const float velocity = 1) noexcept
+    T current, target;
+    float smoothing, velocity;
+
+
+    Interpolation() = default;
+    Interpolation(const T& current, const float smoothing, const float velocity) noexcept
+        : current(current), target(current), smoothing(smoothing), velocity(velocity) {}
+
+
+    operator T() const noexcept { return current; }
+
+
+    void update() noexcept override { current = Interpolate::expolerp(current, target, smoothing, velocity); }
+
+
+    T& set_target_and_update(const T& target) noexcept
     {
-        const float factor = 1.0f - powf(smoothing, GetFrameTime() * velocity);
-        return lerp(start, target, factor);
-    }
+        this->target = target;
+        update();
 
-
-    static Vector2 expolerp(const Vector2& start, const Vector2& target, const float smoothing, const float velocity = 1) noexcept
-    {
-        return { expolerp(start.x, target.x, smoothing, velocity), expolerp(start.y, target.y, smoothing, velocity) };
-    }
-
-
-    static Color expolerp(const Color& start, const Color& target, const float smoothing, const float velocity = 1) noexcept
-    {
-        return {
-            expolerp(start.r, target.r, smoothing, velocity),
-            expolerp(start.g, target.g, smoothing, velocity),
-            expolerp(start.b, target.b, smoothing, velocity),
-            expolerp(start.a, target.a, smoothing, velocity)
-        };
+        return current;
     }
 };

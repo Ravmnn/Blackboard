@@ -7,6 +7,8 @@
 #include <flustral/spring.hpp>
 #include <flustral/rendering/texture_renderer.hpp>
 
+#include <blackboard/interpolation.hpp>
+
 
 
 
@@ -22,10 +24,8 @@ private:
     static constexpr float IdleThicknessVariation = 2;
     static constexpr float StretchSpeedFactor = 1.0 / 4.0;
 
-    Color color_ = WHITE;
-    Color color_target_ = WHITE;
-    float color_interpolation_smoothing_ = 0.01;
-    float color_interpolation_velocity_ = 2;
+    Interpolation<Color> color_interpolation_;
+    Color target_color_;
 
     static constexpr unsigned int NormalOpacity = 200;
     static constexpr unsigned int DrawingOpacity = 230;

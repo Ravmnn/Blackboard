@@ -9,6 +9,9 @@
 BrushBody::BrushBody(Brush& brush) noexcept :
     thickness_(brush.thickness, brush.thickness, 0.15, 40),
     stretch_(0, 0, 0.01, 30),
+
+    color_interpolation_(WHITE, 0.01, 2),
+
     brush(brush)
 {
     stretch_.max = 60;
@@ -50,13 +53,14 @@ void BrushBody::update_stretch() noexcept
 
 void BrushBody::update_color() noexcept
 {
-    // TODO: class Interpolation
-    color_ = Interpolation::expolerp(color_, color_target_, color_interpolation_smoothing_, color_interpolation_velocity_);
+    target_color_ = brush.color;
 
     if (brush.should_draw())
-        color_target_.a = DrawingOpacity;
+        target_color_.a = DrawingOpacity;
     else
-        color_target_.a = NormalOpacity;
+        target_color_.a = NormalOpacity;
+
+    color_interpolation_.set_target_and_update(target_color_);
 }
 
 
@@ -94,7 +98,7 @@ void BrushBody::draw_rotated_stretched_ellipse(const Vector2& position, const fl
         DrawEllipse(
             position.x, position.y,
             radius + stretch, radius,
-            color_
+            color_interpolation_
         );
     rlPopMatrix();
 }
