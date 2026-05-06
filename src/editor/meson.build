@@ -1,6 +1,6 @@
 sources = files(
     'canvas.cpp', 'brush.cpp', 'brush_cursor.cpp', 'brush_body.cpp', 'eraser.cpp',
-    'stroke_renderer.cpp', 'canvas_camera.cpp'
+    'stroke_renderer.cpp', 'canvas_camera.cpp', 'trail.cpp'
 )
 
 editor_lib = static_library('editor', sources,

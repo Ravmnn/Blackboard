@@ -35,6 +35,7 @@ void Brush::update() noexcept
     update_smooth_velocity();
     update_canvas_actions();
 
+    current_thickness_ = thickness_from_velocity();
     add_stroke_point();
 }
 
@@ -83,10 +84,8 @@ void Brush::add_stroke_point() noexcept
     if (!should_draw_ || is_too_slow())
         return;
 
-    const float thickness = thickness_from_velocity();
-    stroke_.points.push_back(StrokePoint(cursor.position(), thickness));
-
-    modify_previous_points_thickness(thickness);
+    stroke_.points.push_back(StrokePoint(cursor.position(), current_thickness_));
+    modify_previous_points_thickness(current_thickness_);
 }
 
 

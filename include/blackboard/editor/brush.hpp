@@ -32,6 +32,7 @@ private:
     float max_smooth_velocity_ = 25;
     int point_thickness_back_iterating_amount_ = 8;
 
+    float current_thickness_;
     float min_thickness_ = 5;
     float max_thickness_ = 50;
 
@@ -75,6 +76,7 @@ private:
 
     float current_velocity() const noexcept;
     float thickness_from_velocity() const noexcept;
+    float current_thickness() const noexcept { return current_thickness_; }
 
     float min_thickness() const noexcept { return std::max(min_thickness_, thickness - thickness_max_decrease_); }
     float max_thickness() const noexcept { return std::min(max_thickness_, thickness + thickness_max_increase_); }

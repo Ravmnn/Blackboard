@@ -51,8 +51,14 @@ public:
     const Camera2D camera() const noexcept { return canvas_camera_.camera(); }
     const Color& background_color() const noexcept { return background_color_; }
 
-    Vector2 mouse_position() const noexcept { return GetScreenToWorld2D(screen_mouse_position(), canvas_camera_.target_camera()); }
+
+    Vector2 mouse_delta() const noexcept { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
+    Vector2 mouse_position() const noexcept { return map_point(screen_mouse_position()); }
+
     Vector2 screen_mouse_position() const noexcept { return GetMousePosition() * SuperSamplingFactor; }
+
+
+    Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, canvas_camera_.target_camera()); }
 
 
     void set_current_tool(Tool& tool) noexcept { active_tool = &tool; }

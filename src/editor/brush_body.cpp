@@ -2,11 +2,14 @@
 
 #include <blackboard/interpolation.hpp>
 #include <blackboard/editor/brush.hpp>
+#include <blackboard/editor/canvas.hpp>
 
 
 
 
 BrushBody::BrushBody(Brush& brush) noexcept :
+    trail_(StrokePoint({}, 0), 10),
+
     thickness_(brush.thickness, brush.thickness, 0.15, 40),
     stretch_(0, 0, 0.01, 30),
 
@@ -22,15 +25,27 @@ BrushBody::BrushBody(Brush& brush) noexcept :
 
 void BrushBody::update() noexcept
 {
+    position_ = brush.canvas().mouse_position();
+
+    update_trail();
     update_thickness();
     update_stretch();
     update_color();
 }
 
 
+void BrushBody::update_trail() noexcept
+{
+    trail_.emit = !brush.should_draw();
+    trail_.color = color_interpolation_;
+    trail_.origin = StrokePoint(position_, thickness_ * 2);
+    trail_.update();
+}
+
+
 void BrushBody::update_thickness() noexcept
 {
-    float target_thickness = brush.thickness_from_velocity();
+    float target_thickness = brush.current_thickness();
     target_thickness = (target_thickness == 0 ? brush.thickness : target_thickness / 2.0);
 
     if (!brush.should_draw())
@@ -43,7 +58,7 @@ void BrushBody::update_thickness() noexcept
 
 void BrushBody::update_stretch() noexcept
 {
-    const float speed = Vector2Length(brush.cursor.velocity());
+    const float speed = Vector2Length(brush.canvas().mouse_delta());
     const float stretch = speed * StretchSpeedFactor;
 
     stretch_ = stretch;
@@ -53,14 +68,7 @@ void BrushBody::update_stretch() noexcept
 
 void BrushBody::update_color() noexcept
 {
-    target_color_ = brush.color;
-
-    if (brush.should_draw())
-        target_color_.a = DrawingOpacity;
-    else
-        target_color_.a = NormalOpacity;
-
-    color_interpolation_.set_target_and_update(target_color_);
+    color_interpolation_.set_target_and_update(brush.color);
 }
 
 
@@ -68,23 +76,23 @@ void BrushBody::update_color() noexcept
 
 void BrushBody::draw() noexcept
 {
-    // TODO: trail
+    trail_.draw();
+    draw_body();
+}
 
-    const Vector2 position = brush.cursor.position();
+
+void BrushBody::draw_body() noexcept
+{
     const float radius = thickness_;
 
-    const Vector2 velocity = brush.cursor.velocity();
+    const Vector2 velocity = brush.canvas().mouse_delta();
     const Vector2 direction = Vector2Normalize(velocity);
     const float direction_length = Vector2Length(velocity);
 
-    float rotation = atan2f(direction.y, direction.x) * RAD2DEG;
-
-    if (direction_length <= 1)
-        rotation = last_rotation_;
-
-    draw_rotated_stretched_ellipse(position, radius, stretch_, rotation);
-
+    const float rotation = direction_length > 1 ? atan2f(direction.y, direction.x) * RAD2DEG : last_rotation_;
     last_rotation_ = rotation;
+
+    draw_rotated_stretched_ellipse(position_, radius, stretch_, rotation);
 }
 
 
