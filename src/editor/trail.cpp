@@ -6,7 +6,7 @@
 
 
 Trail::Trail(const StrokePoint& origin, const float decay) noexcept : Stroke({}, color),
-    trail_renderer_(8), origin(origin), decay(decay)
+    trail_mesh_generator_(4), trail_renderer_(trail_mesh_generator_), origin(origin), decay(decay)
 {}
 
 

@@ -12,6 +12,7 @@ class Trail : public Stroke, public Updateable, public Drawable
 {
 private:
     StrokeRenderer trail_renderer_;
+    StrokeMeshGenerator trail_mesh_generator_;
 
 
 public:

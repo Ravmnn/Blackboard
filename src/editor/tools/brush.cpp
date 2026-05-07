@@ -43,7 +43,7 @@ void Brush::update() noexcept
 void Brush::update_canvas_actions() noexcept
 {
     if (draw_finished_)
-        canvas_.drawn_strokes.push_back(stroke_);
+        canvas_.add_stroke(stroke_);
 }
 
 

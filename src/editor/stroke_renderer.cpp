@@ -10,110 +10,100 @@
 
 
 
-StrokeRenderer::SplineSegment::SplineSegment(const std::vector<StrokePoint>& points, const int i)
-{
-    p0 = points[i - 1].position;
-    p1 = points[i].position;
-    p2 = points[i + 1].position;
-    p3 = points[i + 2].position;
-
-    current_thickness = points[i].thickness;
-    next_thickness = points[i + 1].thickness;
-}
-
-
-
-
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
-    if (stroke.points.empty())
-        return;
-
-    const std::vector<StrokePoint> points = add_ghost_points(stroke.points);
-    const std::vector<Sample> samples = create_samples(points);
-    const size_t samples_count = samples.size();
-
-    if (samples.size() < 2)
-        return;
-
-    const std::vector<Edge> edges = create_edges(samples);
-
-    draw_edges(edges, samples, stroke.color);
-    draw_extreme_caps(samples, stroke.color);
-
-    draw_debug_visualization(points, samples, edges);
+    draw_stroke_mesh(sampler.generate_mesh(stroke));
 }
 
 
-void StrokeRenderer::draw_edges(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept
+void StrokeRenderer::draw_stroke_mesh(const std::vector<StrokeMeshNode>& mesh) noexcept
+{
+    if (mesh.empty())
+        return;
+
+    draw_edges(mesh);
+    draw_extreme_caps(mesh);
+
+    draw_debug_visualization(mesh);
+}
+
+
+void StrokeRenderer::draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
     rlSetTexture(rlGetTextureIdDefault());
     rlBegin(RL_QUADS);
-    rlColor4ub(color.r, color.g, color.b, color.a);
 
-        draw_edges_with_caps(edges, samples, color);
+        draw_edges_with_caps(mesh);
 
     rlEnd();
     rlSetTexture(0);
 }
 
 
-void StrokeRenderer::draw_edges_with_caps(const std::vector<Edge>& edges, const std::vector<Sample>& samples, const Color& color) noexcept
+void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    for (int i = 0; i < samples.size() - 1; i++)
+    for (int i = 0; i < mesh.size() - 1; i++)
     {
-        rlVertex2f(edges[i].top.x, edges[i].top.y);
-        rlVertex2f(edges[i + 1].top.x, edges[i + 1].top.y);
-        rlVertex2f(edges[i + 1].bottom.x, edges[i + 1].bottom.y);
-        rlVertex2f(edges[i].bottom.x, edges[i].bottom.y);
+        const Color& color = mesh[i].color;
+        rlColor4ub(color.r, color.g, color.b, color.a);
 
-        draw_cap_if_intense_curve(samples, i, color);
+        rlVertex2f(mesh[i].edge().top().x, mesh[i].edge().top().y);
+        rlVertex2f(mesh[i + 1].edge().top().x, mesh[i + 1].edge().top().y);
+        rlVertex2f(mesh[i + 1].edge().bottom().x, mesh[i + 1].edge().bottom().y);
+        rlVertex2f(mesh[i].edge().bottom().x, mesh[i].edge().bottom().y);
+
+        draw_cap_if_intense_curve(mesh, i);
     }
 }
 
 
-void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<Sample>& samples, const size_t i, const Color& color) noexcept
+void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>& mesh, const size_t i) noexcept
 {
+    constexpr float MaxCurvature = 0.8;
+
     if (i == 0)
         return;
 
-    const Vector2 previous = samples[i - 1].position, current = samples[i].position, next = samples[i + 1].position;
-    const float curvature  = stroke_curvature(previous, current, next);
+    const StrokeMeshNode& current_node = mesh[i];
+    const Vector2 previous = mesh[i - 1].sample().position();
+    const Vector2 current = current_node.sample().position();
+    const Vector2 next = mesh[i + 1].sample().position();
 
-    if (curvature <= 0.8)
+    if (current_node.curvature() <= MaxCurvature)
         return;
 
     const Vector2 dir1 = Vector2Normalize(Vector2Subtract(current, previous));
     const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
 
-    draw_cap(current, final_direction, samples[i].thickness * 0.5f, color);
+    draw_cap(current, final_direction, current_node.thickness() * 0.5f, current_node.color);
 }
 
 
 
 
-void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeRenderer::Sample>& samples, const Color& color) noexcept
+void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    if (samples.size() < 3)
+    if (mesh.size() < 3)
         return;
 
-    const size_t samples_count = samples.size();
+    const size_t samples_count = mesh.size();
 
-    const float start_thickness_average = (samples[0].thickness / 2 + samples[1].thickness / 2 + samples[2].thickness / 2) / 3;
-    const Vector2 direction_start = Vector2Normalize(samples[0].position - samples[1].position);
-    draw_cap(samples[0].position, direction_start * -1, start_thickness_average, color);
+    const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2 + mesh[2].thickness() / 2) / 3;
+    const Vector2 direction_start = Vector2Normalize(mesh[0].position() - mesh[1].position());
+    draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color);
 
-    const float end_thickness_average = (samples[samples_count - 1].thickness / 2 + samples[samples_count - 2].thickness / 2 + samples[samples_count - 3].thickness / 2) / 3;
-    const Vector2 direction_end = Vector2Normalize(samples[samples_count - 1].position - samples[samples_count - 2].position);
-    draw_cap(samples[samples_count - 1].position, direction_end * -1, end_thickness_average, color);
+    const float end_thickness_average = (mesh[samples_count - 1].thickness() / 2 + mesh[samples_count - 2].thickness() / 2 + mesh[samples_count - 3].thickness() / 2) / 3;
+    const Vector2 direction_end = Vector2Normalize(mesh[samples_count - 1].position() - mesh[samples_count - 2].position());
+    draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color);
 }
 
 
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
 {
-    const Vector2 normal = { -direction.y, direction.x };
+    static constexpr int CapResolution = 32;
 
+    const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;
 
     for (size_t i = 0; i < CapResolution; i++)
@@ -131,138 +121,38 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 
 
 
-void StrokeRenderer::draw_debug_visualization(const std::vector<StrokePoint>& points, const std::vector<Sample>& samples, const std::vector<Edge>& edges) noexcept
+void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
     if (should_debug_draw_samples)
-        debug_draw_samples(samples);
+        debug_draw_samples(mesh);
 
     if (should_debug_draw_edges)
-        debug_draw_edges(edges);
+        debug_draw_edges(mesh);
 
     if (should_debug_draw_points)
-        debug_draw_points(points);
+        debug_draw_points(mesh);
 }
 
 
-void StrokeRenderer::debug_draw_points(const std::vector<StrokePoint>& points) noexcept
+void StrokeRenderer::debug_draw_points(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    for (const auto& point : points)
-        DrawCircleV(point.position, DebugCircleRadius, RED);
+    for (const auto& node : mesh)
+        DrawCircleV(node.position(), DebugCircleRadius, RED);
 }
 
 
-void StrokeRenderer::debug_draw_samples(const std::vector<Sample>& samples) noexcept
+void StrokeRenderer::debug_draw_samples(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    for (const auto& sample : samples)
-        DrawCircleV(sample.position, DebugCircleRadius, BLUE);
+    for (const auto& node : mesh)
+        DrawCircleV(node.position(), DebugCircleRadius, BLUE);
 }
 
 
-void StrokeRenderer::debug_draw_edges(const std::vector<Edge>& edges) noexcept
+void StrokeRenderer::debug_draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    for (const auto& edge : edges)
+    for (const auto& node : mesh)
     {
-        DrawCircleV(edge.top, DebugCircleRadius, BLUE);
-        DrawCircleV(edge.bottom, DebugCircleRadius, BLUE);
+        DrawCircleV(node.edge().top(), DebugCircleRadius, BLUE);
+        DrawCircleV(node.edge().bottom(), DebugCircleRadius, BLUE);
     }
-}
-
-
-
-
-float StrokeRenderer::stroke_curvature(const Vector2& previous, const Vector2& curent, const Vector2& next) noexcept
-{
-    const Vector2 d1 = Vector2Normalize(Vector2Subtract(curent, previous));
-    const Vector2 d2 = Vector2Normalize(Vector2Subtract(next, curent));
-
-    float dot = Vector2DotProduct(d1, d2);
-    dot = std::clamp(dot, -1.0f, 1.0f);
-
-    return acosf(dot);
-}
-
-
-
-
-std::vector<StrokePoint> StrokeRenderer::add_ghost_points(const std::vector<StrokePoint>& points) noexcept
-{
-    std::vector<StrokePoint> new_points;
-    new_points.reserve(points.size() + 2);
-
-    new_points.push_back(points.front());
-    new_points.insert(new_points.end(), points.begin(), points.end());
-    new_points.push_back(points.back());
-
-    return new_points;
-}
-
-
-
-std::vector<StrokeRenderer::Sample> StrokeRenderer::create_samples(const std::vector<StrokePoint>& points) noexcept
-{
-    std::vector<Sample> samples;
-    samples.reserve((points.size() - 3) * samples_per_segment + 1);
-
-    for (size_t i = 1; i < points.size() - 2; i++)
-        add_samples_from_segment(samples, SplineSegment(points, i), i);
-
-    return samples;
-}
-
-
-void StrokeRenderer::add_samples_from_segment(std::vector<StrokeRenderer::Sample>& samples, const StrokeRenderer::SplineSegment& segment, const size_t i)
-{
-    const int start = (i == 1) ? 0 : 1;
-
-    for (size_t j = start; j <= samples_per_segment; j++)
-    {
-        const float t = (float)j / samples_per_segment;
-        samples.push_back(Sample{segment.point(t), segment.thickness(t)});
-    }
-}
-
-
-
-std::vector<StrokeRenderer::Edge> StrokeRenderer::create_edges(const std::vector<Sample>& samples) noexcept
-{
-    std::vector<Edge> edges(samples.size());
-
-    for (size_t i = 0; i < samples.size(); i++)
-    {
-        const Vector2 direction = get_direction_from_samples(samples, i);
-
-        if (Vector2Length(direction) < DirectionEpsilon)
-        {
-            edges[i] = (i > 0) ? edges[i - 1] : Edge(samples[i].position, samples[i].position);
-            continue;
-        }
-
-        edges[i] = create_edge(samples[i], Vector2Normalize(direction));
-    }
-
-    return edges;
-}
-
-
-StrokeRenderer::Edge StrokeRenderer::create_edge(const Sample& sample, const Vector2& direction) noexcept
-{
-    const Vector2 normal = { -direction.y, direction.x };
-    const float half_thickness = sample.thickness / 2;
-
-    return Edge(sample.position, normal, half_thickness);
-}
-
-
-Vector2 StrokeRenderer::get_direction_from_samples(const std::vector<Sample>& samples, const size_t i) noexcept
-{
-    const size_t samples_count = samples.size();
-
-    if (i == 0)
-        return samples[1].position - samples[0].position;
-
-    else if (i == samples_count - 1)
-        return samples[samples_count - 1].position - samples[samples_count - 2].position;
-
-    else
-        return samples[i + 1].position - samples[i - 1].position;
 }

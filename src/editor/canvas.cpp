@@ -7,10 +7,13 @@
 
 
 
-Canvas::Canvas()
-    : stroke_renderer_(16), canvas_camera_(*this, 0.2, 25, 0.13),
-        brush(*this, Color(211, 211, 211, 255), 14),
-        eraser(*this)
+Canvas::Canvas() :
+    stroke_mesh_generator_(16),
+    stroke_renderer_(stroke_mesh_generator_),
+    canvas_camera_(*this, 0.2, 25, 0.13),
+
+    brush(*this, Color(211, 211, 211, 255), 14),
+    eraser(*this)
 {
     stroke_renderer_.should_debug_draw_points = false;
     stroke_renderer_.should_debug_draw_edges = false;
@@ -104,8 +107,8 @@ void Canvas::draw_strokes() noexcept
 {
     stroke_renderer_.draw_stroke(brush.stroke());
 
-    for (auto& stroke : drawn_strokes)
-        stroke_renderer_.draw_stroke(stroke);
+    for (auto& mesh : stroke_meshes_)
+        stroke_renderer_.draw_stroke_mesh(mesh);
 }
 
 
@@ -129,4 +132,15 @@ void Canvas::draw_statistics() noexcept
         return;
 
     DrawText(std::to_string(GetFPS()).c_str(), 0, 0, 30, WHITE);
+}
+
+
+
+
+void Canvas::add_stroke(const Stroke& stroke) noexcept
+{
+    if (stroke.points.empty())
+        return;
+
+    stroke_meshes_.push_back(stroke_mesh_generator_.generate_mesh(stroke));
 }

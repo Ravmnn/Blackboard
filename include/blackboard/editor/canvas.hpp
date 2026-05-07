@@ -15,12 +15,15 @@
 class Canvas : public Updateable, public Drawable
 {
 private:
+    StrokeMeshGenerator stroke_mesh_generator_;
     StrokeRenderer stroke_renderer_;
+
     CanvasCamera canvas_camera_;
 
     WindowRenderer window_renderer_;
     TextureRenderer texture_renderer_;
 
+    std::vector<StrokeMesh> stroke_meshes_;
     Color background_color_ = Color{ 18, 18, 18, 255 };
 
     bool initialized_ = false;
@@ -36,10 +39,7 @@ public:
     Eraser eraser;
 
 
-
     Tool* active_tool = nullptr;
-
-    std::vector<Stroke> drawn_strokes;
 
 
     Canvas();
@@ -52,7 +52,6 @@ public:
     const Camera2D camera() const noexcept { return canvas_camera_.camera(); }
     const Color& background_color() const noexcept { return background_color_; }
 
-
     Vector2 mouse_delta() const noexcept { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
     Vector2 mouse_position() const noexcept { return map_point(screen_mouse_position()); }
 
@@ -60,6 +59,9 @@ public:
 
 
     Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, canvas_camera_.target_camera()); }
+
+
+    void add_stroke(const Stroke& stroke) noexcept;
 
 
     void set_current_tool(Tool& tool) noexcept { active_tool = &tool; }
