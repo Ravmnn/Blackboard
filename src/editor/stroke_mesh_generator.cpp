@@ -7,6 +7,9 @@
 
 std::vector<StrokeMeshNode> StrokeMeshGenerator::generate_mesh(const Stroke& stroke) const noexcept
 {
+    if (stroke.points.empty())
+        return {};
+
     const std::vector<StrokePoint> new_points = add_ghost_points(stroke.points);
     const std::vector<StrokeSample> samples = create_samples(new_points);
     const std::vector<StrokeEdge> edges = create_edges(samples);
@@ -105,7 +108,7 @@ std::vector<StrokeMeshNode> StrokeMeshGenerator::create_mesh(const std::vector<S
 {
     std::vector<StrokeMeshNode> mesh(samples.size());
 
-    for (size_t i = 0; i < mesh.size(); i++)
+    for (size_t i = 0; i < samples.size(); i++)
         mesh.push_back(StrokeMeshNode(samples[i], edges[i], color));
 
     return mesh;
