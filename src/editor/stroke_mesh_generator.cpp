@@ -52,7 +52,7 @@ void StrokeMeshGenerator::add_samples_from_segment(std::vector<StrokeSample>& sa
     const int start = (i == 1) ? 0 : 1;
 
     for (size_t j = start; j <= samples_per_segment; j++)
-        samples.push_back(StrokeSample(segment, (float)j / samples_per_segment));
+        samples.push_back(StrokeSample(segment, j, samples_per_segment));
 }
 
 
@@ -106,7 +106,8 @@ Vector2 StrokeMeshGenerator::get_direction_from_samples(const std::vector<Stroke
 
 std::vector<StrokeMeshNode> StrokeMeshGenerator::create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept
 {
-    std::vector<StrokeMeshNode> mesh(samples.size());
+    std::vector<StrokeMeshNode> mesh;
+    mesh.reserve(samples.size());
 
     for (size_t i = 0; i < samples.size(); i++)
         mesh.push_back(StrokeMeshNode(samples[i], edges[i], color));

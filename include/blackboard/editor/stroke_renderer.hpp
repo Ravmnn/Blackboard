@@ -1,11 +1,8 @@
 #pragma once
 
-#include <optional>
-
+#include <blackboard/collisions.hpp>
 #include <blackboard/editor/stroke_mesh_generator.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
-
-#include <raymath.h>
 
 
 
@@ -20,6 +17,7 @@ public:
     bool should_debug_draw_points = false;
     bool should_debug_draw_samples = false;
     bool should_debug_draw_edges = false;
+    bool should_debug_draw_caps = false;
 
     const StrokeMeshGenerator& sampler;
     const CanvasCamera* camera;
@@ -36,10 +34,15 @@ public:
 private:
     void draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept;
     void draw_edges_with_caps(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    static void draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>& mesh, const size_t i) noexcept;
+    void draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>& mesh, const size_t i) noexcept;
 
-    static void draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    static void draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept;
+    bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) const noexcept
+    {
+        return Collisions::point_inside_rectangle(node.position(), camera_bounds);
+    }
+
+    void draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept;
+    void draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept;
 
     void draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) noexcept;
 

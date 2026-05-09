@@ -2,7 +2,6 @@
 
 #include <rlgl.h>
 
-#include <blackboard/collisions.hpp>
 #include <blackboard/editor/stroke.hpp>
 
 
@@ -44,7 +43,7 @@ void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mes
 
     for (int i = 0; i < mesh.size() - 1; i++)
     {
-        if (camera && !Collisions::point_inside_rectangle(mesh[i].position(), camera_bounds))
+        if (camera && !mesh_node_is_in_camera_bounds(mesh[i], camera_bounds))
             continue;
 
         const Color& color = mesh[i].color;
@@ -87,16 +86,16 @@ void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>
 
 void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
-    if (mesh.size() < 3)
+    if (mesh.size() < 2)
         return;
 
     const size_t samples_count = mesh.size();
 
-    const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2 + mesh[2].thickness() / 2) / 3;
+    const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2) / 2;
     const Vector2 direction_start = Vector2Normalize(mesh[0].position() - mesh[1].position());
     draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color);
 
-    const float end_thickness_average = (mesh[samples_count - 1].thickness() / 2 + mesh[samples_count - 2].thickness() / 2 + mesh[samples_count - 3].thickness() / 2) / 3;
+    const float end_thickness_average = (mesh[samples_count - 1].thickness() / 2 + mesh[samples_count - 2].thickness() / 2) / 2;
     const Vector2 direction_end = Vector2Normalize(mesh[samples_count - 1].position() - mesh[samples_count - 2].position());
     draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color);
 }
@@ -109,6 +108,8 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
     const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;
 
+    const Color true_color = should_debug_draw_caps ? RED : color;
+
     for (size_t i = 0; i < CapResolution; i++)
     {
         const float a0 = i * angle_step;
@@ -117,7 +118,7 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
         const Vector2 v0 = { normal.x * cosf(a0) - normal.y * sinf(a0), normal.x * sinf(a0) + normal.y * cosf(a0) };
         const Vector2 v1 = { normal.x * cosf(a1) - normal.y * sinf(a1), normal.x * sinf(a1) + normal.y * cosf(a1) };
 
-        DrawTriangle(center, center + v1 * radius, center + v0 * radius, color);
+        DrawTriangle(center, center + v1 * radius, center + v0 * radius, true_color);
     }
 }
 
@@ -140,7 +141,7 @@ void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>&
 void StrokeRenderer::debug_draw_points(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
     for (const auto& node : mesh)
-        DrawCircleV(node.position(), DebugCircleRadius, RED);
+        DrawCircleV(node.sample().origin().position, DebugCircleRadius, RED);
 }
 
 

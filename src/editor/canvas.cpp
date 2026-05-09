@@ -8,7 +8,7 @@
 
 
 Canvas::Canvas() :
-    stroke_mesh_generator_(10),
+    stroke_mesh_generator_(16),
     stroke_renderer_(stroke_mesh_generator_, &canvas_camera_),
     canvas_camera_(*this, 0.2, 25, 0.13),
 
@@ -18,6 +18,7 @@ Canvas::Canvas() :
     stroke_renderer_.should_debug_draw_points = false;
     stroke_renderer_.should_debug_draw_edges = false;
     stroke_renderer_.should_debug_draw_samples = false;
+    stroke_renderer_.should_debug_draw_caps = false;
 
     canvas_camera_.bounds_expansion = { 50, 50 };
 

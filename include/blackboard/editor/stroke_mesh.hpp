@@ -11,7 +11,6 @@ class StrokeSplineSegment
 {
     Vector2 previous_, current_, next_, after_next_;
     float current_thickness, next_thickness;
-    float curvature_;
 
 
 public:
@@ -25,9 +24,7 @@ public:
 
         current_thickness(points[i].thickness),
         next_thickness(points[i + 1].thickness)
-    {
-        curvature_ = calculate_curvature();
-    }
+    {}
 
 
     StrokePoint stroke_point() const noexcept { return StrokePoint(current_, current_thickness); }
@@ -39,20 +36,6 @@ public:
 
     Vector2 point(const float t) const noexcept { return GetSplinePointCatmullRom(previous_, current_, next_, after_next_, t); }
     float thickness(const float t) const noexcept { return current_thickness + (next_thickness - current_thickness) * t; }
-
-    float curvature() const noexcept { return curvature_; }
-
-
-    float calculate_curvature() const noexcept
-    {
-        const Vector2 d1 = Vector2Normalize(current_ - previous_);
-        const Vector2 d2 = Vector2Normalize(next_ - current_);
-
-        float dot = Vector2DotProduct(d1, d2);
-        dot = std::clamp(dot, -1.0f, 1.0f);
-
-        return acosf(dot);
-    }
 };
 
 
@@ -61,22 +44,52 @@ public:
 class StrokeSample
 {
     StrokeSplineSegment segment_;
+    int index_;
+    int max_index_;
+
     Vector2 position_;
     float thickness_;
+    float curvature_;
 
 
 public:
     StrokeSample() = default;
 
-    StrokeSample(const StrokeSplineSegment& segment, const float t) noexcept
-        : segment_(segment), position_(segment.point(t)), thickness_(segment.thickness(t)) {}
+    StrokeSample(const StrokeSplineSegment& segment, const int index, const int max_index) noexcept :
+        segment_(segment),
+        index_(index),
+        max_index_(max_index),
+        position_(segment.point(t())),
+        thickness_(segment.thickness(t()))
+    {
+        curvature_ = calculate_curvature();
+    }
 
 
     const StrokeSplineSegment& segment() const noexcept { return segment_; }
-    const StrokePoint& origin() const noexcept { return segment_.stroke_point(); }
+    int index() const noexcept { return index_; }
+    int max_index() const noexcept { return max_index_; }
+    float t() const noexcept { return (float)index_ / max_index_; }
+    StrokePoint origin() const noexcept { return segment_.stroke_point(); }
+
     const Vector2& position() const noexcept { return position_; }
     float thickness() const noexcept { return thickness_; }
-    float curvature() const noexcept { return segment_.curvature(); }
+    float curvature() const noexcept { return curvature_; }
+
+
+    float calculate_curvature() const noexcept
+    {
+        const Vector2 previous = segment_.point((float)(index_ - 1) / max_index_);
+        const Vector2 next = segment_.point((float)(index_ + 1) / max_index_);
+
+        const Vector2 d1 = Vector2Normalize(position_ - previous);
+        const Vector2 d2 = Vector2Normalize(next - position_);
+
+        float dot = Vector2DotProduct(d1, d2);
+        dot = std::clamp(dot, -1.0f, 1.0f);
+
+        return acosf(dot);
+    }
 };
 
 
