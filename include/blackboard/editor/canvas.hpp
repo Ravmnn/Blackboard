@@ -49,7 +49,8 @@ public:
     void draw() noexcept override;
 
 
-    const Camera2D camera() const noexcept { return canvas_camera_.camera(); }
+    const CanvasCamera& canvas_camera() const noexcept { return canvas_camera_; }
+    const Camera2D& camera() const noexcept { return canvas_camera_.camera(); }
     const Color& background_color() const noexcept { return background_color_; }
 
     Vector2 mouse_delta() const noexcept { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }

@@ -1,10 +1,8 @@
 #include <blackboard/editor/stroke_renderer.hpp>
 
-#include <algorithm>
-
 #include <rlgl.h>
-#include <raymath.h>
 
+#include <blackboard/collisions.hpp>
 #include <blackboard/editor/stroke.hpp>
 
 
@@ -42,8 +40,13 @@ void StrokeRenderer::draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcep
 
 void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
 {
+    const Rectangle camera_bounds = camera ? camera->get_world_bounds() : Rectangle{};
+
     for (int i = 0; i < mesh.size() - 1; i++)
     {
+        if (camera && !Collisions::point_inside_rectangle(mesh[i].position(), camera_bounds))
+            continue;
+
         const Color& color = mesh[i].color;
         rlColor4ub(color.r, color.g, color.b, color.a);
 
@@ -65,13 +68,13 @@ void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>
         return;
 
     const StrokeMeshNode& current_node = mesh[i];
-    const Vector2 previous = mesh[i - 1].sample().position();
-    const Vector2 current = current_node.sample().position();
-    const Vector2 next = mesh[i + 1].sample().position();
 
     if (current_node.curvature() <= MaxCurvature)
         return;
 
+    const Vector2 previous = mesh[i - 1].sample().position();
+    const Vector2 current = current_node.sample().position();
+    const Vector2 next = mesh[i + 1].sample().position();
     const Vector2 dir1 = Vector2Normalize(Vector2Subtract(current, previous));
     const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
@@ -101,7 +104,7 @@ void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) 
 
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
 {
-    static constexpr int CapResolution = 32;
+    static constexpr int CapResolution = 24;
 
     const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;

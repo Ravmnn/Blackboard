@@ -29,6 +29,8 @@ public:
     float max_zoom;
     float zoom_factor;
 
+    Vector2 bounds_expansion = {};
+
 
 
     void update() noexcept override;
@@ -43,6 +45,9 @@ public:
 
     const Camera2D& camera() const noexcept { return camera_; }
     const Camera2D& target_camera() const noexcept { return target_camera_; }
+
+
+    Rectangle get_world_bounds() const noexcept;
 
 
 private:

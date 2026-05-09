@@ -25,7 +25,7 @@ BrushBody::BrushBody(Brush& brush) noexcept :
 
 void BrushBody::update() noexcept
 {
-    position_ = brush.canvas().mouse_position();
+    position_ = brush.cursor.position();
 
     update_trail();
     update_thickness();

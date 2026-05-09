@@ -1,15 +1,15 @@
 #include <blackboard/editor/canvas.hpp>
 
+#include <blackboard/timer.hpp>
 #include <blackboard/rendering/effects/effect_pass.hpp>
-
 #include <blackboard/editor/stroke_renderer.hpp>
 
 
 
 
 Canvas::Canvas() :
-    stroke_mesh_generator_(16),
-    stroke_renderer_(stroke_mesh_generator_),
+    stroke_mesh_generator_(10),
+    stroke_renderer_(stroke_mesh_generator_, &canvas_camera_),
     canvas_camera_(*this, 0.2, 25, 0.13),
 
     brush(*this, Color(211, 211, 211, 255), 14),
@@ -18,6 +18,8 @@ Canvas::Canvas() :
     stroke_renderer_.should_debug_draw_points = false;
     stroke_renderer_.should_debug_draw_edges = false;
     stroke_renderer_.should_debug_draw_samples = false;
+
+    canvas_camera_.bounds_expansion = { 50, 50 };
 
     window_renderer_.use_buffer_texture = false;
 
@@ -107,7 +109,7 @@ void Canvas::draw_strokes() noexcept
 {
     stroke_renderer_.draw_stroke(brush.stroke());
 
-    for (auto& mesh : stroke_meshes_)
+    for (const auto& mesh : stroke_meshes_)
         stroke_renderer_.draw_stroke_mesh(mesh);
 }
 

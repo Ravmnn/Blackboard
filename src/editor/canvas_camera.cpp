@@ -1,9 +1,9 @@
 #include <blackboard/editor/canvas_camera.hpp>
 
-#include <raymath.h>
-
 #include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
+
+#include <raymath.h>
 
 
 
@@ -21,6 +21,19 @@ CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const flo
 
     movement_interpolation_ = Interpolation(target_camera_.target, 0.01, 6);
     zoom_interpolation_ = Interpolation(target_camera_.zoom, 0.01, 5);
+}
+
+
+
+
+Rectangle CanvasCamera::get_world_bounds() const noexcept
+{
+    const Vector2 screen_size = Vector2{ GetScreenWidth(), GetScreenHeight() } * canvas.SuperSamplingFactor;
+
+    const Vector2 topLeft = GetScreenToWorld2D({ 0, 0 }, camera_) - bounds_expansion;
+    const Vector2 bottomRight = GetScreenToWorld2D(screen_size, camera_) + bounds_expansion * 2;
+
+    return Rectangle { topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y };
 }
 
 

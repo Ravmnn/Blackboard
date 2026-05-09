@@ -29,7 +29,7 @@ private:
     float smooth_velocity_ = 0;
     float velocity_smoothing_ = 0.05;
     float max_smooth_velocity_ = 25;
-    int point_thickness_back_iterating_amount_ = 8;
+    int point_thickness_back_iterating_amount_ = 6;
 
     float current_thickness_;
     float min_thickness_ = 5;

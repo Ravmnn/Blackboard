@@ -3,7 +3,7 @@ subdir('editor')
 subdir('rendering')
 
 
-sources = files('main.cpp', 'texture_sample.cpp')
+sources = files('main.cpp', 'texture_sample.cpp', 'timer.cpp')
 
 executable('bboard', sources,
     dependencies: global_deps,
