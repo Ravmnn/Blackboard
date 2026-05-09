@@ -82,8 +82,14 @@ public:
         const Vector2 previous = segment_.point((float)(index_ - 1) / max_index_);
         const Vector2 next = segment_.point((float)(index_ + 1) / max_index_);
 
-        const Vector2 d1 = Vector2Normalize(position_ - previous);
-        const Vector2 d2 = Vector2Normalize(next - position_);
+        return calculate_curvature(previous, position_, next);
+    }
+
+
+    static float calculate_curvature(const Vector2& previous, const Vector2& current, const Vector2& next) noexcept
+    {
+        const Vector2 d1 = Vector2Normalize(current - previous);
+        const Vector2 d2 = Vector2Normalize(next - current);
 
         float dot = Vector2DotProduct(d1, d2);
         dot = std::clamp(dot, -1.0f, 1.0f);

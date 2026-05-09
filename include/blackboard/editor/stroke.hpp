@@ -17,6 +17,9 @@ struct StrokePoint
 
     StrokePoint(const Vector2& position, const float thickness)
         : position(position), thickness(thickness) {}
+
+
+    operator Vector2() const noexcept { return position; }
 };
 
 

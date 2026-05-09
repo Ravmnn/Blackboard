@@ -12,10 +12,10 @@ private:
 
 
 public:
-    int samples_per_segment;
+    unsigned int samples_per_segment;
 
 
-    explicit StrokeMeshGenerator(const int samples_per_segment) noexcept
+    explicit StrokeMeshGenerator(const unsigned int samples_per_segment) noexcept
         : samples_per_segment(samples_per_segment) {}
 
 
@@ -25,7 +25,7 @@ public:
 private:
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     std::vector<StrokeSample> create_samples(const std::vector<StrokePoint>& points) const noexcept;
-    void add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokeSplineSegment& segment, const size_t i) const noexcept;
+    static void add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokeSplineSegment& segment, const unsigned int samples_amount, const size_t i) noexcept;
 
     static std::vector<StrokeEdge> create_edges(const std::vector<StrokeSample>& samples) noexcept;
     static StrokeEdge create_edge(const StrokeSample& sample, const Vector2& direction) noexcept;

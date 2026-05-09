@@ -103,7 +103,7 @@ void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) 
 
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
 {
-    static constexpr int CapResolution = 24;
+    static constexpr int CapResolution = 32;
 
     const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;
