@@ -41,7 +41,7 @@ std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<
 
     for (size_t i = 1; i < size; i++)
     {
-        const unsigned int samples_amount = adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment;
+        const unsigned int samples_amount = (adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment);
         add_samples_from_segment(samples, StrokeSplineSegment(points, i), samples_amount, i);
     }
 
@@ -51,8 +51,8 @@ std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<
 
 unsigned int StrokeMeshGenerator::calculate_adaptative_samples_amount(const std::vector<StrokePoint>& points, const size_t i) const noexcept
 {
-    constexpr float VelocityFactor = 1 / 100;
-    constexpr float CurvatureFactor = 5;
+    constexpr float VelocityFactor = 1.0 / 100.0;
+    constexpr float CurvatureFactor = 5.0;
 
     const float velocity = Vector2Distance(points[i].position, points[i + 1].position) * VelocityFactor;
     const float curvature = (points.size() < 3 ? 0 : calculate_average_curvature(points, i)) * CurvatureFactor;
