@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <optional>
-
 #include <blackboard/editor/stroke.hpp>
 #include <blackboard/editor/lazy_cursor.hpp>
 #include <blackboard/editor/tools/brush/body.hpp>
@@ -19,9 +16,9 @@ class Brush : public Tool
 private:
     Stroke stroke_;
 
-    bool should_draw_ = false;
-    bool draw_finished_ = false;
-    bool draw_started_ = false;
+    bool was_active_ = false;
+    bool got_inactive_ = false;
+    bool got_active_ = false;
 
     float max_velocity_ = 70;
 
@@ -59,9 +56,8 @@ public:
     const Stroke& stroke() const noexcept { return stroke_; }
     void clear_stroke() noexcept { stroke_.points.clear(); }
 
-    bool should_draw() const noexcept { return should_draw_; }
-    bool draw_started() const noexcept { return draw_started_; }
-    bool draw_finished() const noexcept { return draw_finished_; }
+    bool draw_started() const noexcept { return got_active_; }
+    bool draw_finished() const noexcept { return got_inactive_; }
 
 
 private:

@@ -1,11 +1,5 @@
 #include <blackboard/editor/tools/brush/brush.hpp>
 
-#include <algorithm>
-#include <string>
-
-#include <raymath.h>
-
-#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
 
 
@@ -24,7 +18,7 @@ Brush::Brush(Canvas& canvas, const Color& color, const float thickness) noexcept
 
 void Brush::update() noexcept
 {
-    if (draw_finished_)
+    if (got_inactive_)
         stroke_.points.clear();
 
     update_drawing_state();
@@ -36,28 +30,31 @@ void Brush::update() noexcept
     update_smooth_velocity();
 
     current_thickness_ = thickness_from_velocity();
+    stroke_.color = color;
     add_stroke_point();
+
+    // TODO: remove Canvas dependency, set position manually
 }
 
 
 void Brush::update_cursor() noexcept
 {
     cursor.target_position = canvas_.mouse_position();
-    cursor.immediate = !should_draw_;
+    cursor.immediate = !active();
     cursor.update();
 }
 
 
 void Brush::update_canvas_actions() noexcept
 {
-    if (draw_finished_)
+    if (got_inactive_)
         canvas_.add_stroke(stroke_);
 }
 
 
 void Brush::update_smooth_velocity() noexcept
 {
-    if (!should_draw_)
+    if (!active())
     {
         smooth_velocity_ = 0;
         return;
@@ -71,26 +68,22 @@ void Brush::update_smooth_velocity() noexcept
 
 void Brush::update_drawing_state() noexcept
 {
-    draw_finished_ = false;
-    draw_started_ = false;
+    got_inactive_ = false;
+    got_active_ = false;
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        should_draw_ = true;
-        draw_started_ = true;
-    }
+    if (!was_active_ && active())
+        got_active_ = true;
 
-    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
-    {
-        should_draw_ = false;
-        draw_finished_ = true;
-    }
+    if (was_active_ && !active())
+        got_inactive_ = true;
+
+    was_active_ = active();
 }
 
 
 void Brush::add_stroke_point() noexcept
 {
-    if (!should_draw_ || is_too_slow())
+    if (!active() || is_too_slow())
         return;
 
     stroke_.points.push_back(StrokePoint(cursor.position(), current_thickness_));
@@ -122,7 +115,7 @@ void Brush::draw() noexcept
 
 float Brush::current_velocity() const noexcept
 {
-    if (stroke_.points.empty() || draw_started_)
+    if (stroke_.points.empty() || got_active_)
         return 0;
 
     const float velocity = Vector2Distance(cursor.position(), stroke_.points.back().position);
