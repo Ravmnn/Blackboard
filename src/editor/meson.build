@@ -5,7 +5,7 @@ subdir('tools')
 
 sources = files(
     'canvas.cpp', 'stroke_renderer.cpp', 'stroke_mesh_generator.cpp', 'canvas_camera.cpp', 'trail.cpp',
-    'lazy_cursor.cpp'
+    'lazy_cursor.cpp', 'mouse_button_event.cpp'
 )
 
 editor_lib = static_library('editor', sources,
