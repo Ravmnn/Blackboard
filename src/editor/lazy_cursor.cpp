@@ -20,6 +20,7 @@ void LazyCursor::update() noexcept
         initialize();
 
     update_position();
+    update_smooth_velocity();
 }
 
 
@@ -45,9 +46,14 @@ void LazyCursor::update_position() noexcept
 }
 
 
-
-
-Vector2 LazyCursor::position() const noexcept
+void LazyCursor::update_smooth_velocity() noexcept
 {
-    return current_position_;
+    if (immediate)
+    {
+        smooth_speed_ = 0;
+        return;
+    }
+
+    if (!is_too_slow())
+        smooth_speed_ += (current_speed() - smooth_speed_) * speed_smoothing;
 }

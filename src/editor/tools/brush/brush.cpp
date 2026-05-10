@@ -27,13 +27,10 @@ void Brush::update() noexcept
     body.update();
 
     update_canvas_actions();
-    update_smooth_velocity();
 
-    current_thickness_ = thickness_from_velocity();
+    current_thickness_ = thickness_from_speed();
     stroke_.color = color;
     add_stroke_point();
-
-    // TODO: remove Canvas dependency, set position manually
 }
 
 
@@ -49,20 +46,6 @@ void Brush::update_canvas_actions() noexcept
 {
     if (got_inactive_)
         canvas_.add_stroke(stroke_);
-}
-
-
-void Brush::update_smooth_velocity() noexcept
-{
-    if (!active())
-    {
-        smooth_velocity_ = 0;
-        return;
-    }
-
-    // TODO: moving this to LazyCursor maybe?
-    if (!is_too_slow())
-        smooth_velocity_ += (current_velocity() - smooth_velocity_) * velocity_smoothing_;
 }
 
 
@@ -83,7 +66,7 @@ void Brush::update_drawing_state() noexcept
 
 void Brush::add_stroke_point() noexcept
 {
-    if (!active() || is_too_slow())
+    if (!active() || cursor.is_too_slow())
         return;
 
     stroke_.points.push_back(StrokePoint(cursor.position(), current_thickness_));
@@ -93,13 +76,11 @@ void Brush::add_stroke_point() noexcept
 
 void Brush::modify_previous_points_thickness(const float thickness) noexcept
 {
-    for (int i = stroke_.points.size() - 1; i > ((int)stroke_.points.size()) - point_thickness_back_iterating_amount_; i--)
-    {
-        if (i < 0)
-            break;
+    const int minimum_index = ((int)stroke_.points.size()) - point_thickness_back_iterating_amount_;
 
+    for (int i = stroke_.points.size() - 1; i > minimum_index && i >= 0; i--)
         stroke_.points[i].thickness = thickness;
-    }
+
 }
 
 
@@ -108,34 +89,4 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 void Brush::draw() noexcept
 {
     body.draw();
-}
-
-
-
-
-float Brush::current_velocity() const noexcept
-{
-    if (stroke_.points.empty() || got_active_)
-        return 0;
-
-    const float velocity = Vector2Distance(cursor.position(), stroke_.points.back().position);
-    return std::min(velocity, max_velocity_);
-}
-
-
-
-
-float Brush::thickness_from_velocity() const noexcept
-{
-    const float t = std::clamp(smooth_velocity_ / max_smooth_velocity_, 0.0f, 1.0f);
-    return max_thickness() + t * (min_thickness() - max_thickness());
-}
-
-
-
-
-bool Brush::is_too_slow() const noexcept
-{
-    const float velocity = current_velocity();
-    return !stroke_.points.empty() && velocity < 1;
 }
