@@ -18,8 +18,6 @@ std::vector<StrokeMeshNode> StrokeMeshGenerator::generate_mesh(const Stroke& str
 }
 
 
-
-
 std::vector<StrokePoint> StrokeMeshGenerator::add_ghost_points(const std::vector<StrokePoint>& points) noexcept
 {
     std::vector<StrokePoint> new_points;

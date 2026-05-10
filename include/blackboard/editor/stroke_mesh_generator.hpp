@@ -24,6 +24,7 @@ public:
 
 
 private:
+    static std::vector<StrokePoint> remove_close_points(const std::vector<StrokePoint>& points) noexcept;
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     std::vector<StrokeSample> create_samples(const std::vector<StrokePoint>& points) const noexcept;
     unsigned int calculate_adaptative_samples_amount(const std::vector<StrokePoint>& points, const size_t i) const noexcept;
