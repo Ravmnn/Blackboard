@@ -8,7 +8,7 @@
 
 
 Canvas::Canvas() :
-    stroke_mesh_generator_(1024),
+    stroke_mesh_generator_(6),
     stroke_renderer_(stroke_mesh_generator_, &canvas_camera_),
     canvas_camera_(*this, 0.2, 25, 0.13),
 
@@ -62,8 +62,12 @@ void Canvas::update_input() noexcept
     if (IsWindowResized())
         recreate_texture_renderer();
 
-    if (IsKeyPressed(KEY_ONE))
-        draw_statistics_ = !draw_statistics_;
+    if (IsKeyPressed(KEY_ONE)) draw_statistics_ = !draw_statistics_;
+
+    if (IsKeyPressed(KEY_TWO)) stroke_renderer_.should_debug_draw_points = !stroke_renderer_.should_debug_draw_points;
+    if (IsKeyPressed(KEY_THREE)) stroke_renderer_.should_debug_draw_samples = !stroke_renderer_.should_debug_draw_samples;
+    if (IsKeyPressed(KEY_FOUR)) stroke_renderer_.should_debug_draw_edges = !stroke_renderer_.should_debug_draw_edges;
+    if (IsKeyPressed(KEY_FIVE)) stroke_renderer_.should_debug_draw_caps = !stroke_renderer_.should_debug_draw_caps;
 }
 
 

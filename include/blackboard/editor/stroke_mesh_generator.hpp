@@ -13,6 +13,7 @@ private:
 
 public:
     unsigned int samples_per_segment;
+    bool adaptative_samples_per_segment = true;
 
 
     explicit StrokeMeshGenerator(const unsigned int samples_per_segment) noexcept
@@ -25,6 +26,8 @@ public:
 private:
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     std::vector<StrokeSample> create_samples(const std::vector<StrokePoint>& points) const noexcept;
+    unsigned int calculate_adaptative_samples_amount(const std::vector<StrokePoint>& points, const size_t i) const noexcept;
+    static float calculate_average_curvature(const std::vector<StrokePoint>& points, const size_t i) noexcept;
     static void add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokeSplineSegment& segment, const unsigned int samples_amount, const size_t i) noexcept;
 
     static std::vector<StrokeEdge> create_edges(const std::vector<StrokeSample>& samples) noexcept;
