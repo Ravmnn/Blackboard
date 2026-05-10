@@ -16,8 +16,8 @@ public:
 
 
     Interpolation() = default;
-    Interpolation(const T& current, const float smoothing, const float velocity) noexcept
-        : current(current), target(current), smoothing(smoothing), velocity(velocity) {}
+    Interpolation(const T& current, const float velocity, const float smoothing = 0.005f) noexcept
+        : current(current), target(current), velocity(velocity), smoothing(smoothing) {}
 
 
     operator T() const noexcept { return current; }

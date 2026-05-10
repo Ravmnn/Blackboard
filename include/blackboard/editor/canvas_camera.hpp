@@ -32,11 +32,10 @@ public:
     Vector2 bounds_expansion = {};
 
 
+    CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
+
 
     void update() noexcept override;
-
-
-    CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
 
 
     void enable() noexcept override { Activatable::enable(); BeginMode2D(camera_); }
