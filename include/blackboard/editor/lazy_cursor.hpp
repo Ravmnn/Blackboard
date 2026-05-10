@@ -11,7 +11,7 @@
 class Brush;
 
 
-class BrushCursor : public Updateable
+class LazyCursor : public Updateable
 {
 private:
     Vector2 last_position_ = {};
@@ -21,11 +21,13 @@ private:
 
 
 public:
-    const Brush& brush;
-    float weight;
+    Vector2 target_position;
+    float laziness;
+
+    bool immediate = false;
 
 
-    explicit BrushCursor(const Brush& brush, const float weight) noexcept;
+    explicit LazyCursor(const float laziness) noexcept;
 
 
     void update() noexcept override;

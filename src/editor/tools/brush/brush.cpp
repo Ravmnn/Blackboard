@@ -13,7 +13,7 @@
 
 Brush::Brush(Canvas& canvas, const Color& color, const float thickness) noexcept : Tool(canvas),
     stroke_({}, color),
-    cursor(*this, 2),
+    cursor(2),
     body(*this),
     color(color),
     thickness(thickness)
@@ -29,14 +29,22 @@ void Brush::update() noexcept
 
     update_drawing_state();
 
-    cursor.update();
+    update_cursor();
     body.update();
 
-    update_smooth_velocity();
     update_canvas_actions();
+    update_smooth_velocity();
 
     current_thickness_ = thickness_from_velocity();
     add_stroke_point();
+}
+
+
+void Brush::update_cursor() noexcept
+{
+    cursor.target_position = canvas_.mouse_position();
+    cursor.immediate = !should_draw_;
+    cursor.update();
 }
 
 
@@ -55,6 +63,7 @@ void Brush::update_smooth_velocity() noexcept
         return;
     }
 
+    // TODO: moving this to LazyCursor maybe?
     if (!is_too_slow())
         smooth_velocity_ += (current_velocity() - smooth_velocity_) * velocity_smoothing_;
 }

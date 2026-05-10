@@ -4,7 +4,7 @@
 #include <optional>
 
 #include <blackboard/editor/stroke.hpp>
-#include <blackboard/editor/tools/brush/cursor.hpp>
+#include <blackboard/editor/lazy_cursor.hpp>
 #include <blackboard/editor/tools/brush/body.hpp>
 #include <blackboard/editor/tools/tool.hpp>
 
@@ -39,7 +39,7 @@ private:
 
 
 public:
-    BrushCursor cursor;
+    LazyCursor cursor;
     BrushBody body;
 
     Color color;
@@ -65,10 +65,11 @@ public:
 
 
 private:
+    void update_cursor() noexcept;
     void update_canvas_actions() noexcept;
-
     void update_smooth_velocity() noexcept;
     void update_drawing_state() noexcept;
+
     void add_stroke_point() noexcept;
     void modify_previous_points_thickness(const float thickness) noexcept;
 
