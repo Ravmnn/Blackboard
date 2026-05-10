@@ -6,11 +6,12 @@
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/mouse_button_event.hpp>
+#include <blackboard/editor/mouse_position_provider.hpp>
 
 
 
 
-class Canvas : public Updateable, public Drawable
+class Canvas : public Updateable, public Drawable, public MousePositionProvider
 {
 public:
     static constexpr Color DefaultBackgroundColor = Color{ 18, 18, 18, 255 };
@@ -34,8 +35,8 @@ private:
     bool draw_statistics_ = false;
 
 
-    MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT);
-    MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT);
+    MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, *this);
+    MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, *this);
 
 
 public:
@@ -61,10 +62,9 @@ public:
     const std::vector<StrokeMesh>& stroke_meshes() const noexcept { return stroke_meshes_; }
     const Color& background_color() const noexcept { return background_color_; }
 
-    Vector2 mouse_delta() const noexcept { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
-    Vector2 mouse_position() const noexcept { return map_point(screen_mouse_position()); }
-
-    Vector2 screen_mouse_position() const noexcept { return GetMousePosition() * SuperSamplingFactor; }
+    Vector2 mouse_delta() const noexcept override { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
+    Vector2 mouse_position() const noexcept override { return map_point(screen_mouse_position()); }
+    Vector2 screen_mouse_position() const noexcept override { return GetMousePosition() * SuperSamplingFactor; }
 
 
     Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, canvas_camera_.target_camera()); }
