@@ -1,4 +1,4 @@
-#include <blackboard/editor/tools/eraser.hpp>
+#include <blackboard/editor/tools/eraser/eraser.hpp>
 
 
 

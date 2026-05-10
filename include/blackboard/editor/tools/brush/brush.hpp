@@ -3,10 +3,9 @@
 #include <vector>
 #include <optional>
 
-#include <blackboard/animation/spring.hpp>
 #include <blackboard/editor/stroke.hpp>
-#include <blackboard/editor/tools/brush_cursor.hpp>
-#include <blackboard/editor/tools/brush_body.hpp>
+#include <blackboard/editor/tools/brush/cursor.hpp>
+#include <blackboard/editor/tools/brush/body.hpp>
 #include <blackboard/editor/tools/tool.hpp>
 
 
@@ -81,4 +80,6 @@ private:
     float max_thickness() const noexcept { return std::min(max_thickness_, thickness + thickness_max_increase_); }
 
     bool is_too_slow() const noexcept;
+
+    float distance_to_last_point() const noexcept { return Vector2Distance(stroke_.points.back(), cursor.position()); }
 };

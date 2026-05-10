@@ -1,5 +1,8 @@
-sources = files('brush.cpp', 'brush_body.cpp', 'brush_cursor.cpp', 'eraser.cpp')
+subdir('brush')
+subdir('eraser')
 
-tools_lib = static_library('tools', sources,
-    dependencies: global_deps
+
+tools_lib = static_library('tools', [],
+    dependencies: global_deps,
+    link_with: [brush_lib, eraser_lib]
 )

@@ -1,4 +1,4 @@
-#include <blackboard/editor/tools/brush.hpp>
+#include <blackboard/editor/tools/brush/brush.hpp>
 
 #include <algorithm>
 #include <string>

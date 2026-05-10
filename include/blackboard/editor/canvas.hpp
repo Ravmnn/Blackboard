@@ -4,8 +4,8 @@
 
 #include <blackboard/drawable.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
-#include <blackboard/editor/tools/brush.hpp>
-#include <blackboard/editor/tools/eraser.hpp>
+#include <blackboard/editor/tools/brush/brush.hpp>
+#include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 
