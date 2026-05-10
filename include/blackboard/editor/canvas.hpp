@@ -1,19 +1,22 @@
 #pragma once
 
-#include <array>
-
-#include <blackboard/drawable.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
+#include <blackboard/editor/mouse_button_event.hpp>
 
 
 
 
 class Canvas : public Updateable, public Drawable
 {
+public:
+    static constexpr Color DefaultBackgroundColor = Color{ 18, 18, 18, 255 };
+    static constexpr Color DefaultBrushColor = Color{ 211, 211, 211, 255 };
+
+
 private:
     StrokeMeshGenerator stroke_mesh_generator_;
     StrokeRenderer stroke_renderer_;
@@ -24,11 +27,15 @@ private:
     TextureRenderer texture_renderer_;
 
     std::vector<StrokeMesh> stroke_meshes_;
-    Color background_color_ = Color{ 18, 18, 18, 255 };
+    Color background_color_ = DefaultBackgroundColor;
 
     bool initialized_ = false;
 
     bool draw_statistics_ = false;
+
+
+    MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT);
+    MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT);
 
 
 public:
@@ -39,7 +46,7 @@ public:
     Eraser eraser;
 
 
-    Tool* active_tool = nullptr;
+    Tool* current_tool = nullptr;
 
 
     Canvas();
@@ -51,6 +58,7 @@ public:
 
     const CanvasCamera& canvas_camera() const noexcept { return canvas_camera_; }
     const Camera2D& camera() const noexcept { return canvas_camera_.camera(); }
+    const std::vector<StrokeMesh>& stroke_meshes() const noexcept { return stroke_meshes_; }
     const Color& background_color() const noexcept { return background_color_; }
 
     Vector2 mouse_delta() const noexcept { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
@@ -65,9 +73,9 @@ public:
     void add_stroke(const Stroke& stroke) noexcept;
 
 
-    void set_current_tool(Tool& tool) noexcept { active_tool = &tool; }
+    void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
 
-    void alternate_tool() noexcept { active_tool = active_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
+    void alternate_tool() noexcept { current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
 
 
 private:
@@ -75,7 +83,7 @@ private:
     void recreate_texture_renderer() noexcept;
 
     void update_input() noexcept;
-    void update_tool_switch() noexcept;
+    void update_mouse_buttons() noexcept;
 
 
     void draw_to_buffer_texture() noexcept;

@@ -13,7 +13,7 @@ BrushBody::BrushBody(Brush& brush) noexcept :
     thickness_(brush.thickness, brush.thickness, 0.15, 40),
     stretch_(0, 0, 0.01, 30),
 
-    color_interpolation_(WHITE, 0.01, 2),
+    color_interpolation_(WHITE, 5),
 
     brush(brush)
 {
@@ -36,7 +36,7 @@ void BrushBody::update() noexcept
 
 void BrushBody::update_trail() noexcept
 {
-    trail_.emit = !brush.should_draw();
+    trail_.emit = !brush.active();
     trail_.color = color_interpolation_;
     trail_.origin = StrokePoint(position_, thickness_ * 2);
     trail_.update();
@@ -48,7 +48,7 @@ void BrushBody::update_thickness() noexcept
     float target_thickness = brush.current_thickness();
     target_thickness = (target_thickness == 0 ? brush.thickness : target_thickness / 2.0);
 
-    if (!brush.should_draw())
+    if (!brush.active())
         target_thickness = brush.thickness + IdleThicknessVariation;
 
     thickness_ = target_thickness;

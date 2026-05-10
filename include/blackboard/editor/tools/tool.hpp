@@ -2,6 +2,7 @@
 
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
+#include <blackboard/activatable.hpp>
 
 
 
@@ -9,7 +10,7 @@
 class Canvas;
 
 
-class Tool : public Updateable, public Drawable
+class Tool : public Updateable, public Drawable, public Activatable
 {
 protected:
     Canvas& canvas_;

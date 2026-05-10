@@ -12,7 +12,7 @@ Canvas::Canvas() :
     stroke_renderer_(stroke_mesh_generator_, &canvas_camera_),
     canvas_camera_(*this, 0.2, 25, 0.13),
 
-    brush(*this, Color(211, 211, 211, 255), 14),
+    brush(*this, DefaultBrushColor, 14),
     eraser(*this)
 {
     stroke_renderer_.should_debug_draw_points = false;
@@ -24,7 +24,14 @@ Canvas::Canvas() :
 
     window_renderer_.use_buffer_texture = false;
 
-    active_tool = &brush;
+    current_tool = &brush;
+
+
+    left_button_.on_press.subscribe([this]() noexcept { current_tool->enable(); });
+    left_button_.on_release.subscribe([this]() noexcept { current_tool->disable(); });
+
+    aux_button_.on_press.subscribe([this]() noexcept { brush.color = background_color(); current_tool->enable(); });
+    aux_button_.on_release.subscribe([this]() noexcept { brush.color = DefaultBrushColor; current_tool->disable(); });
 }
 
 
@@ -38,7 +45,7 @@ void Canvas::update() noexcept
     update_input();
 
     canvas_camera_.update();
-    active_tool->update();
+    current_tool->update();
 }
 
 
@@ -68,13 +75,15 @@ void Canvas::update_input() noexcept
     if (IsKeyPressed(KEY_THREE)) stroke_renderer_.should_debug_draw_samples = !stroke_renderer_.should_debug_draw_samples;
     if (IsKeyPressed(KEY_FOUR)) stroke_renderer_.should_debug_draw_edges = !stroke_renderer_.should_debug_draw_edges;
     if (IsKeyPressed(KEY_FIVE)) stroke_renderer_.should_debug_draw_caps = !stroke_renderer_.should_debug_draw_caps;
+
+    update_mouse_buttons();
 }
 
 
-void Canvas::update_tool_switch() noexcept
+void Canvas::update_mouse_buttons() noexcept
 {
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
-        alternate_tool();
+    left_button_.update();
+    aux_button_.update();
 }
 
 
@@ -93,7 +102,7 @@ void Canvas::draw_to_buffer_texture() noexcept
     canvas_camera_.enable();
 
     draw_strokes();
-    active_tool->draw();
+    current_tool->draw();
     texture_renderer_.end_render();
 
     canvas_camera_.disable();
@@ -112,10 +121,11 @@ void Canvas::draw_buffer_texture_to_window() noexcept
 
 void Canvas::draw_strokes() noexcept
 {
-    stroke_renderer_.draw_stroke(brush.stroke());
-
     for (const auto& mesh : stroke_meshes_)
         stroke_renderer_.draw_stroke_mesh(mesh);
+
+    if (!brush.draw_finished())
+        stroke_renderer_.draw_stroke(brush.stroke());
 }
 
 
