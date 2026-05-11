@@ -1,11 +1,11 @@
 #pragma once
 
-#include <blackboard/components/component.hpp>
+#include <blackboard/components/shape.hpp>
 
 
 
 
-class RoundedRectangle : public Component
+class RoundedRectangle : public Shape
 {
 private:
     Spring<Vector2> size_spring_;
@@ -22,12 +22,16 @@ public:
 
 
     void update() noexcept override;
-    void draw() noexcept override;
 
 
     const Vector2& size() const noexcept { return size_spring_.current; }
 
     void set_size(const Vector2& size) noexcept { size_spring_.target = size; }
+
+
+protected:
+    void draw_filled() noexcept override;
+    void draw_outlined() noexcept override;
 
 
 private:
