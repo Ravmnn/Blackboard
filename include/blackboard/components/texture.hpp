@@ -5,6 +5,7 @@
 
 
 
+// TODO: rename to Texture
 class TextureComponent : public Component
 {
 private:
@@ -16,8 +17,8 @@ public:
     Vector2 size;
 
 
-    TextureComponent(const Vector2& position, const Vector2& size, const Texture& texture) noexcept;
-    virtual ~TextureComponent() { UnloadTexture(texture_); }
+    TextureComponent(Component* const parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept;
+    ~TextureComponent() { UnloadTexture(texture_); }
 
 
     void draw() noexcept override;

@@ -2,6 +2,8 @@
 
 #include <blackboard/components/shape.hpp>
 
+#include <raymath.h>
+
 
 
 
@@ -15,10 +17,9 @@ public:
     unsigned int segments = 32;
 
     float radius;
-    Color color;
 
 
-    RoundedRectangle(const Vector2& position, const Vector2& size, float radius, Color color) noexcept;
+    RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, float radius, Color color) noexcept;
 
 
     void update() noexcept override;

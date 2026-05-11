@@ -8,11 +8,14 @@
 class Shape : public Component
 {
 public:
+    Color color;
+
     float border_thickness;
     Color border_color;
 
 
-    Shape(const Vector2& position, const float border_thickness = 0, const Color& border_color = WHITE) noexcept;
+    Shape(Component* const parent, const Vector2& relative_position, const Color& color = WHITE, const float border_thickness = 0,
+        const Color& border_color = WHITE) noexcept;
 
 
     void draw() noexcept override;

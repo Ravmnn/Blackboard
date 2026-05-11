@@ -3,7 +3,9 @@
 
 
 
-Shape::Shape(const Vector2& position, const float border_thickness, const Color& border_color) noexcept : Component(position),
+Shape::Shape(Component* const parent, const Vector2& position, const Color& color, const float border_thickness, const Color& border_color) noexcept
+    : Component(parent, position),
+    color(color),
     border_thickness(border_thickness),
     border_color(border_color)
 {}
@@ -17,4 +19,6 @@ void Shape::draw() noexcept
 
     if (border_thickness > 0)
         draw_outlined();
+
+    Component::draw();
 }
