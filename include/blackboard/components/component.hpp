@@ -29,4 +29,12 @@ public:
     const Vector2& position() const noexcept { return position_spring_.current; }
 
     void set_position(const Vector2& position) noexcept { position_spring_.target = position; }
+
+
+protected:
+    template <typename T>
+    static Spring<T> create_default_spring(const T& current) noexcept
+    {
+        return Spring<T>(current, current, DefaultSpringDamping, DefaultSpringSpeed);
+    }
 };
