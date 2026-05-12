@@ -25,12 +25,12 @@ void RoundedRectangle::update_self() noexcept
 void RoundedRectangle::draw_filled() noexcept
 {
     const float normalized_radius = get_normalized_radius(radius);
-    DrawRectangleRounded({ relative_position().x, relative_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, color);
+    DrawRectangleRounded({ absolute_position().x, absolute_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, color);
 }
 
 
 void RoundedRectangle::draw_outlined() noexcept
 {
     const float normalized_radius = get_normalized_radius(radius);
-    DrawRectangleRoundedLinesEx({ relative_position().x, relative_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, outline_thickness, outline_color);
+    DrawRectangleRoundedLinesEx({ absolute_position().x, absolute_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, outline_thickness, outline_color);
 }
