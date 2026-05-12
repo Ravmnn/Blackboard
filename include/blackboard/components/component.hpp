@@ -43,12 +43,14 @@ public:
 
 
 protected:
+    virtual void begin_drawing() noexcept;
+    virtual void end_drawing() noexcept;
+
+
     virtual void update_self() noexcept;
     virtual void draw_self() noexcept = 0;
 
-
-    virtual void begin_drawing() noexcept;
-    virtual void end_drawing() noexcept;
+    void decrement_geometry_stencil() noexcept;
 
 
     template <typename T>

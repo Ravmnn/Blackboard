@@ -7,6 +7,7 @@
 #include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/mouse_button_event.hpp>
 #include <blackboard/editor/mouse_position_provider.hpp>
+#include <blackboard/components/rounded_rectangle.hpp>
 
 
 
@@ -29,6 +30,9 @@ private:
 
     std::vector<StrokeMesh> stroke_meshes_;
     Color background_color_ = DefaultBackgroundColor;
+
+    RoundedRectangle parent_rectangle_;
+    RoundedRectangle* rectangle_;
 
     bool initialized_ = false;
 

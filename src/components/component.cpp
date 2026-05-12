@@ -28,18 +28,12 @@ void Component::update() noexcept
 
 void Component::draw() noexcept
 {
+    begin_drawing();
     draw_self();
+    end_drawing();
 
     for (const auto& child : children)
         child->draw();
-}
-
-
-
-
-void Component::update_self() noexcept
-{
-    relative_position_.update();
 }
 
 
@@ -55,4 +49,12 @@ void Component::begin_drawing() noexcept
 void Component::end_drawing() noexcept
 {
     ComponentStencil::disable();
+}
+
+
+
+
+void Component::update_self() noexcept
+{
+    relative_position_.update();
 }

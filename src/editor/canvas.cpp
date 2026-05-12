@@ -4,6 +4,8 @@
 #include <blackboard/rendering/effects/effect_pass.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 
+#include <glad.h>
+
 
 
 
@@ -11,6 +13,8 @@ Canvas::Canvas() :
     stroke_mesh_generator_(6),
     stroke_renderer_(stroke_mesh_generator_, &canvas_camera_),
     canvas_camera_(*this, 0.2, 25, 0.13),
+
+    parent_rectangle_(nullptr, Vector2{}, Vector2{ 1000, 1000 }, 25, WHITE),
 
     brush(*this, DefaultBrushColor, 14),
     eraser(*this)
@@ -32,6 +36,14 @@ Canvas::Canvas() :
 
     aux_button_.on_press.subscribe([this]() noexcept { brush.color = background_color(); current_tool->enable(); });
     aux_button_.on_release.subscribe([this]() noexcept { brush.color = DefaultBrushColor; current_tool->disable(); });
+
+
+    rectangle_ = new RoundedRectangle(&parent_rectangle_, Vector2{}, Vector2{ 100, 100 }, 10, Color{ 255, 180, 180, 255 });
+
+    rectangle_->outline_thickness = 2;
+    rectangle_->outline_color = Color{ 255, 100, 100, 255 };
+    parent_rectangle_.outline_thickness = 2;
+    parent_rectangle_.outline_color = Color{ 255, 100, 255, 255 };
 }
 
 
@@ -46,6 +58,9 @@ void Canvas::update() noexcept
 
     canvas_camera_.update();
     current_tool->update();
+
+    rectangle_->set_absolute_position(mouse_position() - rectangle_->size() / 2);
+    parent_rectangle_.update();
 }
 
 
@@ -100,12 +115,12 @@ void Canvas::draw_to_buffer_texture() noexcept
 {
     texture_renderer_.begin_render();
     canvas_camera_.enable();
-
-    draw_strokes();
-    current_tool->draw();
+        draw_strokes();
+        current_tool->draw();
+        parent_rectangle_.draw();
+    canvas_camera_.disable();
     texture_renderer_.end_render();
 
-    canvas_camera_.disable();
     texture_renderer_.generate_mipmaps();
 }
 
@@ -113,8 +128,8 @@ void Canvas::draw_to_buffer_texture() noexcept
 void Canvas::draw_buffer_texture_to_window() noexcept
 {
     window_renderer_.begin_render();
-    draw_antialiased_contents();
-    draw_statistics();
+        draw_antialiased_contents();
+        draw_statistics();
     window_renderer_.end_render();
 }
 

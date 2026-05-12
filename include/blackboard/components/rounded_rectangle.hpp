@@ -14,7 +14,7 @@ private:
 
 
 public:
-    unsigned int segments = 32;
+    unsigned int segments = 16;
 
     float radius;
 

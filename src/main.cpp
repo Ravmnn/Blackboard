@@ -2,10 +2,12 @@
 
 #include <blackboard/editor/canvas.hpp>
 
+#include <glad.h>
 
 
 
-int main(int argc, char** argv)
+
+int main(int argc, char **argv)
 {
     SetTraceLogLevel(LOG_WARNING);
 
@@ -14,10 +16,8 @@ int main(int argc, char** argv)
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
 
-
     {
         Canvas canvas;
-
 
         while (!WindowShouldClose())
         {
@@ -25,7 +25,6 @@ int main(int argc, char** argv)
             canvas.draw();
         }
     }
-
 
     CloseWindow();
 

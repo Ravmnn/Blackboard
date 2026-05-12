@@ -15,6 +15,10 @@ public:
     static void clear() noexcept { glClear(GL_STENCIL_BUFFER_BIT); }
 
 
+    static void enable_color() noexcept { glColorMask(true, true, true, true); }
+    static void disable_color() noexcept { glColorMask(false, false, false, false); }
+
+
     static void begin_write(const int condition, const int stencil_value, const GLenum stencil_op) noexcept
     {
         set(condition, stencil_value, stencil_op);
