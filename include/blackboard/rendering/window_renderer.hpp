@@ -22,7 +22,9 @@ public:
 
     // TODO: detect window resizing and update buffer texture size
 
-    Vector2 resolution() const noexcept override { return { GetScreenWidth(), GetScreenHeight() }; }
+    Vector2 resolution() const noexcept override { return screen_resolution(); }
+
+    static Vector2 screen_resolution() noexcept { return { GetScreenWidth(), GetScreenHeight() }; }
 
 
 protected:
