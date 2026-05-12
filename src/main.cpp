@@ -1,8 +1,4 @@
-#include <raylib.h>
-
-#include <blackboard/editor/canvas.hpp>
-
-#include <glad.h>
+#include <blackboard/editor/editor.hpp>
 
 
 
@@ -17,12 +13,12 @@ int main(int argc, char **argv)
     PollInputEvents();
 
     {
-        Canvas canvas;
+        Editor editor;
 
         while (!WindowShouldClose())
         {
-            canvas.update();
-            canvas.draw();
+            editor.update();
+            editor.draw();
         }
     }
 
