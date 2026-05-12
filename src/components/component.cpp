@@ -1,5 +1,7 @@
 #include <blackboard/components/component.hpp>
 
+#include <blackboard/components/component_stencil.hpp>
+
 
 
 
@@ -15,7 +17,7 @@ Component::Component(Component* const parent, const Vector2& relative_position) 
 
 void Component::update() noexcept
 {
-    relative_position_.update();
+    update_self();
 
     for (const auto& child : children)
         child->update();
@@ -26,6 +28,31 @@ void Component::update() noexcept
 
 void Component::draw() noexcept
 {
+    draw_self();
+
     for (const auto& child : children)
         child->draw();
+}
+
+
+
+
+void Component::update_self() noexcept
+{
+    relative_position_.update();
+}
+
+
+
+
+void Component::begin_drawing() noexcept
+{
+    ComponentStencil::enable();
+    ComponentStencil::mask_and_increment(*this);
+}
+
+
+void Component::end_drawing() noexcept
+{
+    ComponentStencil::disable();
 }

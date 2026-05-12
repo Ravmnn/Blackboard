@@ -21,10 +21,6 @@ public:
 
     RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, float radius, Color color) noexcept;
 
-
-    void update() noexcept override;
-
-
     const Vector2& size() const noexcept { return size_spring_.current; }
 
     void set_size(const Vector2& size) noexcept { size_spring_.target = size; }
@@ -37,6 +33,8 @@ public:
 
 
 protected:
+    void update_self() noexcept override;
+
     void draw_filled() noexcept override;
     void draw_outlined() noexcept override;
 };

@@ -21,8 +21,9 @@ public:
     ~TextureComponent() { UnloadTexture(texture_); }
 
 
-    void draw() noexcept override;
-
-
     const Texture& texture() const noexcept { return texture_; }
+
+
+protected:
+    void draw_self() noexcept override;
 };

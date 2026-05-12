@@ -43,6 +43,14 @@ public:
 
 
 protected:
+    virtual void update_self() noexcept;
+    virtual void draw_self() noexcept = 0;
+
+
+    virtual void begin_drawing() noexcept;
+    virtual void end_drawing() noexcept;
+
+
     template <typename T>
     static Spring<T> create_default_spring(const T& current) noexcept
     {

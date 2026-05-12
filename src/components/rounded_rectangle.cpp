@@ -12,11 +12,11 @@ RoundedRectangle::RoundedRectangle(Component* const parent, const Vector2& posit
 
 
 
-void RoundedRectangle::update() noexcept
+void RoundedRectangle::update_self() noexcept
 {
-    size_spring_.update();
+    Shape::update_self();
 
-    Shape::update();
+    size_spring_.update();
 }
 
 
@@ -32,5 +32,5 @@ void RoundedRectangle::draw_filled() noexcept
 void RoundedRectangle::draw_outlined() noexcept
 {
     const float normalized_radius = get_normalized_radius(radius);
-    DrawRectangleRoundedLinesEx({ relative_position().x, relative_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, border_thickness, border_color);
+    DrawRectangleRoundedLinesEx({ relative_position().x, relative_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, outline_thickness, outline_color);
 }
