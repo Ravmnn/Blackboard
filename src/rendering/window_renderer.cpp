@@ -11,10 +11,8 @@ void WindowRenderer::begin_render() noexcept
         return;
     }
 
-    Renderer::begin_render();
-
     BeginDrawing();
-    ClearBackground(clear_color);
+    Renderer::begin_render();
 }
 
 
@@ -22,9 +20,9 @@ void WindowRenderer::end_render() noexcept
 {
     if (!use_buffer_texture)
     {
+        EndDrawing();
         Renderer::end_render();
 
-        EndDrawing();
         return;
     }
 
@@ -36,7 +34,7 @@ void WindowRenderer::end_render() noexcept
 void WindowRenderer::render_buffer_to_window() const noexcept
 {
     BeginDrawing();
-    ClearBackground(clear_color);
+    clear();
 
     draw_y_inverted_texture(contents().texture);
 

@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include <blackboard/activatable.hpp>
+#include <blackboard/rendering/stencil.hpp>
 
 
 
@@ -19,8 +20,8 @@ public:
     virtual ~Renderer() = default;
 
 
-    virtual void begin_render() { enable(); };
-    virtual void end_render() { disable(); };
+    virtual void begin_render() { enable(); clear(); }
+    virtual void end_render() { disable(); }
 
 
     virtual RenderTexture contents() const noexcept = 0;
@@ -33,4 +34,8 @@ public:
 
         return resolution;
     }
+
+
+protected:
+    void clear() const noexcept { ClearBackground(clear_color); Stencil::clear(); }
 };
