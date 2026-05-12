@@ -3,10 +3,11 @@
 
 
 
-TextureRenderer::TextureRenderer(const unsigned int width, const unsigned int height) noexcept 
+TextureRenderer::TextureRenderer(const unsigned int width, const unsigned int height, const bool use_depth_and_stencil) noexcept 
     : render_texture_(LoadRenderTexture(width, height))
 {
-    load_stencil();
+    if (use_depth_and_stencil)
+        load_stencil();
 }
 
 

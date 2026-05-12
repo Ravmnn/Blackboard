@@ -17,13 +17,13 @@ protected:
 
 
 public:
-    TextureRenderer() noexcept
-        : TextureRenderer(GetScreenWidth(), GetScreenHeight()) {}
+    TextureRenderer(const bool use_depth_and_stencil = false) noexcept
+        : TextureRenderer(GetScreenWidth(), GetScreenHeight(), use_depth_and_stencil) {}
 
-    explicit TextureRenderer(const Vector2& size) noexcept
-        : TextureRenderer(size.x, size.y) {}
+    explicit TextureRenderer(const Vector2& size, const bool use_depth_and_stencil = false) noexcept
+        : TextureRenderer(size.x, size.y, use_depth_and_stencil) {}
 
-    TextureRenderer(const unsigned int width, const unsigned int height) noexcept;
+    TextureRenderer(const unsigned int width, const unsigned int height, const bool use_depth_and_stencil = false) noexcept;
 
 
     virtual ~TextureRenderer() { unload_stencil(); }
