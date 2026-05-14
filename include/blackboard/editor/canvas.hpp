@@ -5,7 +5,7 @@
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
-#include <blackboard/editor/mouse_position_provider.hpp>
+#include <blackboard/mouse_position_provider.hpp>
 
 
 

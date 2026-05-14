@@ -4,24 +4,24 @@
 
 
 Editor::Editor() noexcept :
-    parent_rectangle_(nullptr, Vector2{100, 100}, Vector2{ 800, 600 }, 25, WHITE)
+    parent_rectangle_(nullptr, Vector2{ 100, 100 }, Vector2{ 800, 600 }, 25, WHITE)
 {
     window_renderer_.use_buffer_texture = false;
 
 
-    left_button_.on_press.subscribe([this]() noexcept { canvas.current_tool->enable(); });
-    left_button_.on_release.subscribe([this]() noexcept { canvas.current_tool->disable(); });
+    left_button_.press.subscribe([this]() noexcept { canvas.current_tool->enable(); });
+    left_button_.release.subscribe([this]() noexcept { canvas.current_tool->disable(); });
 
-    aux_button_.on_press.subscribe([this]() noexcept { canvas.brush.color = canvas.background_color; canvas.current_tool->enable(); });
-    aux_button_.on_release.subscribe([this]() noexcept { canvas.brush.color = canvas.DefaultBrushColor; canvas.current_tool->disable(); });
+    aux_button_.press.subscribe([this]() noexcept { canvas.brush.color = canvas.background_color; canvas.current_tool->enable(); });
+    aux_button_.release.subscribe([this]() noexcept { canvas.brush.color = canvas.DefaultBrushColor; canvas.current_tool->disable(); });
 
 
-    rectangle_ = new RoundedRectangle(&parent_rectangle_, Vector2{}, Vector2{ 100, 100 }, 10, Color{ 255, 180, 180, 255 });
+    button_ = new Button(&parent_rectangle_, Vector2{ 100, 100 }, Vector2{ 100, 100 }, 10, Color{ 255, 180, 180, 255 });
 
-    rectangle_->outline_thickness = 2;
-    rectangle_->outline_color = Color{ 255, 100, 100, 255 };
-    parent_rectangle_.outline_thickness = 2;
-    parent_rectangle_.outline_color = Color{ 255, 100, 255, 255 };
+    button_->set_outline_thickness(2);
+    button_->set_outline_color(Color{ 255, 100, 100, 255 });
+    parent_rectangle_.set_outline_thickness(2);
+    parent_rectangle_.set_outline_color(Color{ 255, 100, 255, 255 });
 }
 
 
@@ -34,7 +34,7 @@ void Editor::update() noexcept
 
     canvas.update();
 
-    rectangle_->set_absolute_position(GetMousePosition() - rectangle_->size() / 2);
+    //button_->set_absolute_position(GetMousePosition() - button_->size() / 2);
     parent_rectangle_.update();
 }
 

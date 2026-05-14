@@ -1,8 +1,7 @@
 #pragma once
 
-#include <blackboard/components/rounded_rectangle.hpp>
+#include <blackboard/components/button.hpp>
 #include <blackboard/editor/canvas.hpp>
-#include <blackboard/editor/mouse_button_event.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 
 
@@ -14,7 +13,7 @@ private:
     WindowRenderer window_renderer_;
 
     RoundedRectangle parent_rectangle_;
-    RoundedRectangle* rectangle_;
+    Button* button_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
     MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);
