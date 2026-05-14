@@ -7,13 +7,14 @@
 #include <raymath.h>
 
 #include <blackboard/animation/spring.hpp>
+#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/vector.hpp>
 
 
 
 
-class Component : public Updateable, public Drawable
+class Component : public virtual Updateable, public Drawable
 {
 protected:
     Spring<Vector2> relative_position_;
@@ -22,6 +23,7 @@ protected:
 public:
     static constexpr float DefaultSpringSpeed = 12.0f;
     static constexpr float DefaultSpringDamping = 0.6f;
+    static constexpr float DefaultInterpolationSpeed = 5;
 
 
     Component* parent = nullptr;
@@ -50,12 +52,17 @@ protected:
     virtual void update_self() noexcept;
     virtual void draw_self() noexcept = 0;
 
-    void decrement_geometry_stencil() noexcept;
-
 
     template <typename T>
     static Spring<T> create_default_spring(const T& current) noexcept
     {
         return Spring<T>(current, current, DefaultSpringDamping, DefaultSpringSpeed);
+    }
+
+
+    template <typename T>
+    static Interpolation<T> create_default_interpolation(const T& current) noexcept
+    {
+        return Interpolation<T>(current, DefaultInterpolationSpeed);
     }
 };
