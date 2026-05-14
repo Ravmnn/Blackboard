@@ -1,4 +1,4 @@
-#include <blackboard/editor/mouse_button_event.hpp>
+#include <blackboard/mouse_button_event.hpp>
 
 #include <raymath.h>
 
@@ -7,15 +7,28 @@
 
 void MouseButtonEvent::update() noexcept
 {
-    on_press.update();
-    on_release.update();
-    on_down.update();
+    press.update();
+    release.update();
+    down.update();
+
+    if (!all_conditions_are_true())
+        return;
 
     if (IsMouseButtonPressed(button_id)) trigger_press_event();
     if (IsMouseButtonReleased(button_id)) trigger_release_event();
     if (IsMouseButtonDown(button_id)) trigger_down_event();
 
     update_drag_state();
+}
+
+
+bool MouseButtonEvent::all_conditions_are_true() const noexcept
+{
+    for (const auto& condition : conditions)
+        if (!condition())
+            return false;
+
+    return true;
 }
 
 
@@ -27,7 +40,7 @@ void MouseButtonEvent::update_drag_state() noexcept
     if (!is_drag_ && distance_from_press_position() >= min_drag_distance_)
     {
         is_drag_ = true;
-        on_drag_start.trigger();
+        drag_start.trigger();
     }
 }
 
@@ -36,18 +49,18 @@ void MouseButtonEvent::trigger_press_event() noexcept
 {
     press_position_ = mouse_position_provider.mouse_position();
 
-    on_press.trigger();
+    press.trigger();
 }
 
 
 void MouseButtonEvent::trigger_release_event() noexcept
 {
-    on_release.trigger();
+    release.trigger();
 
     if (is_drag_)
-        on_drag_end.trigger();
+        drag_end.trigger();
     else
-        on_click.trigger();
+        click.trigger();
 
     is_drag_ = false;
     press_position_.reset();
@@ -56,7 +69,7 @@ void MouseButtonEvent::trigger_release_event() noexcept
 
 void MouseButtonEvent::trigger_down_event() noexcept
 {
-    on_down.trigger();
+    down.trigger();
 }
 
 
