@@ -7,10 +7,23 @@
 
 Shape::Shape(Component* const parent, const Vector2& position, const Color& color, const float outline_thickness, const Color& outline_color) noexcept
     : Component(parent, position),
-    color(color),
-    outline_thickness(outline_thickness),
-    outline_color(outline_color)
+
+    color_(create_default_interpolation(color)),
+    outline_thickness_(create_default_interpolation(outline_thickness)),
+    outline_color_(create_default_interpolation(outline_color))
 {}
+
+
+
+
+void Shape::update_self() noexcept
+{
+    Component::update_self();
+
+    color_.update();
+    outline_thickness_.update();
+    outline_color_.update();
+}
 
 
 
@@ -24,7 +37,7 @@ void Shape::draw_self() noexcept
 
 void Shape::draw_outline() noexcept
 {
-    if (outline_thickness <= 0)
+    if (outline_thickness_ <= 0)
         return;
 
     ComponentStencil::mask_and_decrement(*this);

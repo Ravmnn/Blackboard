@@ -9,27 +9,30 @@
 
 class RoundedRectangle : public Shape
 {
-private:
-    Spring<Vector2> size_spring_;
+protected:
+    Spring<Vector2> size_;
+    Interpolation<float> radius_;
 
 
 public:
     unsigned int segments = 16;
 
-    float radius;
+
+    RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, const float radius = 0,
+        const Color& color = WHITE, const float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
 
 
-    RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, float radius, Color color) noexcept;
+    const Vector2& size() const noexcept { return size_.current; }
+    float radius() const noexcept { return radius_; }
 
-    const Vector2& size() const noexcept { return size_spring_.current; }
+    void set_size(const Vector2& size) noexcept { size_.target = size; }
+    void set_radius(const float radius) noexcept { radius_.target = radius;}
 
-    void set_size(const Vector2& size) noexcept { size_spring_.target = size; }
 
+    void set_normalized_radius(const float normalized_radius) noexcept { radius_.target = get_radius_from_normalized(normalized_radius); }
 
-    void set_normalized_radius(const float normalized_radius) noexcept { radius = get_radius_from_normalized(normalized_radius); }
-
-    float get_radius_from_normalized(const float normalized_radius) const noexcept { return normalized_radius * std::min(size_spring_.current.x, size_spring_.current.y); }
-    float get_normalized_radius(const float radius) const noexcept { return radius / std::min(size_spring_.current.x, size_spring_.current.y); }
+    float get_radius_from_normalized(const float normalized_radius) const noexcept { return normalized_radius * std::min(size_.current.x, size_.current.y); }
+    float get_normalized_radius(const float radius) const noexcept { return radius / std::min(size_.current.x, size_.current.y); }
 
 
 protected:

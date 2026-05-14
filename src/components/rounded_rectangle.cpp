@@ -3,10 +3,12 @@
 
 
 
-RoundedRectangle::RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, float radius, Color color) noexcept
-    : Shape(parent, position, color),
-    size_spring_(create_default_spring(size)),
-    radius(radius)
+RoundedRectangle::RoundedRectangle(Component* const parent, const Vector2& position, const Vector2& size, const float radius,
+    const Color& color, const float outline_thickness, const Color& outline_color) noexcept
+    : Shape(parent, position, color, outline_thickness, outline_color),
+
+    size_(create_default_spring(size)),
+    radius_(create_default_interpolation(radius))
 {}
 
 
@@ -16,7 +18,8 @@ void RoundedRectangle::update_self() noexcept
 {
     Shape::update_self();
 
-    size_spring_.update();
+    size_.update();
+    radius_.update();
 }
 
 
@@ -24,13 +27,13 @@ void RoundedRectangle::update_self() noexcept
 
 void RoundedRectangle::draw_filled() noexcept
 {
-    const float normalized_radius = get_normalized_radius(radius);
-    DrawRectangleRounded({ absolute_position().x, absolute_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, color);
+    const float normalized_radius = get_normalized_radius(radius_);
+    DrawRectangleRounded({ absolute_position().x, absolute_position().y, size_.current.x, size_.current.y }, normalized_radius, segments, color_);
 }
 
 
 void RoundedRectangle::draw_outlined() noexcept
 {
-    const float normalized_radius = get_normalized_radius(radius);
-    DrawRectangleRoundedLinesEx({ absolute_position().x, absolute_position().y, size_spring_.current.x, size_spring_.current.y }, normalized_radius, segments, outline_thickness, outline_color);
+    const float normalized_radius = get_normalized_radius(radius_);
+    DrawRectangleRoundedLinesEx({ absolute_position().x, absolute_position().y, size_.current.x, size_.current.y }, normalized_radius, segments, outline_thickness_, outline_color_);
 }
