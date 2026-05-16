@@ -5,9 +5,12 @@
 
 
 
-Component::Component(Component* const parent, const Vector2& relative_position) noexcept
-    : parent(parent), relative_position_(relative_position, relative_position, DefaultSpringDamping, DefaultSpringSpeed)
+Component::Component(Component* const parent, const Vector2& relative_position) noexcept :
+    relative_position_(relative_position, relative_position, DefaultSpringDamping, DefaultSpringSpeed),
+    parent(parent)
 {
+    enable();
+
     if (parent)
         parent->children.emplace_back(std::unique_ptr<Component>(this));
 }
@@ -17,6 +20,9 @@ Component::Component(Component* const parent, const Vector2& relative_position) 
 
 void Component::update() noexcept
 {
+    if (!active())
+        return;
+
     update_self();
 
     for (const auto& child : children)
@@ -28,6 +34,9 @@ void Component::update() noexcept
 
 void Component::draw() noexcept
 {
+    if (!visible)
+        return;
+
     begin_drawing();
     draw_self();
     end_drawing();

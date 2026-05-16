@@ -2,19 +2,26 @@
 
 #include <memory>
 #include <vector>
-
-#include <raylib.h>
-#include <raymath.h>
+#include <functional>
+#include <concepts>
 
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/vector.hpp>
+#include <blackboard/activatable.hpp>
 
 
 
 
-class Component : public virtual Updateable, public Drawable
+class Component;
+
+
+template <typename T>
+concept ComponentDerived = std::derived_from<T, Component>;
+
+
+class Component : public virtual Updateable, public Drawable, public Activatable
 {
 protected:
     Spring<Vector2> relative_position_;
@@ -29,6 +36,7 @@ public:
     Component* parent = nullptr;
     std::vector<std::unique_ptr<Component>> children;
 
+    bool visible = true;
     bool clip = true;
 
 
@@ -65,6 +73,15 @@ protected:
 
     virtual void update_self() noexcept;
     virtual void draw_self() noexcept = 0;
+
+
+    template <typename T> requires ComponentDerived<T>
+    void for_each_children(const std::function<void (T*)>& function)
+    {
+        for (auto& child : children)
+            if (auto casted = dynamic_cast<T*>(child.get()))
+                function(casted);
+    }
 
 
     template <typename T>
