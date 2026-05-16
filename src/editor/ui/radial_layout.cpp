@@ -28,7 +28,7 @@ void RadialLayout::update_children_position() noexcept
 
 
 
-Vector2 RadialLayout::get_position_for_child(Component& child, const size_t i) noexcept
+Vector2 RadialLayout::get_position_for_child(Component&, const size_t i) noexcept
 {
     constexpr float CircunferenceLength = 2 * PI;
     const float regular_length = CircunferenceLength / children.size();

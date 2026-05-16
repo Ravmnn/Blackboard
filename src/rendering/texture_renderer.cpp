@@ -50,7 +50,6 @@ void TextureRenderer::load_stencil() noexcept
     glBindFramebuffer(GL_FRAMEBUFFER, render_texture_.render_texture().id);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_id_);
 
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

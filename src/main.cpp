@@ -3,7 +3,7 @@
 
 
 
-int main(int argc, char **argv)
+int main(int, char**)
 {
     SetTraceLogLevel(LOG_WARNING);
 

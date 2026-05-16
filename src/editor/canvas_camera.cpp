@@ -69,7 +69,7 @@ void CanvasCamera::update_interpolation() noexcept
 
 Rectangle CanvasCamera::get_world_bounds() const noexcept
 {
-    const Vector2 screen_size = Vector2{ GetScreenWidth(), GetScreenHeight() } * canvas.SuperSamplingFactor;
+    const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() } * canvas.SuperSamplingFactor;
 
     const Vector2 topLeft = GetScreenToWorld2D({ 0, 0 }, camera_) - bounds_expansion;
     const Vector2 bottomRight = GetScreenToWorld2D(screen_size, camera_) + bounds_expansion * 2;
