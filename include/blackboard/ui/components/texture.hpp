@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/components/component.hpp>
+#include <blackboard/ui/components/component.hpp>
 
 
 
@@ -22,6 +22,11 @@ public:
 
 
     const Texture& texture() const noexcept { return texture_; }
+
+
+    Rectangle relative_bounding_box() const noexcept override {
+        return { relative_position_.current.x, relative_position_.current.y, size.x, size.y };
+    }
 
 
 protected:

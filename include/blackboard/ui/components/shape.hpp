@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/components/component.hpp>
+#include <blackboard/ui/components/component.hpp>
 #include <blackboard/animation/interpolation.hpp>
 
 

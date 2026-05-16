@@ -2,8 +2,8 @@
 
 #include <tuple>
 
-#include <blackboard/components/rounded_rectangle.hpp>
-#include <blackboard/components/clickable.hpp>
+#include <blackboard/ui/components/rounded_rectangle.hpp>
+#include <blackboard/ui/clickable.hpp>
 
 
 
@@ -24,7 +24,7 @@ public:
 
 
     Button(Component* const parent, const Vector2& position, const Vector2& size, const float radius = 0, const Color& color = WHITE,
-        const float outline_thickness = 1, const Color& outline_color = WHITE) noexcept;
+        const float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
 
 
     void update() noexcept override { RoundedRectangle::update(); }

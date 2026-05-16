@@ -4,7 +4,7 @@
 #include <memory>
 #include <concepts>
 
-#include <blackboard/components/component.hpp>
+#include <blackboard/ui/components/component.hpp>
 
 
 

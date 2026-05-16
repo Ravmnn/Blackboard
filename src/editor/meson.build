@@ -1,4 +1,5 @@
 subdir('tools')
+subdir('ui')
 
 
 
@@ -10,5 +11,5 @@ sources = files(
 
 editor_lib = static_library('editor', sources,
     dependencies: global_deps,
-    link_with: tools_lib
+    link_with: [tools_lib, editor_ui_lib]
 )

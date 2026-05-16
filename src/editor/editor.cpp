@@ -4,7 +4,7 @@
 
 
 Editor::Editor() noexcept :
-    parent_rectangle_(nullptr, Vector2{ 100, 100 }, Vector2{ 800, 600 }, 25, WHITE)
+    color_menu_(nullptr, { 600, 600 }, 200)
 {
     window_renderer_.use_buffer_texture = false;
 
@@ -16,12 +16,14 @@ Editor::Editor() noexcept :
     aux_button_.release.subscribe([this]() noexcept { canvas.brush.color = canvas.DefaultBrushColor; canvas.current_tool->disable(); });
 
 
-    button_ = new Button(&parent_rectangle_, Vector2{ 100, 100 }, Vector2{ 100, 100 }, 10, Color{ 255, 180, 180, 255 });
-
-    button_->set_outline_thickness(2);
-    button_->set_outline_color(Color{ 255, 100, 100, 255 });
-    parent_rectangle_.set_outline_thickness(2);
-    parent_rectangle_.set_outline_color(Color{ 255, 100, 255, 255 });
+    new ColorMenuButton(&color_menu_, { 255, 60, 60, 255 });
+    new ColorMenuButton(&color_menu_, { 60, 255, 60, 255 });
+    new ColorMenuButton(&color_menu_, { 60, 60, 255, 255 });
+    new ColorMenuButton(&color_menu_, { 255, 60, 255, 255 });
+    new ColorMenuButton(&color_menu_, { 255, 255, 60, 255 });
+    new ColorMenuButton(&color_menu_, { 60, 255, 255, 255 });
+    new ColorMenuButton(&color_menu_, { 255, 255, 255, 255 });
+    new ColorMenuButton(&color_menu_, { 0, 0, 0, 255 });
 }
 
 
@@ -35,7 +37,7 @@ void Editor::update() noexcept
     canvas.update();
 
     //button_->set_absolute_position(GetMousePosition() - button_->size() / 2);
-    parent_rectangle_.update();
+    color_menu_.update();
 }
 
 
@@ -63,7 +65,7 @@ void Editor::draw() noexcept
 {
     window_renderer_.begin_render();
         canvas.draw();
-        parent_rectangle_.draw();
+        color_menu_.draw();
 
         draw_statistics();
     window_renderer_.end_render();

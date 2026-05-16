@@ -1,6 +1,6 @@
-#include <blackboard/components/component.hpp>
+#include <blackboard/ui/components/component.hpp>
 
-#include <blackboard/components/component_stencil.hpp>
+#include <blackboard/ui/components/component_stencil.hpp>
 
 
 
@@ -41,6 +41,9 @@ void Component::draw() noexcept
 
 void Component::begin_drawing() noexcept
 {
+    if (!clip)
+        return;
+
     ComponentStencil::enable();
     ComponentStencil::mask_and_increment(*this);
 }
@@ -57,4 +60,27 @@ void Component::end_drawing() noexcept
 void Component::update_self() noexcept
 {
     relative_position_.update();
+}
+
+
+
+
+Rectangle Component::absolute_bounding_box() const noexcept
+{
+    const Rectangle bounding_box = relative_bounding_box();
+    const Vector2 parent_absolute_position = parent ? parent->absolute_position() : Vector2{};
+
+    return {
+        bounding_box.x + parent_absolute_position.x, bounding_box.y + parent_absolute_position.y,
+        bounding_box.width, bounding_box.height
+    };
+}
+
+
+
+
+Vector2 Component::bounding_box_size() const noexcept
+{
+    const Rectangle bounding_box = relative_bounding_box();
+    return { bounding_box.width, bounding_box.height };
 }

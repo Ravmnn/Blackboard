@@ -1,7 +1,8 @@
 #pragma once
 
-#include <blackboard/components/button.hpp>
 #include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/ui/radial_menu.hpp>
+#include <blackboard/editor/ui/color_menu_button.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 
 
@@ -12,8 +13,7 @@ class Editor final : public Updateable, public Drawable
 private:
     WindowRenderer window_renderer_;
 
-    RoundedRectangle parent_rectangle_;
-    Button* button_;
+    RadialMenu color_menu_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
     MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);

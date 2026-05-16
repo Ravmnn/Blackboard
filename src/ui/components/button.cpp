@@ -1,4 +1,4 @@
-#include <blackboard/components/button.hpp>
+#include <blackboard/ui/components/button.hpp>
 
 #include <algorithm>
 
@@ -28,17 +28,12 @@ Button::Button(Component* const parent, const Vector2& position, const Vector2& 
 
 bool Button::is_point_over(const Vector2& point) const noexcept
 {
-    const Vector2 absolute_position = this->absolute_position();
+    Vector2 q = Vector2{ std::abs(point.x - absolute_position().x), std::abs(point.y - absolute_position().y) } - half_size() + Vector2{ radius_, radius_ };
+    float d = Vector2Length({ std::max(q.x, 0.0f), std::max(q.y, 0.0f) }) + std::min(std::max(q.x, q.y), 0.0f) - radius_;
 
-    const Vector2 inner = {
-        std::clamp(point.x, absolute_position.x + radius_, absolute_position.x + size().x - radius_),
-        std::clamp(point.y, absolute_position.y + radius_, absolute_position.y + size().y - radius_)
-    };
+    // TODO: not working properly
 
-    const float dx = point.x - inner.x;
-    const float dy = point.y - inner.y;
-
-    return dx * dx + dy * dy <= radius_ * radius_;
+    return d <= 0;
 }
 
 

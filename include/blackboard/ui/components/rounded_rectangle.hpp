@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/components/shape.hpp>
+#include <blackboard/ui/components/shape.hpp>
 
 #include <raymath.h>
 
@@ -23,6 +23,7 @@ public:
 
 
     const Vector2& size() const noexcept { return size_.current; }
+    Vector2 half_size() const noexcept { return size() / 2; }
     float radius() const noexcept { return radius_; }
 
     void set_size(const Vector2& size) noexcept { size_.target = size; }
@@ -33,6 +34,11 @@ public:
 
     float get_radius_from_normalized(const float normalized_radius) const noexcept { return normalized_radius * std::min(size_.current.x, size_.current.y); }
     float get_normalized_radius(const float radius) const noexcept { return radius / std::min(size_.current.x, size_.current.y); }
+
+
+    Rectangle relative_bounding_box() const noexcept override {
+        return { relative_position_.current.x, relative_position_.current.y, size_.current.x, size_.current.y };
+    }
 
 
 protected:

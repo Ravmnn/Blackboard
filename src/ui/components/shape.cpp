@@ -1,6 +1,6 @@
-#include <blackboard/components/shape.hpp>
+#include <blackboard/ui/components/shape.hpp>
 
-#include <blackboard/components/component_stencil.hpp>
+#include <blackboard/ui/components/component_stencil.hpp>
 
 
 
