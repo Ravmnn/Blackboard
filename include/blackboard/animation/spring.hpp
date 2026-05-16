@@ -7,6 +7,7 @@
 #include <raylib.h>
 
 #include <blackboard/updateable.hpp>
+#include <blackboard/vector.hpp>
 
 
 
@@ -30,6 +31,8 @@ public:
 
     float damping;
     float speed;
+
+    bool immediate = false;
 
 
     Spring(const T& current, const T& target, const float damping, const float speed) noexcept
@@ -71,5 +74,18 @@ public:
 
         if (max.has_value())
             current = std::min(current, *max);
+
+        constexpr float Epsilon = 0.1f;
+
+        if (immediate || distance_of_current_to_target() <= Epsilon)
+            current = target;
     }
+
+
+private:
+    float distance_of_current_to_target() const noexcept;
 };
+
+
+template<> inline float Spring<float>::distance_of_current_to_target() const noexcept { return target - current; }
+template<> inline float Spring<Vector2>::distance_of_current_to_target() const noexcept { return Vector2Length(target - current); }

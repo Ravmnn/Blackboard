@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include <raylib.h>
 #include <raymath.h>
 
@@ -9,26 +11,28 @@
 class Interpolate
 {
 public:
-    static float expolerp(const float start, const float target, const float smoothing, const float velocity = 1) noexcept
+    static float expolerp(const float start, const float target, const float smoothing, const float speed = 1) noexcept
     {
-        const float factor = 1.0f - powf(smoothing, GetFrameTime() * velocity);
-        return lerp(start, target, factor);
+        constexpr float Epsilon = 0.001f;
+        const float factor = 1.0f - powf(smoothing, GetFrameTime() * speed);
+
+        return std::abs(target - start) <= Epsilon ? target : lerp(start, target, factor);
     }
 
 
-    static Vector2 expolerp(const Vector2& start, const Vector2& target, const float smoothing, const float velocity = 1) noexcept
+    static Vector2 expolerp(const Vector2& start, const Vector2& target, const float smoothing, const float speed = 1) noexcept
     {
-        return { expolerp(start.x, target.x, smoothing, velocity), expolerp(start.y, target.y, smoothing, velocity) };
+        return { expolerp(start.x, target.x, smoothing, speed), expolerp(start.y, target.y, smoothing, speed) };
     }
 
 
-    static Color expolerp(const Color& start, const Color& target, const float smoothing, const float velocity = 1) noexcept
+    static Color expolerp(const Color& start, const Color& target, const float smoothing, const float speed = 1) noexcept
     {
         return {
-            expolerp(start.r, target.r, smoothing, velocity),
-            expolerp(start.g, target.g, smoothing, velocity),
-            expolerp(start.b, target.b, smoothing, velocity),
-            expolerp(start.a, target.a, smoothing, velocity)
+            (uint8_t)expolerp(start.r, target.r, smoothing, speed),
+            (uint8_t)expolerp(start.g, target.g, smoothing, speed),
+            (uint8_t)expolerp(start.b, target.b, smoothing, speed),
+            (uint8_t)expolerp(start.a, target.a, smoothing, speed)
         };
     }
 };
