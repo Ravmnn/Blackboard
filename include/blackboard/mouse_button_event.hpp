@@ -15,7 +15,7 @@ class MouseButtonEvent : public Updateable
 private:
     std::optional<Vector2> press_position_;
 
-    float min_drag_distance_ = 5;
+    float min_drag_distance_ = 2;
     bool is_drag_ = false;
 
 
@@ -38,7 +38,7 @@ public:
 
 
     explicit MouseButtonEvent(const int button_id = MOUSE_BUTTON_LEFT, const MousePositionProvider& mouse_position_provider = {}) noexcept
-        : button_id(button_id), mouse_position_provider(mouse_position_provider) {}
+        : mouse_position_provider(mouse_position_provider), button_id(button_id) {}
 
 
     void update() noexcept override;
