@@ -2,6 +2,11 @@ project('Blackboard', 'cpp',
     default_options: ['warning_level=3', 'cpp_std=c++20']
 )
 
+add_project_arguments(
+    '-Wno-missing-field-initializers',
+    language: 'cpp'
+)
+
 
 cc = meson.get_compiler('cpp')
 
