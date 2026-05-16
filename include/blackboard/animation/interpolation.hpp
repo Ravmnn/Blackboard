@@ -12,19 +12,21 @@ class Interpolation : public Updateable
 {
 public:
     T current, target;
-    float smoothing, velocity;
+    float speed, smoothing;
 
 
     Interpolation() = default;
-    Interpolation(const T& current, const float velocity, const float smoothing = 0.005f) noexcept
-        : current(current), target(current), velocity(velocity), smoothing(smoothing) {}
+    Interpolation(const T& current, const float speed, const float smoothing = 0.005f) noexcept
+        : current(current), target(current), speed(speed), smoothing(smoothing) {}
 
 
     operator T() const noexcept { return current; }
 
 
-    void update() noexcept override { current = Interpolate::expolerp(current, target, smoothing, velocity); }
+    void update() noexcept override { current = Interpolate::expolerp(current, target, smoothing, speed); }
 
+
+    void set_value_immediately(const T& value) noexcept { current = target = value; }
 
     T& set_target_and_update(const T& target) noexcept
     {
