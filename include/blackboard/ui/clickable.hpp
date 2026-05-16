@@ -24,6 +24,8 @@ public:
     Event<> leaved;
     Event<> hover;
 
+    bool ignore_interaction_events = false;
+
 
     explicit Clickable(const MousePositionProvider* const mouse_position_provider) noexcept;
     virtual ~Clickable() noexcept = default;
@@ -50,6 +52,7 @@ public:
 
 
 protected:
+    void update_interaction() noexcept;
     void update_mouse_buttons() noexcept;
 
 

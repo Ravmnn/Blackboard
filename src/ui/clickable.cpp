@@ -16,19 +16,28 @@ Clickable::Clickable(const MousePositionProvider* const mouse_position_provider)
 
 void Clickable::update() noexcept
 {
-    was_hover_ = hover_;
-    hover_ = is_mouse_over();
+    update_interaction();
+    update_mouse_buttons();
+}
 
-    if (!was_hover_ && hover_)
-        entered.trigger();
+
+void Clickable::update_interaction() noexcept
+{
+    was_hover_ = hover_;
+
+    if (ignore_interaction_events)
+        return;
+
+    hover_ = is_mouse_over();
 
     if (was_hover_ && !hover_)
         leaved.trigger();
 
+    if (!was_hover_ && hover_)
+        entered.trigger();
+
     if (hover_)
         hover.trigger();
-
-    update_mouse_buttons();
 }
 
 
