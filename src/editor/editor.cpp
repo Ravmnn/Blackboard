@@ -4,7 +4,7 @@
 
 
 Editor::Editor() noexcept :
-    color_menu_(nullptr, { 600, 600 }, 200)
+    color_menu_(nullptr, { 600, 600 }, 100)
 {
     window_renderer_.use_buffer_texture = false;
 

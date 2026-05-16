@@ -65,20 +65,6 @@ void Component::update_self() noexcept
 
 
 
-Rectangle Component::absolute_bounding_box() const noexcept
-{
-    const Rectangle bounding_box = relative_bounding_box();
-    const Vector2 parent_absolute_position = parent ? parent->absolute_position() : Vector2{};
-
-    return {
-        bounding_box.x + parent_absolute_position.x, bounding_box.y + parent_absolute_position.y,
-        bounding_box.width, bounding_box.height
-    };
-}
-
-
-
-
 Vector2 Component::bounding_box_size() const noexcept
 {
     const Rectangle bounding_box = relative_bounding_box();

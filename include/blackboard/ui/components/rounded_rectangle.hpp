@@ -33,11 +33,11 @@ public:
     void set_normalized_radius(const float normalized_radius) noexcept { radius_.target = get_radius_from_normalized(normalized_radius); }
 
     float get_radius_from_normalized(const float normalized_radius) const noexcept { return normalized_radius * std::min(size_.current.x, size_.current.y); }
-    float get_normalized_radius(const float radius) const noexcept { return radius / std::min(size_.current.x, size_.current.y); }
+    float get_normalized_radius(const float radius) const noexcept { return (radius * 2) / std::min(size_.current.x, size_.current.y); }
 
 
     Rectangle relative_bounding_box() const noexcept override {
-        return { relative_position_.current.x, relative_position_.current.y, size_.current.x, size_.current.y };
+        return { relative_position_.current.x - half_size().x, relative_position_.current.y - half_size().y, size_.current.x, size_.current.y };
     }
 
 

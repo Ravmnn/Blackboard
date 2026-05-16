@@ -39,23 +39,26 @@ public:
     void draw() noexcept override;
 
 
-    Vector2 relative_position() const noexcept { return relative_position_.current - bounding_box_size() / 2; }
-    Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : relative_position(); }
+    Vector2 relative_position() const noexcept { return relative_position_.current; }
+    Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : relative_position_; }
+
+    Vector2 top_left_relative_position() const noexcept { return relative_position() - bounding_box_size() / 2; }
+    Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
 
     void set_relative_position(const Vector2& position) noexcept { relative_position_.target = position; }
     void set_absolute_position(const Vector2& position) noexcept { relative_position_.target = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
     virtual Rectangle relative_bounding_box() const noexcept = 0;
-    virtual Rectangle absolute_bounding_box() const noexcept;
+    virtual Rectangle absolute_bounding_box() const noexcept {
+        return { top_left_absolute_position().x, top_left_absolute_position().y, bounding_box_size().x, bounding_box_size().y };
+    }
 
     Vector2 bounding_box_size() const noexcept;
 
 
+
 protected:
-    Vector2 render_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
-
-
     virtual void begin_drawing() noexcept;
     virtual void end_drawing() noexcept;
 

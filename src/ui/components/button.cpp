@@ -28,12 +28,18 @@ Button::Button(Component* const parent, const Vector2& position, const Vector2& 
 
 bool Button::is_point_over(const Vector2& point) const noexcept
 {
-    Vector2 q = Vector2{ std::abs(point.x - absolute_position().x), std::abs(point.y - absolute_position().y) } - half_size() + Vector2{ radius_, radius_ };
-    float d = Vector2Length({ std::max(q.x, 0.0f), std::max(q.y, 0.0f) }) + std::min(std::max(q.x, q.y), 0.0f) - radius_;
+    const Vector2 center = this->absolute_position();
+    const Vector2 top_left = top_left_absolute_position();
 
-    // TODO: not working properly
+    const Vector2 inner = {
+        std::clamp(point.x, top_left.x + radius_, top_left.x + size().x - radius_),
+        std::clamp(point.y, top_left.y + radius_, top_left.y + size().y - radius_)
+    };
 
-    return d <= 0;
+    const float dx = point.x - inner.x;
+    const float dy = point.y - inner.y;
+
+    return dx * dx + dy * dy <= radius_ * radius_;
 }
 
 
@@ -79,7 +85,7 @@ void Button::on_release() noexcept
 
 std::tuple<Color, Color, Color> Button::get_colors_keyframes_from_base_color(const Color& color) noexcept
 {
-    constexpr uint8_t DecrementValue = 10;
+    constexpr uint8_t DecrementValue = 20;
 
     Color hovered_color = Color{
         .r = (uint8_t)(color.r - DecrementValue),
