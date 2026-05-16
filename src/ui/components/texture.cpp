@@ -3,8 +3,11 @@
 
 
 
-TextureComponent::TextureComponent(Component* const parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept
-    : Component(parent, position), size(size), texture_(texture)
+TextureComponent::TextureComponent(Component* const parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept :
+    Component(parent, position),
+
+    texture_(texture),
+    size(size)
 {}
 
 

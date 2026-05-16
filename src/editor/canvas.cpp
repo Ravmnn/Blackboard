@@ -87,7 +87,7 @@ void Canvas::draw_super_sampled_to_final_texture() noexcept
     const Texture contents = super_sampled_texture_.contents().texture;
     SetTextureFilter(contents, TEXTURE_FILTER_TRILINEAR);
 
-    const Vector2 source_size = { contents.width, contents.height };
+    const Vector2 source_size = { (float)contents.width, (float)contents.height };
     const Vector2 target_size = final_texture_.resolution();
     const Rectangle source = { 0, 0, source_size.x, source_size.y };
     const Rectangle destination = { 0, 0, target_size.x, target_size.y };

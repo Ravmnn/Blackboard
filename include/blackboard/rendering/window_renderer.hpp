@@ -24,7 +24,7 @@ public:
 
     Vector2 resolution() const noexcept override { return screen_resolution(); }
 
-    static Vector2 screen_resolution() noexcept { return { GetScreenWidth(), GetScreenHeight() }; }
+    static Vector2 screen_resolution() noexcept { return { (float)GetScreenWidth(), (float)GetScreenHeight() }; }
 
 
 protected:

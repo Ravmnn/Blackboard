@@ -41,7 +41,7 @@ void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mes
 {
     const Rectangle camera_bounds = camera ? camera->get_world_bounds() : Rectangle{};
 
-    for (int i = 0; i < mesh.size() - 1; i++)
+    for (int i = 0; i < (int)mesh.size() - 1; i++)
     {
         if (camera && !mesh_node_is_in_camera_bounds(mesh[i], camera_bounds))
             continue;

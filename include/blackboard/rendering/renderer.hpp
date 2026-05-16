@@ -30,7 +30,7 @@ public:
     virtual Vector2 resolution() const noexcept
     {
         const RenderTexture render_texture = contents();
-        const Vector2 resolution = { render_texture.texture.width, render_texture.texture.height };
+        const Vector2 resolution = { (float)render_texture.texture.width, (float)render_texture.texture.height };
 
         return resolution;
     }

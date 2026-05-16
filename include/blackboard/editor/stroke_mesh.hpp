@@ -148,7 +148,7 @@ public:
     const Vector2& normal() const noexcept { return edge_.normal(); }
 
     const Vector2& position() const noexcept { return sample_.position(); }
-    const float thickness() const noexcept { return sample_.thickness(); }
+    float thickness() const noexcept { return sample_.thickness(); }
 };
 
 
