@@ -15,7 +15,7 @@ class MouseButtonEvent : public Updateable
 private:
     std::optional<Vector2> press_position_;
 
-    float min_drag_distance_ = 1;
+    float min_drag_distance_ = 2;
     bool is_drag_ = false;
 
 
