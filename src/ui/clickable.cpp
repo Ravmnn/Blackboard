@@ -24,11 +24,10 @@ void Clickable::update() noexcept
 void Clickable::update_interaction() noexcept
 {
     was_hover_ = hover_;
+    hover_ = caught_mouse_input && is_mouse_over();
 
-    if (ignore_interaction_events)
+    if (ignore_interaction_update)
         return;
-
-    hover_ = is_mouse_over();
 
     if (was_hover_ && !hover_)
         leaved.trigger();
@@ -53,7 +52,7 @@ void Clickable::update_mouse_buttons() noexcept
 void Clickable::add_mouse_button_event(const int id) noexcept
 {
     MouseButtonEvent button(id, *mouse_position_provider);
-    button.conditions.push_back([this]() { return is_mouse_over(); });
+    button.conditions.push_back([this]() { return hover_; });
 
     mouse_buttons_.insert({ id, button });
 }

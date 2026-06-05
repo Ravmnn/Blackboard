@@ -24,7 +24,8 @@ public:
     Event<> leaved;
     Event<> hover;
 
-    bool ignore_interaction_events = false;
+    bool ignore_interaction_update = false;
+    bool caught_mouse_input = false;
 
 
     explicit Clickable(const MousePositionProvider* const mouse_position_provider) noexcept;
@@ -43,6 +44,8 @@ public:
     bool is_pressed() const noexcept { return all_buttons([](const auto& button) { return button.is_pressed(); }); }
     bool is_released() const noexcept { return all_buttons([](const auto& button) { return button.is_released(); }); }
     bool is_clicked() const noexcept { return all_buttons([](const auto& button) { return button.is_clicked(); }); }
+
+    bool is_hover() const noexcept { return hover_; }
 
     bool is_mouse_over() const noexcept { return is_point_over(mouse_position_provider->mouse_position()); }
     virtual bool is_point_over(const Vector2& point) const noexcept = 0;

@@ -24,9 +24,6 @@ void Component::update() noexcept
         return;
 
     update_self();
-
-    for (const auto& child : children)
-        child->update();
 }
 
 
@@ -40,9 +37,6 @@ void Component::draw() noexcept
     begin_drawing();
     draw_self();
     end_drawing();
-
-    for (const auto& child : children)
-        child->draw();
 }
 
 
