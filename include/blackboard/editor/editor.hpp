@@ -1,5 +1,6 @@
 #pragma once
 
+#include <blackboard/ui/ui_context.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
@@ -13,7 +14,9 @@ class Editor final : public Updateable, public Drawable
 private:
     WindowRenderer window_renderer_;
 
-    ColorMenu color_menu_;
+    UIContext ui_context_;
+
+    ColorMenu* color_menu_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
     MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);

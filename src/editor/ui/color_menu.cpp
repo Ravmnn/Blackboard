@@ -8,6 +8,9 @@
 
 ColorMenu::ColorMenu() noexcept : RadialLayout(nullptr, {}, 0)
 {
+    color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
+
+
     visible = false;
 
     relative_position_.immediate = true;
@@ -61,8 +64,11 @@ void ColorMenu::update_self() noexcept
     RadialLayout::update_self();
 
     for_each_children<Button>([this](Button* const child) {
-        if (child->is_released())
-            on_color_selected(child->color());
+        if (!child->is_released())
+            return;
+
+        color_selected.trigger(child->color());
+        child->leaved.trigger();
     });
 }
 
@@ -73,7 +79,7 @@ Vector2 ColorMenu::get_position_for_child(Component& child, const size_t i) noex
 {
     Vector2 position = RadialLayout::get_position_for_child(child, i);
 
-    if (auto button = dynamic_cast<Button*>(&child); button && button->is_mouse_over())
+    if (auto button = dynamic_cast<Button*>(&child); button && button->is_hover())
         position *= 1.1;
 
     return position;
@@ -84,6 +90,5 @@ Vector2 ColorMenu::get_position_for_child(Component& child, const size_t i) noex
 
 void ColorMenu::on_color_selected(const Color& color) noexcept
 {
-    color_selected.trigger(color);
     hide();
 }
