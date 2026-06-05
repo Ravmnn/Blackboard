@@ -75,7 +75,7 @@ public:
         if (max.has_value())
             current = std::min(current, *max);
 
-        constexpr float Epsilon = 0.1f;
+        constexpr float Epsilon = 0.15f;
 
         if (immediate || distance_of_current_to_target() <= Epsilon)
             current = target;
@@ -87,5 +87,5 @@ private:
 };
 
 
-template<> inline float Spring<float>::distance_of_current_to_target() const noexcept { return target - current; }
-template<> inline float Spring<Vector2>::distance_of_current_to_target() const noexcept { return Vector2Length(target - current); }
+template<> inline float Spring<float>::distance_of_current_to_target() const noexcept { return std::abs(target - current); }
+template<> inline float Spring<Vector2>::distance_of_current_to_target() const noexcept { return std::abs(Vector2Length(target - current)); }
