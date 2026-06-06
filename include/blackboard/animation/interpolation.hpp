@@ -22,6 +22,8 @@ public:
 
     operator T() const noexcept { return current; }
 
+    T operator =(const T& value) noexcept { return target = value; }
+
 
     void update() noexcept override { current = Interpolate::expolerp(current, target, smoothing, speed); }
 
