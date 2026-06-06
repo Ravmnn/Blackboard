@@ -30,23 +30,28 @@ private:
     float thickness_max_increase_ = 15;
 
 
+protected:
+    Color color_;
+
+
 public:
     LazyCursor cursor;
     BrushBody body;
 
-    Color color;
     float thickness;
 
 
     friend class BrushBody;
 
 
-    Brush(Canvas& canvas, const Color& color, const float thickness) noexcept;
+    Brush(Canvas& canvas, const float thickness) noexcept;
 
 
     void update() noexcept override;
     void draw() noexcept override;
 
+
+    const Color& color() const noexcept { return color_; }
 
     const Stroke& stroke() const noexcept { return stroke_; }
     void clear_stroke() noexcept { stroke_.points.clear(); }

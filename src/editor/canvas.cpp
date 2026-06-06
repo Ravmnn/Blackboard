@@ -6,12 +6,16 @@
 
 
 
-Canvas::Canvas() :
+Canvas::Canvas(const Palette& palette) :
+    background_color_(DefaultBackgroundColor, 3),
+
     stroke_mesh_generator(6),
     stroke_renderer(stroke_mesh_generator, &canvas_camera),
     canvas_camera(*this, 0.2, 25, 0.13),
 
-    brush(*this, DefaultBrushColor, 14),
+    palette(palette),
+
+    brush(*this, 14),
     eraser(*this)
 {
     stroke_renderer.should_debug_draw_points = false;
@@ -35,6 +39,7 @@ void Canvas::update() noexcept
     if (IsWindowResized())
         recreate_texture_renderer();
 
+    update_background_color();
     canvas_camera.update();
     current_tool->update();
 }
@@ -53,9 +58,19 @@ void Canvas::recreate_texture_renderer() noexcept
     const Vector2 screen_resolution = WindowRenderer::screen_resolution();
 
     super_sampled_texture_ = TextureRenderer(screen_resolution * SuperSamplingFactor);
-    super_sampled_texture_.clear_color = background_color;
-
     final_texture_ = TextureRenderer(screen_resolution);
+}
+
+
+void Canvas::update_background_color() noexcept
+{
+    if (dynamic_background_color)
+        background_color_ = palette.background_color_from_current();
+    else
+        background_color_ = DefaultBackgroundColor;
+
+    background_color_.update();
+    super_sampled_texture_.clear_color = background_color_;
 }
 
 

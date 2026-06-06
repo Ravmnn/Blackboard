@@ -11,6 +11,10 @@
 
 class Editor final : public Updateable, public Drawable
 {
+public:
+    static constexpr Color DefaultPaletteColor = Color{ 211, 211, 211, 255 };
+
+
 private:
     WindowRenderer window_renderer_;
 
@@ -40,6 +44,5 @@ private:
     void update_mouse_buttons() noexcept;
     void update_keybindings() noexcept;
 
-    void draw_canvas() noexcept;
     void draw_statistics() noexcept;
 };

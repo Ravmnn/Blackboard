@@ -8,6 +8,7 @@
 
 
 class Canvas;
+class Palette;
 
 
 class Tool : public Updateable, public Drawable, public Activatable

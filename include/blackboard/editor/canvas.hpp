@@ -3,6 +3,7 @@
 #include <blackboard/rendering/renderizable.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
+#include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/stroke_renderer.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/mouse_position_provider.hpp>
@@ -14,7 +15,6 @@ class Canvas : public Updateable, public Drawable, public MousePositionProvider
 {
 public:
     static constexpr Color DefaultBackgroundColor = Color{ 18, 18, 18, 255 };
-    static constexpr Color DefaultBrushColor = Color{ 211, 211, 211, 255 };
 
 
 private:
@@ -22,6 +22,8 @@ private:
     TextureRenderer final_texture_;
 
     std::vector<StrokeMesh> stroke_meshes_;
+
+    Interpolation<Color> background_color_;
 
     bool initialized_ = false;
 
@@ -35,15 +37,16 @@ public:
 
     CanvasCamera canvas_camera;
 
+    Palette palette;
+    bool dynamic_background_color = true;
+
     Brush brush;
     Eraser eraser;
 
     Tool* current_tool = nullptr;
 
-    Color background_color = DefaultBackgroundColor;
 
-
-    Canvas();
+    Canvas(const Palette& palette);
 
 
     void update() noexcept override;
@@ -73,10 +76,11 @@ private:
     void initialize() noexcept;
     void recreate_texture_renderer() noexcept;
 
+    void update_background_color() noexcept;
+
 
     void draw_to_super_sampled_texture() noexcept;
     void draw_super_sampled_to_final_texture() noexcept;
 
     void draw_strokes() noexcept;
-    void draw_super_sampled_contents() noexcept;
 };

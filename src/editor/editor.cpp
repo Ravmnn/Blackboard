@@ -3,7 +3,8 @@
 
 
 
-Editor::Editor() noexcept
+Editor::Editor() noexcept :
+    canvas(Palette(DefaultPaletteColor))
 {
     window_renderer_.use_buffer_texture = false;
 
@@ -16,13 +17,13 @@ Editor::Editor() noexcept
     left_button_.press.subscribe([this]() noexcept { canvas.current_tool->enable(); });
     left_button_.release.subscribe([this]() noexcept { canvas.current_tool->disable(); });
 
-    aux_button_.press.subscribe([this]() noexcept { canvas.brush.color = canvas.background_color; canvas.current_tool->enable(); });
-    aux_button_.release.subscribe([this]() noexcept { canvas.brush.color = canvas.DefaultBrushColor; canvas.current_tool->disable(); });
+    aux_button_.press.subscribe([this]() noexcept { canvas.palette.switch_to_last(); canvas.current_tool->enable(); });
+    aux_button_.release.subscribe([this]() noexcept { canvas.palette.switch_to_last(); canvas.current_tool->disable(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
 
 
-    new ColorMenuButton(color_menu_, canvas.DefaultBrushColor);
+    new ColorMenuButton(color_menu_, DefaultPaletteColor);
     new ColorMenuButton(color_menu_, { 255, 255, 255, 255 });
     new ColorMenuButton(color_menu_, { 0, 0, 0, 255 });
     new ColorMenuButton(color_menu_, { 50, 50, 50, 255 });
@@ -55,7 +56,7 @@ Editor::Editor() noexcept
     new ColorMenuButton(color_menu_, { 214, 188, 150, 255 });
 
 
-    color_menu_->color_selected.subscribe([this](const Color& color) { canvas.brush.color = color; });
+    color_menu_->color_selected.subscribe([this](const Color& color) { canvas.palette.set_current_color(color); });
 }
 
 

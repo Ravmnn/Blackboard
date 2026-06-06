@@ -24,7 +24,7 @@ public:
     Event<> leaved;
     Event<> hover;
 
-    bool ignore_interaction_update = false;
+    bool ignore_event_triggering = false;
     bool caught_mouse_input = false;
 
 

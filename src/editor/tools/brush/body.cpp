@@ -68,7 +68,7 @@ void BrushBody::update_stretch() noexcept
 
 void BrushBody::update_color() noexcept
 {
-    color_interpolation_.set_target_and_update(brush.color);
+    color_interpolation_.set_target_and_update(brush.color());
 }
 
 

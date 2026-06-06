@@ -48,6 +48,6 @@ protected:
 
 
     void set_children_ignore_interaction(const bool ignore) noexcept {
-        for_each_children<Button>([ignore](Button* const child) { child->ignore_interaction_update = ignore; });
+        for_each_children<Button>([ignore](Button* const child) { child->ignore_event_triggering = ignore; });
     }
 };

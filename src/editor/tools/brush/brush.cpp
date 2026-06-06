@@ -5,11 +5,11 @@
 
 
 
-Brush::Brush(Canvas& canvas, const Color& color, const float thickness) noexcept : Tool(canvas),
-    stroke_({}, color),
+Brush::Brush(Canvas& canvas, const float thickness) noexcept : Tool(canvas),
+    stroke_({}, BLACK),
     cursor(2),
     body(*this),
-    color(color),
+    color_(canvas.palette.current_color()),
     thickness(thickness)
 {}
 
@@ -21,6 +21,7 @@ void Brush::update() noexcept
     if (got_inactive_)
         stroke_.points.clear();
 
+    color_ = canvas_.palette.current_color();
     update_drawing_state();
 
     update_cursor();
@@ -29,7 +30,7 @@ void Brush::update() noexcept
     update_canvas_actions();
 
     current_thickness_ = thickness_from_speed();
-    stroke_.color = color;
+    stroke_.color = color_;
     add_stroke_point();
 }
 
