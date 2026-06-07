@@ -23,7 +23,7 @@ private:
 
     std::vector<StrokeMesh> stroke_meshes_;
 
-    Interpolation<Color> background_color_;
+    LinearInterpolation<Color> background_color_;
 
     bool initialized_ = false;
 

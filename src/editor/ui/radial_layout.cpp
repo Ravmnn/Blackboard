@@ -4,7 +4,7 @@
 
 
 RadialLayout::RadialLayout(Component* const parent, const Vector2& relative_position, const float radius) noexcept
-    : Component(parent, relative_position), radius_(create_default_interpolation(radius))
+    : Component(parent, relative_position), radius_(create_default_exponential_interpolation(radius))
 {}
 
 

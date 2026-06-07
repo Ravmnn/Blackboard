@@ -12,20 +12,16 @@ class Interpolation : public Updateable
 {
 public:
     T current, target;
-    float speed, smoothing;
 
 
     Interpolation() = default;
-    Interpolation(const T& current, const float speed, const float smoothing = 0.005f) noexcept
-        : current(current), target(current), speed(speed), smoothing(smoothing) {}
+    Interpolation(const T& current) noexcept
+        : current(current), target(current) {}
 
 
     operator T() const noexcept { return current; }
 
     T operator =(const T& value) noexcept { return target = value; }
-
-
-    void update() noexcept override { current = Interpolate::expolerp(current, target, smoothing, speed); }
 
 
     void set_value_immediately(const T& value) noexcept { current = target = value; }
@@ -37,4 +33,46 @@ public:
 
         return current;
     }
+};
+
+
+
+
+template <typename T>
+class ExponentialInterpolation : public Interpolation<T>
+{
+public:
+    using Interpolation<T>::operator=;
+
+
+    float speed, smoothing;
+
+
+    ExponentialInterpolation() = default;
+    ExponentialInterpolation(const T& current, const float speed, const float smoothing = 0.005f) noexcept : Interpolation<T>(current),
+        speed(speed), smoothing(smoothing) {}
+
+
+    void update() noexcept override { this->current = Interpolate::expolerp(this->current, this->target, smoothing, speed); }
+};
+
+
+
+
+template <typename T>
+class LinearInterpolation : public Interpolation<T>
+{
+public:
+    using Interpolation<T>::operator=;
+
+
+    float t;
+
+
+    LinearInterpolation() = default;
+    LinearInterpolation(const T& current, const float t) noexcept : Interpolation<T>(current),
+        t(t) {}
+
+
+    void update() noexcept override { this->current = Interpolate::linear(this->current, this->target, t); }
 };

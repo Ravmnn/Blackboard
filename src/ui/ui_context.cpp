@@ -30,12 +30,15 @@ void UIContext::update_mouse_input(Component& component) noexcept
 {
     Clickable* const clickable = dynamic_cast<Clickable*>(&component);
 
+    const bool had_component_with_mouse_input = component_with_mouse_input_;
+    component_with_mouse_input_ = nullptr;
+
     if (!clickable)
         return;
 
     clickable->caught_mouse_input = false;
 
-    if (!component_with_mouse_input_ && clickable->is_mouse_over())
+    if (!had_component_with_mouse_input && clickable->can_receive_input() && clickable->is_mouse_over())
     {
         clickable->caught_mouse_input = true;
         component_with_mouse_input_ = &component;
@@ -56,6 +59,7 @@ void UIContext::draw_component_parent_first(Component& component) noexcept
 {
     component.draw();
 
-    for (std::unique_ptr<Component>& child : component.children)
-        draw_component_parent_first(*child);
+    if (component.visible)
+        for (std::unique_ptr<Component>& child : component.children)
+            draw_component_parent_first(*child);
 }

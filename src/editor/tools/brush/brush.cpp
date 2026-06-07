@@ -7,10 +7,10 @@
 
 Brush::Brush(Canvas& canvas, const float thickness) noexcept : Tool(canvas),
     stroke_({}, BLACK),
+    thickness(thickness),
     cursor(2),
     body(*this),
-    color_(canvas.palette.current_color()),
-    thickness(thickness)
+    color_(canvas.palette.current_color())
 {}
 
 

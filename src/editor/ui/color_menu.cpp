@@ -12,7 +12,6 @@ ColorMenu::ColorMenu() noexcept : RadialLayout(nullptr, {}, 0)
 
 
     visible = false;
-
     relative_position_.immediate = true;
 
     radius_.set_value_immediately(HiddenRadius);
@@ -64,7 +63,7 @@ void ColorMenu::update_self() noexcept
     RadialLayout::update_self();
 
     for_each_children<Button>([this](Button* const child) {
-        if (!child->is_released())
+        if (!child->is_clicked())
             return;
 
         color_selected.trigger(child->color());

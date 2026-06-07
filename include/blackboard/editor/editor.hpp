@@ -5,6 +5,7 @@
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
+#include <blackboard/animation/interpolation.hpp>
 
 
 

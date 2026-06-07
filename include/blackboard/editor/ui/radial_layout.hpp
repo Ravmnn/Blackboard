@@ -8,7 +8,7 @@
 class RadialLayout : public Component
 {
 protected:
-    Interpolation<float> radius_;
+    ExponentialInterpolation<float> radius_;
 
 
 public:

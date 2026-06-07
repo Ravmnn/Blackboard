@@ -8,7 +8,7 @@
 Button::Button(Component* const parent, const Vector2& position, const Vector2& size, const float radius, const Color& color,
     const float outline_thickness, const Color& outline_color) noexcept
     : RoundedRectangle(parent, position, size, radius, color, outline_thickness, outline_color),
-        Clickable(new MousePositionProvider)
+        Clickable(new MousePositionProvider) // TODO: mouse provider free is responsibility of this class
 {
     add_mouse_button_event(MainButtonId);
 

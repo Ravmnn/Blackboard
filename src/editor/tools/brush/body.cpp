@@ -4,6 +4,8 @@
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/canvas.hpp>
 
+#include <iostream>
+
 
 
 

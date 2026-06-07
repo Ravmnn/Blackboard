@@ -41,6 +41,7 @@ public:
 
 
     explicit Component(Component* const parent, const Vector2& relative_position) noexcept;
+    virtual ~Component() = default;
 
 
     void update() noexcept override;
@@ -92,8 +93,8 @@ protected:
 
 
     template <typename T>
-    static Interpolation<T> create_default_interpolation(const T& current) noexcept
+    static ExponentialInterpolation<T> create_default_exponential_interpolation(const T& current) noexcept
     {
-        return Interpolation<T>(current, DefaultInterpolationSpeed);
+        return ExponentialInterpolation<T>(current, DefaultInterpolationSpeed);
     }
 };

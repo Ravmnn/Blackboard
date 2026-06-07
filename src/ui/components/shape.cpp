@@ -8,9 +8,9 @@
 Shape::Shape(Component* const parent, const Vector2& position, const Color& color, const float outline_thickness, const Color& outline_color) noexcept
     : Component(parent, position),
 
-    color_(create_default_interpolation(color)),
-    outline_thickness_(create_default_interpolation(outline_thickness)),
-    outline_color_(create_default_interpolation(outline_color))
+    color_(create_default_exponential_interpolation(color)),
+    outline_thickness_(create_default_exponential_interpolation(outline_thickness)),
+    outline_color_(create_default_exponential_interpolation(outline_color))
 {}
 
 

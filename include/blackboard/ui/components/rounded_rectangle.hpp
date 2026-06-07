@@ -11,7 +11,7 @@ class RoundedRectangle : public Shape
 {
 protected:
     Spring<Vector2> size_;
-    Interpolation<float> radius_;
+    ExponentialInterpolation<float> radius_;
 
 
 public:

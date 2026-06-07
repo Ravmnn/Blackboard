@@ -52,7 +52,7 @@ void Clickable::update_mouse_buttons() noexcept
 void Clickable::add_mouse_button_event(const int id) noexcept
 {
     MouseButtonEvent button(id, *mouse_position_provider);
-    button.conditions.push_back([this]() { return hover_; });
+    button.clickable = this;
 
     mouse_buttons_.insert({ id, button });
 }

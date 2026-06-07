@@ -10,6 +10,9 @@
 
 
 
+class Clickable;
+
+
 class MouseButtonEvent : public Updateable
 {
 private:
@@ -18,16 +21,16 @@ private:
     float min_drag_distance_ = 2;
     bool is_drag_ = false;
 
+    bool magic_ = false;
+
 
 public:
     using EventType = Event<>;
-    using ConditionType = std::function<bool ()>;
 
 
     const MousePositionProvider& mouse_position_provider;
 
     int button_id;
-    std::vector<ConditionType> conditions;
 
     EventType down;
     EventType press;
@@ -35,6 +38,8 @@ public:
     EventType click;
     EventType drag_start;
     EventType drag_end;
+
+    const Clickable* clickable = nullptr;
 
 
     explicit MouseButtonEvent(const int button_id = MOUSE_BUTTON_LEFT, const MousePositionProvider& mouse_position_provider = {}) noexcept
@@ -51,7 +56,6 @@ public:
 
 
 private:
-    bool all_conditions_are_true() const noexcept;
     void update_drag_state() noexcept;
 
     void trigger_press_event() noexcept;

@@ -8,7 +8,7 @@ RoundedRectangle::RoundedRectangle(Component* const parent, const Vector2& posit
     : Shape(parent, position, color, outline_thickness, outline_color),
 
     size_(create_default_spring(size)),
-    radius_(create_default_interpolation(radius))
+    radius_(create_default_exponential_interpolation(radius))
 {}
 
 

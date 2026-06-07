@@ -26,6 +26,8 @@ public:
 
     bool is_point_over(const Vector2& point) const noexcept override;
 
+    bool can_receive_input() const noexcept override { return Clickable::can_receive_input() && visible; }
+
 
 protected:
     void update_self() noexcept override;

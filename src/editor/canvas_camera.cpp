@@ -19,8 +19,8 @@ CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const flo
 
     camera_ = target_camera_;
 
-    movement_interpolation_ = Interpolation(target_camera_.target, 6);
-    zoom_interpolation_ = Interpolation(target_camera_.zoom, 5);
+    movement_interpolation_ = ExponentialInterpolation(target_camera_.target, 6);
+    zoom_interpolation_ = ExponentialInterpolation(target_camera_.zoom, 5);
 }
 
 

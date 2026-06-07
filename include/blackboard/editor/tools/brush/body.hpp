@@ -24,7 +24,7 @@ private:
     static constexpr float IdleThicknessVariation = 2;
     static constexpr float StretchSpeedFactor = 1.0 / 3.0;
 
-    Interpolation<Color> color_interpolation_;
+    ExponentialInterpolation<Color> color_interpolation_;
 
 
     float last_rotation_ = 0;

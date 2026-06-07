@@ -22,7 +22,7 @@ private:
 
     int point_thickness_back_iterating_amount_ = 7;
 
-    float current_thickness_;
+    float current_thickness_ = 0;
     float min_thickness_ = 5;
     float max_thickness_ = 50;
 
@@ -35,10 +35,10 @@ protected:
 
 
 public:
+    float thickness;
+
     LazyCursor cursor;
     BrushBody body;
-
-    float thickness;
 
 
     friend class BrushBody;

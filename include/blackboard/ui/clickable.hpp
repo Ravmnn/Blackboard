@@ -24,6 +24,7 @@ public:
     Event<> leaved;
     Event<> hover;
 
+    bool ignore_input = false;
     bool ignore_event_triggering = false;
     bool caught_mouse_input = false;
 
@@ -49,6 +50,8 @@ public:
 
     bool is_mouse_over() const noexcept { return is_point_over(mouse_position_provider->mouse_position()); }
     virtual bool is_point_over(const Vector2& point) const noexcept = 0;
+
+    virtual bool can_receive_input() const noexcept { return !ignore_input; }
 
 
     void add_mouse_button_event(const int id) noexcept;

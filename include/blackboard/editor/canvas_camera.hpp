@@ -18,8 +18,8 @@ private:
     Camera2D camera_;
     Camera2D target_camera_;
 
-    Interpolation<Vector2> movement_interpolation_;
-    Interpolation<float> zoom_interpolation_;
+    ExponentialInterpolation<Vector2> movement_interpolation_;
+    ExponentialInterpolation<float> zoom_interpolation_;
 
 
 public:

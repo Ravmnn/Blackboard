@@ -9,9 +9,9 @@
 class Shape : public Component
 {
 protected:
-    Interpolation<Color> color_;
-    Interpolation<float> outline_thickness_;
-    Interpolation<Color> outline_color_;
+    ExponentialInterpolation<Color> color_;
+    ExponentialInterpolation<float> outline_thickness_;
+    ExponentialInterpolation<Color> outline_color_;
 
 
 public:

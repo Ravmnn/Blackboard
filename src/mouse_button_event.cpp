@@ -2,6 +2,8 @@
 
 #include <raymath.h>
 
+#include <blackboard/ui/clickable.hpp>
+
 
 
 
@@ -10,8 +12,11 @@ void MouseButtonEvent::update() noexcept
     press.update();
     release.update();
     down.update();
+    click.update();
+    drag_start.update();
+    drag_end.update();
 
-    if (!all_conditions_are_true())
+    if (clickable && !clickable->is_hover())
         return;
 
     if (IsMouseButtonPressed(button_id)) trigger_press_event();
@@ -19,16 +24,6 @@ void MouseButtonEvent::update() noexcept
     if (IsMouseButtonDown(button_id)) trigger_down_event();
 
     update_drag_state();
-}
-
-
-bool MouseButtonEvent::all_conditions_are_true() const noexcept
-{
-    for (const auto& condition : conditions)
-        if (!condition())
-            return false;
-
-    return true;
 }
 
 
@@ -50,6 +45,7 @@ void MouseButtonEvent::trigger_press_event() noexcept
     press_position_ = mouse_position_provider.mouse_position();
 
     press.trigger();
+    magic_ = true;
 }
 
 
@@ -59,11 +55,12 @@ void MouseButtonEvent::trigger_release_event() noexcept
 
     if (is_drag_)
         drag_end.trigger();
-    else
+    else if (!clickable || magic_)
         click.trigger();
 
     is_drag_ = false;
     press_position_.reset();
+    magic_ = false;
 }
 
 
