@@ -1,0 +1,10 @@
+Checks: >
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  clang-analyzer-*,
+  -readability-braces-around-statements,
+  -readability-magic-numbers
+
+WarningsAsErrors: ''
