@@ -1,8 +1,11 @@
 #include <blackboard/editor/lazy_cursor.hpp>
 
-#include <algorithm>
-
 #include <raymath.h>
+
+
+
+
+using bb::editor::LazyCursor;
 
 
 

@@ -5,6 +5,11 @@
 
 
 
+using bb::rendering::ScopedRenderTexture, bb::rendering::EffectPass;
+
+
+
+
 ScopedRenderTexture EffectPass::apply(const Texture& texture) noexcept
 {
     const ScopedRenderTexture down_sampled = TextureSample::down_sample(texture, down_sample_factor);

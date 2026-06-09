@@ -2,8 +2,15 @@
 
 #include <raylib.h>
 
+
 #include <blackboard/activatable.hpp>
 #include <blackboard/rendering/stencil.hpp>
+
+
+
+
+namespace bb::rendering
+{
 
 
 
@@ -24,10 +31,10 @@ public:
     virtual void end_render() { disable(); }
 
 
-    virtual RenderTexture contents() const noexcept = 0;
+    [[nodiscard]] virtual RenderTexture contents() const noexcept = 0;
 
 
-    virtual Vector2 resolution() const noexcept
+    [[nodiscard]] virtual Vector2 resolution() const noexcept
     {
         const RenderTexture render_texture = contents();
         const Vector2 resolution = { (float)render_texture.texture.width, (float)render_texture.texture.height };
@@ -39,3 +46,8 @@ public:
 protected:
     void clear() const noexcept { ClearBackground(clear_color); Stencil::clear(); }
 };
+
+
+
+
+}

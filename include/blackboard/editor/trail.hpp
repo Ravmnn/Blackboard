@@ -8,6 +8,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Trail : public Stroke, public Updateable, public Drawable
 {
 private:
@@ -21,9 +27,14 @@ public:
     bool emit = true;
 
 
-    explicit Trail(const StrokePoint& origin, const float decay) noexcept;
+    explicit Trail(const StrokePoint& origin, float decay) noexcept;
 
 
     void update() noexcept override;
     void draw() noexcept override;
 };
+
+
+
+
+}

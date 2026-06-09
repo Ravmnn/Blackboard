@@ -3,8 +3,13 @@
 
 
 
+using bb::rendering::TextureRenderer;
+
+
+
+
 TextureRenderer::TextureRenderer(const unsigned int width, const unsigned int height, const bool use_depth_and_stencil) noexcept 
-    : render_texture_(LoadRenderTexture(width, height))
+    : render_texture_(LoadRenderTexture((int)width, (int)height))
 {
     if (use_depth_and_stencil)
         load_stencil();
@@ -45,7 +50,7 @@ void TextureRenderer::load_stencil() noexcept
 
     glGenRenderbuffers(1, &stencil_id_);
     glBindRenderbuffer(GL_RENDERBUFFER, stencil_id_);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, texture_size.x, texture_size.y);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (int)texture_size.x, (int)texture_size.y);
 
     glBindFramebuffer(GL_FRAMEBUFFER, render_texture_.render_texture().id);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_id_);

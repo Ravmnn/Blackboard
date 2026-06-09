@@ -8,6 +8,12 @@
 
 
 
+namespace bb::ui
+{
+
+
+
+
 class Clickable : public virtual Updateable
 {
 private:
@@ -29,7 +35,7 @@ public:
     bool caught_mouse_input = false;
 
 
-    explicit Clickable(const MousePositionProvider* const mouse_position_provider) noexcept;
+    explicit Clickable(const MousePositionProvider* mouse_position_provider) noexcept;
     virtual ~Clickable() noexcept = default;
 
 
@@ -39,22 +45,22 @@ public:
     void update() noexcept override;
 
 
-    const std::map<int, MouseButtonEvent>& mouse_buttons() const noexcept { return mouse_buttons_; }
+    [[nodiscard]] const std::map<int, MouseButtonEvent>& mouse_buttons() const noexcept { return mouse_buttons_; }
 
-    bool is_down() const noexcept { return all_buttons([](const auto& button) { return button.is_down(); }); }
-    bool is_pressed() const noexcept { return all_buttons([](const auto& button) { return button.is_pressed(); }); }
-    bool is_released() const noexcept { return all_buttons([](const auto& button) { return button.is_released(); }); }
-    bool is_clicked() const noexcept { return all_buttons([](const auto& button) { return button.is_clicked(); }); }
+    [[nodiscard]] bool is_down() const noexcept { return all_buttons([](const auto& button) { return button.is_down(); }); }
+    [[nodiscard]] bool is_pressed() const noexcept { return all_buttons([](const auto& button) { return button.is_pressed(); }); }
+    [[nodiscard]] bool is_released() const noexcept { return all_buttons([](const auto& button) { return button.is_released(); }); }
+    [[nodiscard]] bool is_clicked() const noexcept { return all_buttons([](const auto& button) { return button.is_clicked(); }); }
 
-    bool is_hover() const noexcept { return hover_; }
+    [[nodiscard]] bool is_hover() const noexcept { return hover_; }
 
-    bool is_mouse_over() const noexcept { return is_point_over(mouse_position_provider->mouse_position()); }
-    virtual bool is_point_over(const Vector2& point) const noexcept = 0;
+    [[nodiscard]] bool is_mouse_over() const noexcept { return is_point_over(mouse_position_provider->mouse_position()); }
+    [[nodiscard]] virtual bool is_point_over(const Vector2& point) const noexcept = 0;
 
-    virtual bool can_receive_input() const noexcept { return !ignore_input; }
+    [[nodiscard]] virtual bool can_receive_input() const noexcept { return !ignore_input; }
 
 
-    void add_mouse_button_event(const int id) noexcept;
+    void add_mouse_button_event(int id) noexcept;
 
 
 protected:
@@ -69,5 +75,10 @@ protected:
 
     using MouseButtonPredicate = std::function<bool (const MouseButtonEvent&)>;
 
-    bool all_buttons(const MouseButtonPredicate& predicate) const noexcept;
+    [[nodiscard]] bool all_buttons(const MouseButtonPredicate& predicate) const noexcept;
 };
+
+
+
+
+}

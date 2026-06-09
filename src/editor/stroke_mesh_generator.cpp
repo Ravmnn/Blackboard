@@ -1,6 +1,15 @@
 #include <blackboard/editor/stroke_mesh_generator.hpp>
 
-#include <algorithm>
+#include <cstdint>
+
+
+
+
+using bb::editor::StrokeMeshNode,
+    bb::editor::StrokeMeshGenerator,
+    bb::editor::StrokePoint,
+    bb::editor::StrokeSample,
+    bb::editor::StrokeEdge;
 
 
 
@@ -42,7 +51,7 @@ std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<
     for (size_t i = 1; i < size; i++)
     {
         const unsigned int samples_amount = (adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment);
-        add_samples_from_segment(samples, StrokeSplineSegment(points, i), samples_amount, i);
+        add_samples_from_segment(samples, StrokeSplineSegment(points, (int)i), samples_amount, i);
     }
 
     return samples;
@@ -57,7 +66,7 @@ unsigned int StrokeMeshGenerator::calculate_adaptative_samples_amount(const std:
     const float velocity = Vector2Distance(points[i].position, points[i + 1].position) * VelocityFactor;
     const float curvature = (points.size() < 3 ? 0 : calculate_average_curvature(points, i)) * CurvatureFactor;
 
-    return samples_per_segment + velocity + curvature;
+    return (uint32_t)((float)samples_per_segment + velocity + curvature);
 }
 
 
@@ -74,7 +83,7 @@ void StrokeMeshGenerator::add_samples_from_segment(std::vector<StrokeSample>& sa
     const int start = (i == 1) ? 0 : 1;
 
     for (size_t j = start; j <= samples_amount; j++)
-        samples.push_back(StrokeSample(segment, j, samples_amount));
+        samples.emplace_back(segment, (int)j, (int)samples_amount);
 }
 
 
@@ -105,7 +114,7 @@ StrokeEdge StrokeMeshGenerator::create_edge(const StrokeSample& sample, const Ve
     const Vector2 normal = { -direction.y, direction.x };
     const float half_thickness = sample.thickness() / 2;
 
-    return StrokeEdge(sample.position(), normal, half_thickness);
+    return { sample.position(), normal, half_thickness };
 }
 
 
@@ -116,11 +125,10 @@ Vector2 StrokeMeshGenerator::get_direction_from_samples(const std::vector<Stroke
     if (i == 0)
         return samples[1].position() - samples[0].position();
 
-    else if (i == samples_count - 1)
+    if (i == samples_count - 1)
         return samples[samples_count - 1].position() - samples[samples_count - 2].position();
 
-    else
-        return samples[i + 1].position() - samples[i - 1].position();
+    return samples[i + 1].position() - samples[i - 1].position();
 }
 
 
@@ -132,7 +140,7 @@ std::vector<StrokeMeshNode> StrokeMeshGenerator::create_mesh(const std::vector<S
     mesh.reserve(samples.size());
 
     for (size_t i = 0; i < samples.size(); i++)
-        mesh.push_back(StrokeMeshNode(samples[i], edges[i], color));
+        mesh.emplace_back(samples[i], edges[i], color);
 
     return mesh;
 }

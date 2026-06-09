@@ -5,6 +5,11 @@
 
 
 
+using bb::editor::ColorMenuButton;
+
+
+
+
 ColorMenuButton::ColorMenuButton(ColorMenu* const parent, const Color& color) noexcept
     : Button(parent, {}, DefaultSize, DefaultRadius, color, DefaultOutlineThickness, DefaultOutlineColor)
 {

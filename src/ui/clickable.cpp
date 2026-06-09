@@ -3,6 +3,11 @@
 
 
 
+using bb::ui::Clickable;
+
+
+
+
 Clickable::Clickable(const MousePositionProvider* const mouse_position_provider) noexcept
     : mouse_position_provider(mouse_position_provider)
 {

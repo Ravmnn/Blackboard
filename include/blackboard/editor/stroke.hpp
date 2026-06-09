@@ -9,6 +9,14 @@
 
 
 
+
+
+namespace bb::editor
+{
+
+
+
+
 struct StrokePoint
 {
     Vector2 position;
@@ -33,3 +41,8 @@ public:
     Stroke(const std::initializer_list<StrokePoint>& points, const Color& color)
         : points(points), color(color) {}
 };
+
+
+
+
+}

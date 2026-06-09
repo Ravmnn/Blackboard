@@ -3,6 +3,11 @@
 
 
 
+using bb::ui::TextureComponent;
+
+
+
+
 TextureComponent::TextureComponent(Component* const parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept :
     Component(parent, position),
 

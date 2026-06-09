@@ -4,7 +4,14 @@
 
 
 
-class UIContext : public Updateable, public Drawable
+
+namespace bb::ui
+{
+
+
+
+
+class Context : public Updateable, public Drawable
 {
 private:
     std::vector<std::unique_ptr<Component>> components_;
@@ -19,8 +26,8 @@ public:
 
     void add_component(Component& component) noexcept { components_.push_back(std::unique_ptr<Component>(&component)); }
 
-    const std::vector<std::unique_ptr<Component>>& components() const noexcept { return components_; }
-    Component* component_with_mouse_input() noexcept { return component_with_mouse_input_; }
+    [[nodiscard]] const std::vector<std::unique_ptr<Component>>& components() const noexcept { return components_; }
+    [[nodiscard]] Component* component_with_mouse_input() noexcept { return component_with_mouse_input_; }
 
 
 private:
@@ -29,3 +36,8 @@ private:
 
     void draw_component_parent_first(Component& component) noexcept;
 };
+
+
+
+
+}

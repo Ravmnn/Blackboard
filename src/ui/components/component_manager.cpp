@@ -5,6 +5,11 @@
 
 
 
+using bb::ui::ComponentManager;
+
+
+
+
 void ComponentManager::update() noexcept
 {
     for (auto& component : components)

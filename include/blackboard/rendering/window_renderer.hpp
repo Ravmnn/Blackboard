@@ -2,7 +2,14 @@
 
 #include <raylib.h>
 
+
 #include <blackboard/rendering/texture_renderer.hpp>
+
+
+
+
+namespace bb::rendering
+{
 
 
 
@@ -22,7 +29,7 @@ public:
 
     // TODO: detect window resizing and update buffer texture size
 
-    Vector2 resolution() const noexcept override { return screen_resolution(); }
+    [[nodiscard]] Vector2 resolution() const noexcept override { return screen_resolution(); }
 
     static Vector2 screen_resolution() noexcept { return { (float)GetScreenWidth(), (float)GetScreenHeight() }; }
 
@@ -30,3 +37,8 @@ public:
 protected:
     void render_buffer_to_window() const noexcept;
 };
+
+
+
+
+}

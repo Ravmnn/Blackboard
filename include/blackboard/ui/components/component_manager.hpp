@@ -9,6 +9,12 @@
 
 
 
+namespace bb::ui
+{
+
+
+
+
 class ComponentManager : public Updateable, public Drawable
 {
 public:
@@ -38,3 +44,8 @@ public:
         return dynamic_cast<T*>((components.end() - 1)->get());
     }
 };
+
+
+
+
+}

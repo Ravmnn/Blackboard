@@ -7,6 +7,12 @@
 
 
 
+namespace bb::animation
+{
+
+
+
+
 template <typename T>
 class Interpolation : public Updateable
 {
@@ -76,3 +82,8 @@ public:
 
     void update() noexcept override { this->current = Interpolate::linear(this->current, this->target, t); }
 };
+
+
+
+
+}

@@ -1,9 +1,16 @@
 #pragma once
 
-#include <memory>
 #include <optional>
 
 #include <raylib.h>
+
+
+
+
+
+
+namespace bb::rendering
+{
 
 
 
@@ -20,7 +27,7 @@ public:
 
 
     explicit ScopedRenderTexture(const Vector2& size) noexcept
-        : ScopedRenderTexture(LoadRenderTexture(size.x, size.y)) {}
+        : ScopedRenderTexture(LoadRenderTexture((int)size.x, (int)size.y)) {}
 
     explicit ScopedRenderTexture(const RenderTexture& render_texture) noexcept
         : render_texture_(render_texture) { }
@@ -50,14 +57,14 @@ public:
     operator Texture() const noexcept { return texture(); }
 
 
-    const RenderTexture& render_texture() const noexcept { return render_texture_.value(); }
-    RenderTexture& render_texture() noexcept { return render_texture_.value(); }
+    [[nodiscard]] const RenderTexture& render_texture() const noexcept { return render_texture_.value(); }
+    [[nodiscard]] RenderTexture& render_texture() noexcept { return render_texture_.value(); }
 
-    const Texture& texture() const noexcept { return render_texture_.value().texture; }
-    Texture& texture() noexcept { return render_texture_.value().texture; }
+    [[nodiscard]] const Texture& texture() const noexcept { return render_texture_.value().texture; }
+    [[nodiscard]] Texture& texture() noexcept { return render_texture_.value().texture; }
 
 
-    Vector2 size() const noexcept { return { (float)texture().width, (float)texture().height }; }
+    [[nodiscard]] Vector2 size() const noexcept { return { (float)texture().width, (float)texture().height }; }
 
 
     RenderTexture release() noexcept
@@ -76,3 +83,8 @@ private:
         other.render_texture_.reset();
     }
 };
+
+
+
+
+}

@@ -7,6 +7,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Canvas;
 class Palette;
 
@@ -21,5 +27,10 @@ public:
     explicit Tool(Canvas& canvas) noexcept : canvas_(canvas) {}
 
 
-    const Canvas& canvas() const noexcept { return canvas_; }
+    [[nodiscard]] const Canvas& canvas() const noexcept { return canvas_; }
 };
+
+
+
+
+}

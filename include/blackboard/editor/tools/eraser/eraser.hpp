@@ -5,6 +5,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Eraser : public Tool
 {
 public:
@@ -14,3 +20,8 @@ public:
     void update() noexcept override;
     void draw() noexcept override;
 };
+
+
+
+
+}

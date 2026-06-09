@@ -2,7 +2,14 @@
 
 #include <raylib.h>
 
+
 #include <blackboard/rendering/scoped_render_texture.hpp>
+
+
+
+
+namespace bb
+{
 
 
 
@@ -10,6 +17,11 @@
 class TextureSample
 {
 public:
-    static ScopedRenderTexture down_sample(const Texture& source, const float factor) noexcept;
-    static ScopedRenderTexture up_sample(const Texture& source, const float factor) noexcept;
+    static rendering::ScopedRenderTexture down_sample(const Texture& source, float factor) noexcept;
+    static rendering::ScopedRenderTexture up_sample(const Texture& source, float factor) noexcept;
 };
+
+
+
+
+}

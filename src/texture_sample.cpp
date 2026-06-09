@@ -3,9 +3,14 @@
 
 
 
+using bb::TextureSample, bb::rendering::ScopedRenderTexture;
+
+
+
+
 ScopedRenderTexture TextureSample::down_sample(const Texture& source, const float factor) noexcept
 {
-    const RenderTexture render_texture = LoadRenderTexture(source.width / factor, source.height / factor);
+    const RenderTexture render_texture = LoadRenderTexture((int)((float)source.width / factor), (int)((float)source.height / factor));
 
     BeginTextureMode(render_texture);
         const Rectangle source_rect = Rectangle{ 0, 0, (float)source.width, (float)source.height };

@@ -3,7 +3,12 @@
 
 
 
-int main(int, char**)
+using bb::editor::Editor;
+
+
+
+
+int main(int /*unused*/, char** /*unused*/)
 {
     SetTraceLogLevel(LOG_WARNING);
 

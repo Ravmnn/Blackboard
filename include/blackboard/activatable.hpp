@@ -3,6 +3,14 @@
 
 
 
+
+
+namespace bb
+{
+
+
+
+
 class Activatable
 {
 private:
@@ -10,10 +18,18 @@ private:
 
 
 public:
+    virtual ~Activatable() = default;
+
+
     virtual void enable() { active_ = true; }
     virtual void disable() { active_ = false; }
 
     void set_active(const bool active) noexcept { active ? enable() : disable(); }
 
-    bool active() const noexcept { return active_; }
+    [[nodiscard]] bool active() const noexcept { return active_; }
 };
+
+
+
+
+}

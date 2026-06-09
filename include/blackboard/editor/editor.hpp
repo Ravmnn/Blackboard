@@ -1,11 +1,17 @@
 #pragma once
 
-#include <blackboard/ui/ui_context.hpp>
+#include <blackboard/ui/context.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 #include <blackboard/animation/interpolation.hpp>
+
+
+
+
+namespace bb::editor
+{
 
 
 
@@ -17,9 +23,9 @@ public:
 
 
 private:
-    WindowRenderer window_renderer_;
+    rendering::WindowRenderer window_renderer_;
 
-    UIContext ui_context_;
+    ui::Context ui_context_;
 
     ColorMenu* color_menu_;
 
@@ -45,5 +51,10 @@ private:
     void update_mouse_buttons() noexcept;
     void update_keybindings() noexcept;
 
-    void draw_statistics() noexcept;
+    void draw_statistics() const noexcept;
 };
+
+
+
+
+}

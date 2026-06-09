@@ -3,6 +3,11 @@
 
 
 
+using bb::editor::Editor;
+
+
+
+
 Editor::Editor() noexcept :
     canvas(Palette(DefaultPaletteColor))
 {
@@ -105,7 +110,7 @@ void Editor::draw() noexcept
 }
 
 
-void Editor::draw_statistics() noexcept
+void Editor::draw_statistics() const noexcept
 {
     if (!draw_statistics_)
         return;

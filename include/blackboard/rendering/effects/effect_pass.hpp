@@ -1,11 +1,14 @@
 #pragma once
 
-#include <memory>
-
-#include <raylib.h>
 
 #include <blackboard/rendering/effects/effect.hpp>
 #include <blackboard/rendering/scoped_render_texture.hpp>
+
+
+
+
+namespace bb::rendering
+{
 
 
 
@@ -38,3 +41,8 @@ private:
     void set_effect_target_texture_if_allowed(const Texture& source) noexcept;
     void apply_effect_and_render_to(const RenderTexture& render_texture, const RenderTexture& source) noexcept;
 };
+
+
+
+
+}

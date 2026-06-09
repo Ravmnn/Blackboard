@@ -8,6 +8,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Brush;
 
 
@@ -18,13 +24,13 @@ private:
 
 
     Vector2 position_;
-    Spring<float> thickness_;
-    Spring<float> stretch_;
+    animation::Spring<float> thickness_;
+    animation::Spring<float> stretch_;
 
     static constexpr float IdleThicknessVariation = 2;
     static constexpr float StretchSpeedFactor = 1.0 / 3.0;
 
-    ExponentialInterpolation<Color> color_interpolation_;
+    animation::ExponentialInterpolation<Color> color_interpolation_;
 
 
     float last_rotation_ = 0;
@@ -49,5 +55,10 @@ private:
 
 
     void draw_body() noexcept;
-    void draw_rotated_stretched_ellipse(const Vector2& position, const float radius, const float stretch, const float rotation) noexcept;
+    void draw_rotated_stretched_ellipse(const Vector2& position, float radius, float stretch, float rotation) noexcept;
 };
+
+
+
+
+}

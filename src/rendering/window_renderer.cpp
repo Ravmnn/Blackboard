@@ -3,6 +3,11 @@
 
 
 
+using bb::rendering::WindowRenderer;
+
+
+
+
 void WindowRenderer::begin_render() noexcept
 {
     if (use_buffer_texture)

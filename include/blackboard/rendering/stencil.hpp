@@ -7,6 +7,12 @@
 
 
 
+namespace bb::rendering
+{
+
+
+
+
 class Stencil
 {
 public:
@@ -44,3 +50,8 @@ public:
 private:
     static void flush() noexcept { RLGL::draw_render_batch_active(); }
 };
+
+
+
+
+}

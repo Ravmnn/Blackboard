@@ -6,6 +6,13 @@
 
 
 
+using bb::editor::Canvas,
+    bb::rendering::WindowRenderer,
+    bb::rendering::TextureRenderer;
+
+
+
+
 Canvas::Canvas(const Palette& palette) :
     background_color_(DefaultBackgroundColor, 0.6),
 
@@ -29,7 +36,7 @@ Canvas::Canvas(const Palette& palette) :
 }
 
 
-#include <iostream>
+
 
 void Canvas::update() noexcept
 {

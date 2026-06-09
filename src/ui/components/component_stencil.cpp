@@ -5,6 +5,11 @@
 
 
 
+using bb::ui::ComponentStencil;
+
+
+
+
 uint8_t ComponentStencil::get_stencil_value_for_component(const Component& component) noexcept
 {
     uint8_t id = 0;

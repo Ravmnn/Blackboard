@@ -11,6 +11,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Canvas : public Updateable, public Drawable, public MousePositionProvider
 {
 public:
@@ -18,12 +24,12 @@ public:
 
 
 private:
-    TextureRenderer super_sampled_texture_;
-    TextureRenderer final_texture_;
+    rendering::TextureRenderer super_sampled_texture_;
+    rendering::TextureRenderer final_texture_;
 
     std::vector<StrokeMesh> stroke_meshes_;
 
-    LinearInterpolation<Color> background_color_;
+    animation::LinearInterpolation<Color> background_color_;
 
     bool initialized_ = false;
 
@@ -53,15 +59,15 @@ public:
     void draw() noexcept override;
 
 
-    const Camera2D& camera() const noexcept { return canvas_camera.camera(); }
-    const std::vector<StrokeMesh>& stroke_meshes() const noexcept { return stroke_meshes_; }
+    [[nodiscard]] const Camera2D& camera() const noexcept { return canvas_camera.camera(); }
+    [[nodiscard]] const std::vector<StrokeMesh>& stroke_meshes() const noexcept { return stroke_meshes_; }
 
-    Vector2 mouse_delta() const noexcept override { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
-    Vector2 mouse_position() const noexcept override { return map_point(screen_mouse_position()); }
-    Vector2 screen_mouse_position() const noexcept override { return GetMousePosition() * SuperSamplingFactor; }
+    [[nodiscard]] Vector2 mouse_delta() const noexcept override { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
+    [[nodiscard]] Vector2 mouse_position() const noexcept override { return map_point(screen_mouse_position()); }
+    [[nodiscard]] Vector2 screen_mouse_position() const noexcept override { return GetMousePosition() * SuperSamplingFactor; }
 
 
-    Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, canvas_camera.target_camera()); }
+    [[nodiscard]] Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, canvas_camera.target_camera()); }
 
 
     void add_stroke(const Stroke& stroke) noexcept;
@@ -84,3 +90,8 @@ private:
 
     void draw_strokes() noexcept;
 };
+
+
+
+
+}

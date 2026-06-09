@@ -6,6 +6,11 @@
 
 
 
+using bb::editor::ColorMenu, bb::ui::Button;
+
+
+
+
 ColorMenu::ColorMenu() noexcept : RadialLayout(nullptr, {}, 0)
 {
     color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
@@ -78,7 +83,7 @@ Vector2 ColorMenu::get_position_for_child(Component& child, const size_t i) noex
 {
     Vector2 position = RadialLayout::get_position_for_child(child, i);
 
-    if (auto button = dynamic_cast<Button*>(&child); button && button->is_hover())
+    if (auto* button = dynamic_cast<Button*>(&child); button && button->is_hover())
         position *= 1.1;
 
     return position;
@@ -87,7 +92,7 @@ Vector2 ColorMenu::get_position_for_child(Component& child, const size_t i) noex
 
 
 
-void ColorMenu::on_color_selected(const Color& color) noexcept
+void ColorMenu::on_color_selected(const Color& /*unused*/) noexcept
 {
     hide();
 }

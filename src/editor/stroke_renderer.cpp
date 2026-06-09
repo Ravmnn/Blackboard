@@ -7,6 +7,11 @@
 
 
 
+using bb::editor::StrokeRenderer;
+
+
+
+
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
     draw_stroke_mesh(sampler.generate_mesh(stroke));
@@ -101,7 +106,7 @@ void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) 
 }
 
 
-void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) noexcept
+void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) const noexcept
 {
     static constexpr int CapResolution = 32;
 
@@ -112,8 +117,8 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 
     for (size_t i = 0; i < CapResolution; i++)
     {
-        const float a0 = i * angle_step;
-        const float a1 = (i + 1) * angle_step;
+        const float a0 = (float)i * angle_step;
+        const float a1 = (float)(i + 1) * angle_step;
 
         const Vector2 v0 = { normal.x * cosf(a0) - normal.y * sinf(a0), normal.x * sinf(a0) + normal.y * cosf(a0) };
         const Vector2 v1 = { normal.x * cosf(a1) - normal.y * sinf(a1), normal.x * sinf(a1) + normal.y * cosf(a1) };
@@ -125,7 +130,7 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 
 
 
-void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) const noexcept
 {
     if (should_debug_draw_samples)
         debug_draw_samples(mesh);

@@ -7,6 +7,12 @@
 
 
 
+namespace bb::rendering
+{
+
+
+
+
 template <typename T>
 class EffectProperty : Updateable
 {
@@ -28,8 +34,8 @@ public:
     void update() noexcept override { update_shader_value(); }
 
 
-    int id() const noexcept { return id_; }
-    int type() const noexcept;
+    [[nodiscard]] int id() const noexcept { return id_; }
+    [[nodiscard]] int type() const noexcept;
 
 
 private:
@@ -48,3 +54,8 @@ template<> inline int EffectProperty<Texture>::type() const noexcept { return SH
 
 template<typename T> inline void EffectProperty<T>::update_shader_value() const noexcept { SetShaderValue(shader, id_, &value, type()); }
 template<> inline void EffectProperty<Texture>::update_shader_value() const noexcept { SetShaderValueTexture(shader, id_, value); }
+
+
+
+
+}

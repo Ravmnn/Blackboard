@@ -5,12 +5,17 @@
 
 
 
+using bb::editor::Brush;
+
+
+
+
 Brush::Brush(Canvas& canvas, const float thickness) noexcept : Tool(canvas),
     stroke_({}, BLACK),
+    color_(canvas.palette.current_color()),
     thickness(thickness),
     cursor(2),
-    body(*this),
-    color_(canvas.palette.current_color())
+    body(*this)
 {}
 
 
@@ -79,7 +84,7 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 {
     const int minimum_index = ((int)stroke_.points.size()) - point_thickness_back_iterating_amount_;
 
-    for (int i = stroke_.points.size() - 1; i > minimum_index && i >= 0; i--)
+    for (int i = (int)stroke_.points.size() - 1; i > minimum_index && i >= 0; i--)
         stroke_.points[i].thickness = thickness;
 
 }

@@ -6,6 +6,14 @@
 
 
 
+
+
+namespace bb
+{
+
+
+
+
 using Clock = std::chrono::steady_clock;
 using Milliseconds = std::chrono::milliseconds;
 
@@ -19,7 +27,7 @@ public:
     void reset() noexcept { start = Clock::now(); }
 
 
-    double elapsed() const { return std::chrono::duration<double, std::milli>(Clock::now() - start).count(); }
+    [[nodiscard]] double elapsed() const { return std::chrono::duration<double, std::milli>(Clock::now() - start).count(); }
 };
 
 
@@ -39,7 +47,7 @@ public:
         timer_.reset();
     }
 
-    static long long end() noexcept { return timer_.elapsed(); }
+    static double end() noexcept { return timer_.elapsed(); }
 
 
     static void begin_log(const std::string& id = "") noexcept
@@ -57,3 +65,8 @@ public:
 private:
     static std::string id_or_default() noexcept { return id_.empty() ? "timer" : id_; }
 };
+
+
+
+
+}

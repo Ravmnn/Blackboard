@@ -12,6 +12,12 @@
 
 
 
+namespace bb::animation
+{
+
+
+
+
 template <typename T> concept Arithmetic = requires(T a, T b) {
     { a + b } -> std::convertible_to<T>;
     { a - b } -> std::convertible_to<T>;
@@ -69,11 +75,7 @@ public:
 
     void clamp_current() noexcept
     {
-        if (min.has_value())
-            current = std::max(current, *min);
-
-        if (max.has_value())
-            current = std::min(current, *max);
+        apply_min_max();
 
         constexpr float Epsilon = 0.15f;
 
@@ -83,9 +85,34 @@ public:
 
 
 private:
-    float distance_of_current_to_target() const noexcept;
+    void apply_min_max() noexcept
+    {
+        if (min.has_value())
+            current = std::max(current, *min);
+
+        if (max.has_value())
+            current = std::min(current, *max);
+    }
+
+
+    [[nodiscard]] float distance_of_current_to_target() const noexcept;
 };
+
+
+template<> inline void Spring<Vector2>::apply_min_max() noexcept
+{
+    if (min.has_value())
+        current = Vector2Max(current, *min);
+
+    if (max.has_value())
+        current = Vector2Min(current, *max);
+}
 
 
 template<> inline float Spring<float>::distance_of_current_to_target() const noexcept { return std::abs(target - current); }
 template<> inline float Spring<Vector2>::distance_of_current_to_target() const noexcept { return std::abs(Vector2Length(target - current)); }
+
+
+
+
+}

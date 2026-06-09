@@ -5,6 +5,11 @@
 
 
 
+using bb::ui::Shape;
+
+
+
+
 Shape::Shape(Component* const parent, const Vector2& position, const Color& color, const float outline_thickness, const Color& outline_color) noexcept
     : Component(parent, position),
 

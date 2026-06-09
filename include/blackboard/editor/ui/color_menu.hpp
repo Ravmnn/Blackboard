@@ -8,6 +8,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class ColorMenu : public RadialLayout
 {
 private:
@@ -36,18 +42,23 @@ protected:
     void update_self() noexcept override;
 
 
-    Vector2 get_position_for_child(Component& child, const size_t i) noexcept override;
+    Vector2 get_position_for_child(Component& child, size_t i) noexcept override;
 
 
     void on_color_selected(const Color& color) noexcept;
 
 
     void set_children_opacity(const uint8_t opacity) noexcept {
-        for_each_children<Shape>([opacity](Shape* const child) { child->set_both_opacity(opacity); });
+        for_each_children<ui::Shape>([opacity](ui::Shape* const child) { child->set_both_opacity(opacity); });
     }
 
 
     void set_children_ignore_interaction(const bool ignore) noexcept {
-        for_each_children<Button>([ignore](Button* const child) { child->ignore_event_triggering = ignore; });
+        for_each_children<ui::Button>([ignore](ui::Button* const child) { child->ignore_event_triggering = ignore; });
     }
 };
+
+
+
+
+}

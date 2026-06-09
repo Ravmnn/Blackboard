@@ -5,7 +5,13 @@
 
 
 
-class DefaultButton : public Button
+namespace bb::editor
+{
+
+
+
+
+class DefaultButton : public ui::Button
 {
 public:
     Color base_color;
@@ -17,8 +23,8 @@ public:
     Color outline_pressed_color;
 
 
-    DefaultButton(Component* const parent, const Vector2& position, const Vector2& size, const float radius = 0, const Color& color = WHITE,
-        const float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
+    DefaultButton(Component* parent, const Vector2& position, const Vector2& size, float radius = 0, const Color& color = WHITE,
+        float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
 
 
 protected:
@@ -31,3 +37,8 @@ protected:
 
     static std::tuple<Color, Color, Color> get_colors_keyframes_from_base_color(const Color& base_color) noexcept;
 };
+
+
+
+
+}

@@ -8,13 +8,18 @@
 
 
 
+using bb::editor::CanvasCamera, bb::animation::ExponentialInterpolation;
+
+
+
+
 CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept :
     canvas(canvas), min_zoom(min_zoom), max_zoom(max_zoom), zoom_factor(zoom_factor)
 {
-    target_camera_ = {
-        .target = 0,
+    target_camera_ = Camera2D{
+        .target = {},
         .rotation = 0,
-        .zoom = canvas.SuperSamplingFactor
+        .zoom = Canvas::SuperSamplingFactor
     };
 
     camera_ = target_camera_;
@@ -28,7 +33,7 @@ CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const flo
 
 void CanvasCamera::update() noexcept
 {
-    camera_.offset = target_camera_.offset = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+    camera_.offset = target_camera_.offset = { (float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f };
 
     update_dragging();
     update_zoom();
@@ -39,13 +44,13 @@ void CanvasCamera::update() noexcept
 void CanvasCamera::update_dragging() noexcept
 {
     if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
-        target_camera_.target += GetMouseDelta() * canvas.SuperSamplingFactor / target_camera_.zoom * -1;
+        target_camera_.target += GetMouseDelta() * Canvas::SuperSamplingFactor / target_camera_.zoom * -1;
 }
 
 
 void CanvasCamera::update_zoom() noexcept
 {
-    if (!GetMouseWheelMove())
+    if (GetMouseWheelMove() == 0)
         return;
 
     const Vector2 mouse_world = canvas.mouse_position();
@@ -69,7 +74,7 @@ void CanvasCamera::update_interpolation() noexcept
 
 Rectangle CanvasCamera::get_world_bounds() const noexcept
 {
-    const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() } * canvas.SuperSamplingFactor;
+    const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() } * Canvas::SuperSamplingFactor;
 
     const Vector2 topLeft = GetScreenToWorld2D({ 0, 0 }, camera_) - bounds_expansion;
     const Vector2 bottomRight = GetScreenToWorld2D(screen_size, camera_) + bounds_expansion * 2;

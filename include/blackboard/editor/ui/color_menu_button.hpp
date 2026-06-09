@@ -5,10 +5,16 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class ColorMenu;
 
 
-class ColorMenuButton final : public Button
+class ColorMenuButton final : public ui::Button
 {
 public:
     static constexpr Vector2 DefaultSize = { 60, 60 };
@@ -23,10 +29,15 @@ public:
     static constexpr float ColorInterpolationSpeed = 10;
 
 
-    explicit ColorMenuButton(ColorMenu* const parent, const Color& color) noexcept;
+    explicit ColorMenuButton(ColorMenu* parent, const Color& color) noexcept;
 
 
 protected:
     void on_entered() noexcept override;
     void on_leaved() noexcept override;
 };
+
+
+
+
+}

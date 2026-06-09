@@ -5,6 +5,14 @@
 
 
 
+
+
+namespace bb
+{
+
+
+
+
 class Collisions
 {
 public:
@@ -14,3 +22,8 @@ public:
                 point.y >= rectangle.y && point.y <= rectangle.y + rectangle.height;
     }
 };
+
+
+
+
+}

@@ -1,9 +1,13 @@
 #pragma once
 
-#include <tuple>
-
-#include <blackboard/ui/components/rounded_rectangle.hpp>
 #include <blackboard/ui/clickable.hpp>
+#include <blackboard/ui/components/rounded_rectangle.hpp>
+
+
+
+
+namespace bb::ui
+{
 
 
 
@@ -14,8 +18,8 @@ public:
     static constexpr int MainButtonId = MOUSE_BUTTON_LEFT;
 
 
-    Button(Component* const parent, const Vector2& position, const Vector2& size, const float radius = 0, const Color& color = WHITE,
-        const float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
+    Button(Component* parent, const Vector2& position, const Vector2& size, float radius = 0, const Color& color = WHITE,
+        float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
 
 
     void update() noexcept override { RoundedRectangle::update(); }
@@ -24,9 +28,9 @@ public:
     MouseButtonEvent& main_button() noexcept { return (*this)[MainButtonId]; }
 
 
-    bool is_point_over(const Vector2& point) const noexcept override;
+    [[nodiscard]] bool is_point_over(const Vector2& point) const noexcept override;
 
-    bool can_receive_input() const noexcept override { return Clickable::can_receive_input() && visible; }
+    [[nodiscard]] bool can_receive_input() const noexcept override { return Clickable::can_receive_input() && visible; }
 
 
 protected:
@@ -43,3 +47,8 @@ protected:
     virtual void on_drag_start() noexcept {}
     virtual void on_drag_end() noexcept {}
 };
+
+
+
+
+}

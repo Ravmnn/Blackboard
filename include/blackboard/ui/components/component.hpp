@@ -14,6 +14,12 @@
 
 
 
+namespace bb::ui
+{
+
+
+
+
 class Component;
 
 
@@ -24,7 +30,7 @@ concept ComponentDerived = std::derived_from<T, Component>;
 class Component : public virtual Updateable, public Drawable, public Activatable
 {
 protected:
-    Spring<Vector2> relative_position_;
+    animation::Spring<Vector2> relative_position_;
 
 
 public:
@@ -40,30 +46,29 @@ public:
     bool clip = true;
 
 
-    explicit Component(Component* const parent, const Vector2& relative_position) noexcept;
-    virtual ~Component() = default;
+    explicit Component(Component* parent, const Vector2& relative_position) noexcept;
 
 
     void update() noexcept override;
     void draw() noexcept override;
 
 
-    Vector2 relative_position() const noexcept { return relative_position_.current; }
-    Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : relative_position_; }
+    [[nodiscard]] Vector2 relative_position() const noexcept { return relative_position_.current; }
+    [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : relative_position_; }
 
-    Vector2 top_left_relative_position() const noexcept { return relative_position() - bounding_box_size() / 2; }
-    Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
+    [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position() - bounding_box_size() / 2; }
+    [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
 
     void set_relative_position(const Vector2& position) noexcept { relative_position_.target = position; }
     void set_absolute_position(const Vector2& position) noexcept { relative_position_.target = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
-    virtual Rectangle relative_bounding_box() const noexcept = 0;
-    virtual Rectangle absolute_bounding_box() const noexcept {
+    [[nodiscard]] virtual Rectangle relative_bounding_box() const noexcept = 0;
+    [[nodiscard]] virtual Rectangle absolute_bounding_box() const noexcept {
         return { top_left_absolute_position().x, top_left_absolute_position().y, bounding_box_size().x, bounding_box_size().y };
     }
 
-    Vector2 bounding_box_size() const noexcept;
+    [[nodiscard]] Vector2 bounding_box_size() const noexcept;
 
 
 
@@ -86,15 +91,20 @@ protected:
 
 
     template <typename T>
-    static Spring<T> create_default_spring(const T& current) noexcept
+    static animation::Spring<T> create_default_spring(const T& current) noexcept
     {
-        return Spring<T>(current, current, DefaultSpringDamping, DefaultSpringSpeed);
+        return animation::Spring<T>(current, current, DefaultSpringDamping, DefaultSpringSpeed);
     }
 
 
     template <typename T>
-    static ExponentialInterpolation<T> create_default_exponential_interpolation(const T& current) noexcept
+    static animation::ExponentialInterpolation<T> create_default_exponential_interpolation(const T& current) noexcept
     {
-        return ExponentialInterpolation<T>(current, DefaultInterpolationSpeed);
+        return animation::ExponentialInterpolation<T>(current, DefaultInterpolationSpeed);
     }
 };
+
+
+
+
+}

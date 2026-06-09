@@ -8,6 +8,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Canvas;
 
 
@@ -44,20 +50,20 @@ public:
     friend class BrushBody;
 
 
-    Brush(Canvas& canvas, const float thickness) noexcept;
+    Brush(Canvas& canvas, float thickness) noexcept;
 
 
     void update() noexcept override;
     void draw() noexcept override;
 
 
-    const Color& color() const noexcept { return color_; }
+    [[nodiscard]] const Color& color() const noexcept { return color_; }
 
-    const Stroke& stroke() const noexcept { return stroke_; }
+    [[nodiscard]] const Stroke& stroke() const noexcept { return stroke_; }
     void clear_stroke() noexcept { stroke_.points.clear(); }
 
-    bool draw_started() const noexcept { return got_active_; }
-    bool draw_finished() const noexcept { return got_inactive_; }
+    [[nodiscard]] bool draw_started() const noexcept { return got_active_; }
+    [[nodiscard]] bool draw_finished() const noexcept { return got_inactive_; }
 
 
 private:
@@ -66,13 +72,18 @@ private:
     void update_drawing_state() noexcept;
 
     void add_stroke_point() noexcept;
-    void modify_previous_points_thickness(const float thickness) noexcept;
+    void modify_previous_points_thickness(float thickness) noexcept;
 
-    float thickness_from_speed() const noexcept { return std::lerp(max_thickness(), min_thickness(), cursor.smooth_speed_fraction()); }
-    float current_thickness() const noexcept { return current_thickness_; }
+    [[nodiscard]] float thickness_from_speed() const noexcept { return std::lerp(max_thickness(), min_thickness(), cursor.smooth_speed_fraction()); }
+    [[nodiscard]] float current_thickness() const noexcept { return current_thickness_; }
 
-    float min_thickness() const noexcept { return std::max(min_thickness_, thickness - thickness_max_decrease_); }
-    float max_thickness() const noexcept { return std::min(max_thickness_, thickness + thickness_max_increase_); }
+    [[nodiscard]] float min_thickness() const noexcept { return std::max(min_thickness_, thickness - thickness_max_decrease_); }
+    [[nodiscard]] float max_thickness() const noexcept { return std::min(max_thickness_, thickness + thickness_max_increase_); }
 
-    float distance_to_last_point() const noexcept { return Vector2Distance(stroke_.points.back(), cursor.position()); }
+    [[nodiscard]] float distance_to_last_point() const noexcept { return Vector2Distance(stroke_.points.back(), cursor.position()); }
 };
+
+
+
+
+}

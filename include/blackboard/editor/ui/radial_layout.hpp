@@ -5,22 +5,28 @@
 
 
 
-class RadialLayout : public Component
+namespace bb::editor
+{
+
+
+
+
+class RadialLayout : public ui::Component
 {
 protected:
-    ExponentialInterpolation<float> radius_;
+    animation::ExponentialInterpolation<float> radius_;
 
 
 public:
-    RadialLayout(Component* const parent, const Vector2& position, const float radius) noexcept;
+    RadialLayout(Component* parent, const Vector2& position, float radius) noexcept;
 
 
-    Rectangle relative_bounding_box() const noexcept override {
+    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
         return { relative_position_.current.x, relative_position_.current.y, radius_ * 2, radius_ * 2 };
     }
 
 
-    float radius() const noexcept { return radius_; }
+    [[nodiscard]] float radius() const noexcept { return radius_; }
 
     void set_radius(const float radius) noexcept { radius_.target = radius; }
 
@@ -32,5 +38,10 @@ protected:
     void draw_self() noexcept override {}
 
 
-    virtual Vector2 get_position_for_child(Component& child, const size_t i) noexcept;
+    virtual Vector2 get_position_for_child(Component& child, size_t i) noexcept;
 };
+
+
+
+
+}

@@ -11,6 +11,12 @@
 
 
 
+namespace bb::rendering
+{
+
+
+
+
 class Effect : public Activatable, public Updateable
 {
 private:
@@ -28,9 +34,14 @@ public:
     void disable() noexcept override;
 
 
-    Shader* shader() const noexcept { return shader_.get(); };
+    [[nodiscard]] Shader* shader() const noexcept { return shader_.get(); };
 
 
     virtual Texture* target_texture() noexcept = 0;
     virtual Vector2* target_texture_resolution() noexcept = 0;
 };
+
+
+
+
+}

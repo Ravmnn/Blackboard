@@ -1,10 +1,17 @@
 #pragma once
 
+#include <cstdint>
 #include <raylib.h>
 #include <rlgl.h>
 
 #include <blackboard/rendering/renderer.hpp>
 #include <blackboard/rendering/scoped_render_texture.hpp>
+
+
+
+
+namespace bb::rendering
+{
 
 
 
@@ -21,12 +28,12 @@ public:
         : TextureRenderer(GetScreenWidth(), GetScreenHeight(), use_depth_and_stencil) {}
 
     explicit TextureRenderer(const Vector2& size, const bool use_depth_and_stencil = false) noexcept
-        : TextureRenderer(size.x, size.y, use_depth_and_stencil) {}
+        : TextureRenderer((uint32_t)size.x, (uint32_t)size.y, use_depth_and_stencil) {}
 
-    TextureRenderer(const unsigned int width, const unsigned int height, const bool use_depth_and_stencil = false) noexcept;
+    TextureRenderer(unsigned int width, unsigned int height, bool use_depth_and_stencil = false) noexcept;
 
 
-    virtual ~TextureRenderer() { unload_stencil(); }
+    ~TextureRenderer() override { unload_stencil(); }
 
 
     TextureRenderer& operator=(TextureRenderer&&) = default;
@@ -39,7 +46,7 @@ public:
     void generate_mipmaps() noexcept { GenTextureMipmaps(&render_texture_.texture()); }
 
 
-    RenderTexture contents() const noexcept override { return render_texture_; }
+    [[nodiscard]] RenderTexture contents() const noexcept override { return render_texture_; }
     RenderTexture release_contents() noexcept { return render_texture_.release(); }
 
 
@@ -50,3 +57,8 @@ private:
     void load_stencil() noexcept;
     void unload_stencil() noexcept;
 };
+
+
+
+
+}

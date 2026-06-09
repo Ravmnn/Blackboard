@@ -3,6 +3,11 @@
 
 
 
+using bb::editor::Eraser;
+
+
+
+
 void Eraser::update() noexcept
 {
     

@@ -4,7 +4,10 @@
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/canvas.hpp>
 
-#include <iostream>
+
+
+
+using bb::editor::BrushBody;
 
 
 
@@ -48,7 +51,7 @@ void BrushBody::update_trail() noexcept
 void BrushBody::update_thickness() noexcept
 {
     float target_thickness = brush.current_thickness();
-    target_thickness = (target_thickness == 0 ? brush.thickness : target_thickness / 2.0);
+    target_thickness = (float)(target_thickness == 0 ? brush.thickness : target_thickness / 2.0);
 
     if (!brush.active())
         target_thickness = brush.thickness + IdleThicknessVariation;
@@ -106,7 +109,7 @@ void BrushBody::draw_rotated_stretched_ellipse(const Vector2& position, const fl
         rlTranslatef(-position.x, -position.y, 0.0f);
 
         DrawEllipse(
-            position.x, position.y,
+            (int)position.x, (int)position.y,
             radius + stretch, radius,
             color_interpolation_
         );

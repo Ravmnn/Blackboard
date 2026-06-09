@@ -3,6 +3,11 @@
 
 
 
+using bb::rendering::Effect;
+
+
+
+
 
 void Effect::enable(const std::optional<Texture>& texture) noexcept
 {

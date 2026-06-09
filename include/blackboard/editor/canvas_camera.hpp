@@ -9,6 +9,12 @@
 
 
 
+namespace bb::editor
+{
+
+
+
+
 class Canvas;
 
 
@@ -18,8 +24,8 @@ private:
     Camera2D camera_;
     Camera2D target_camera_;
 
-    ExponentialInterpolation<Vector2> movement_interpolation_;
-    ExponentialInterpolation<float> zoom_interpolation_;
+    animation::ExponentialInterpolation<Vector2> movement_interpolation_;
+    animation::ExponentialInterpolation<float> zoom_interpolation_;
 
 
 public:
@@ -32,7 +38,7 @@ public:
     Vector2 bounds_expansion = {};
 
 
-    CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept;
+    CanvasCamera(const Canvas& canvas, float min_zoom, float max_zoom, float zoom_factor) noexcept;
 
 
     void update() noexcept override;
@@ -42,11 +48,11 @@ public:
     void disable() noexcept override { Activatable::disable(); EndMode2D(); }
 
 
-    const Camera2D& camera() const noexcept { return camera_; }
-    const Camera2D& target_camera() const noexcept { return target_camera_; }
+    [[nodiscard]] const Camera2D& camera() const noexcept { return camera_; }
+    [[nodiscard]] const Camera2D& target_camera() const noexcept { return target_camera_; }
 
 
-    Rectangle get_world_bounds() const noexcept;
+    [[nodiscard]] Rectangle get_world_bounds() const noexcept;
 
 
 private:
@@ -54,3 +60,8 @@ private:
     void update_zoom() noexcept;
     void update_interpolation() noexcept;
 };
+
+
+
+
+}

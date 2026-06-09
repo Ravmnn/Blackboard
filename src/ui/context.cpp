@@ -1,24 +1,29 @@
-#include <blackboard/ui/ui_context.hpp>
+#include <blackboard/ui/context.hpp>
 
 #include <blackboard/ui/clickable.hpp>
 
 
 
 
-void UIContext::update() noexcept
+using bb::ui::Context;
+
+
+
+
+void Context::update() noexcept
 {
     component_with_mouse_input_ = nullptr;
 
     if (!components_.empty())
-        for (int i = components_.size() - 1; i >= 0; i--)
+        for (int i = (int)components_.size() - 1; i >= 0; i--)
             update_component_children_first(*components_[i]);
 }
 
 
-void UIContext::update_component_children_first(Component& component) noexcept
+void Context::update_component_children_first(Component& component) noexcept
 {
     if (!component.children.empty())
-        for (int i = component.children.size() - 1; i >= 0; i--)
+        for (int i = (int)component.children.size() - 1; i >= 0; i--)
             update_component_children_first(*component.children[i]);
 
     update_mouse_input(component);
@@ -26,9 +31,9 @@ void UIContext::update_component_children_first(Component& component) noexcept
 }
 
 
-void UIContext::update_mouse_input(Component& component) noexcept
+void Context::update_mouse_input(Component& component) noexcept
 {
-    Clickable* const clickable = dynamic_cast<Clickable*>(&component);
+    auto* const clickable = dynamic_cast<Clickable*>(&component);
 
     const bool had_component_with_mouse_input = component_with_mouse_input_;
     component_with_mouse_input_ = nullptr;
@@ -48,14 +53,14 @@ void UIContext::update_mouse_input(Component& component) noexcept
 
 
 
-void UIContext::draw() noexcept
+void Context::draw() noexcept
 {
     for (std::unique_ptr<Component>& component : components_)
         draw_component_parent_first(*component);
 }
 
 
-void UIContext::draw_component_parent_first(Component& component) noexcept
+void Context::draw_component_parent_first(Component& component) noexcept
 {
     component.draw();
 

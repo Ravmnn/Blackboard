@@ -3,7 +3,14 @@
 #include <functional>
 #include <vector>
 
+
 #include <blackboard/updateable.hpp>
+
+
+
+
+namespace bb
+{
 
 
 
@@ -42,5 +49,10 @@ public:
     }
 
 
-    bool triggered() const noexcept { return triggered_last_frame_; }
+    [[nodiscard]] bool triggered() const noexcept { return triggered_last_frame_; }
 };
+
+
+
+
+}

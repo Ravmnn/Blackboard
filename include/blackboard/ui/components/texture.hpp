@@ -5,6 +5,12 @@
 
 
 
+namespace bb::ui
+{
+
+
+
+
 // TODO: rename to Texture
 class TextureComponent : public Component
 {
@@ -17,14 +23,14 @@ public:
     Vector2 size;
 
 
-    TextureComponent(Component* const parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept;
-    ~TextureComponent() { UnloadTexture(texture_); }
+    TextureComponent(Component* parent, const Vector2& position, const Vector2& size, const Texture& texture) noexcept;
+    ~TextureComponent() override { UnloadTexture(texture_); }
 
 
-    const Texture& texture() const noexcept { return texture_; }
+    [[nodiscard]] const Texture& texture() const noexcept { return texture_; }
 
 
-    Rectangle relative_bounding_box() const noexcept override {
+    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
         return { relative_position_.current.x, relative_position_.current.y, size.x, size.y };
     }
 
@@ -32,3 +38,8 @@ public:
 protected:
     void draw_self() noexcept override;
 };
+
+
+
+
+}

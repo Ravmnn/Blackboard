@@ -1,7 +1,6 @@
 #pragma once
 
 #include <optional>
-#include <functional>
 
 #include <blackboard/event.hpp>
 #include <blackboard/updateable.hpp>
@@ -10,7 +9,13 @@
 
 
 
-class Clickable;
+namespace bb
+{
+
+
+
+
+namespace ui { class Clickable; }
 
 
 class MouseButtonEvent : public Updateable
@@ -39,7 +44,7 @@ public:
     EventType drag_start;
     EventType drag_end;
 
-    const Clickable* clickable = nullptr;
+    const ui::Clickable* clickable = nullptr;
 
 
     explicit MouseButtonEvent(const int button_id = MOUSE_BUTTON_LEFT, const MousePositionProvider& mouse_position_provider = {}) noexcept
@@ -49,10 +54,10 @@ public:
     void update() noexcept override;
 
 
-    bool is_clicked() const noexcept { return click.triggered(); }
-    bool is_pressed() const noexcept { return press.triggered(); }
-    bool is_released() const noexcept { return release.triggered(); }
-    bool is_down() const noexcept { return down.triggered(); }
+    [[nodiscard]] bool is_clicked() const noexcept { return click.triggered(); }
+    [[nodiscard]] bool is_pressed() const noexcept { return press.triggered(); }
+    [[nodiscard]] bool is_released() const noexcept { return release.triggered(); }
+    [[nodiscard]] bool is_down() const noexcept { return down.triggered(); }
 
 
 private:
@@ -63,5 +68,10 @@ private:
     void trigger_down_event() noexcept;
 
 
-    float distance_from_press_position() const noexcept;
+    [[nodiscard]] float distance_from_press_position() const noexcept;
 };
+
+
+
+
+}

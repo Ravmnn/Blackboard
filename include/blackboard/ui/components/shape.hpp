@@ -6,24 +6,30 @@
 
 
 
+namespace bb::ui
+{
+
+
+
+
 class Shape : public Component
 {
 protected:
-    ExponentialInterpolation<Color> color_;
-    ExponentialInterpolation<float> outline_thickness_;
-    ExponentialInterpolation<Color> outline_color_;
+    animation::ExponentialInterpolation<Color> color_;
+    animation::ExponentialInterpolation<float> outline_thickness_;
+    animation::ExponentialInterpolation<Color> outline_color_;
 
 
 public:
-    Shape(Component* const parent, const Vector2& relative_position, const Color& color = WHITE, const float outline_thickness = 0,
+    Shape(Component* parent, const Vector2& relative_position, const Color& color = WHITE, float outline_thickness = 0,
         const Color& outline_color = WHITE) noexcept;
 
 
-    const Color& color() const noexcept { return color_.current; }
-    float outline_thickness() const noexcept { return outline_thickness_; }
-    const Color& outline_color() const noexcept { return outline_color_.current; }
-    uint8_t opacity() const noexcept { return color_.current.a; }
-    uint8_t outline_opacity() const noexcept { return outline_color_.current.a; }
+    [[nodiscard]] const Color& color() const noexcept { return color_.current; }
+    [[nodiscard]] float outline_thickness() const noexcept { return outline_thickness_; }
+    [[nodiscard]] const Color& outline_color() const noexcept { return outline_color_.current; }
+    [[nodiscard]] uint8_t opacity() const noexcept { return color_.current.a; }
+    [[nodiscard]] uint8_t outline_opacity() const noexcept { return outline_color_.current.a; }
 
     void set_color(const Color& color) noexcept { color_.target = color; }
     void set_outline_thickness(const float thickness) noexcept { outline_thickness_.target = thickness; }
@@ -43,3 +49,8 @@ protected:
     virtual void draw_filled() noexcept = 0;
     virtual void draw_outlined() noexcept = 0;
 };
+
+
+
+
+}

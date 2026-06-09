@@ -3,6 +3,11 @@
 
 
 
+using bb::editor::RadialLayout;
+
+
+
+
 RadialLayout::RadialLayout(Component* const parent, const Vector2& relative_position, const float radius) noexcept
     : Component(parent, relative_position), radius_(create_default_exponential_interpolation(radius))
 {}
@@ -28,12 +33,12 @@ void RadialLayout::update_children_position() noexcept
 
 
 
-Vector2 RadialLayout::get_position_for_child(Component&, const size_t i) noexcept
+Vector2 RadialLayout::get_position_for_child(Component& /*unused*/, const size_t i) noexcept
 {
     constexpr float CircunferenceLength = 2 * PI;
-    const float regular_length = CircunferenceLength / children.size();
+    const float regular_length = CircunferenceLength / (float)children.size();
 
-    const float angle = i * regular_length;
+    const float angle = (float)i * regular_length;
     const Vector2 position = { cos(angle) * radius_, sin(angle) * radius_ };
 
     return position;
