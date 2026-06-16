@@ -20,24 +20,24 @@ CanvasRenderer::CanvasRenderer(const Canvas& canvas) noexcept :
 
 
 
+void CanvasRenderer::initialize() noexcept
+{
+    recreate_texture_renderer();
+
+    Initializable::initialize();
+}
+
+
+
+
 void CanvasRenderer::update() noexcept
 {
-    if (!initialized_)
-        initialize();
+    initialize_if_uninitialized();
 
     if (IsWindowResized())
         recreate_texture_renderer();
 
     super_sampled_texture_.clear_color = canvas.background_color();
-}
-
-
-// TODO: create Initializable
-void CanvasRenderer::initialize() noexcept
-{
-    recreate_texture_renderer();
-
-    initialized_ = true;
 }
 
 

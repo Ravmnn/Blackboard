@@ -6,6 +6,7 @@
 #include <raymath.h>
 
 #include <blackboard/updateable.hpp>
+#include <blackboard/initializable.hpp>
 
 
 
@@ -19,7 +20,7 @@ namespace bb::editor
 class Brush;
 
 
-class LazyCursor : public Updateable
+class LazyCursor : public Initializable, public Updateable
 {
 private:
     Vector2 last_position_ = {};
@@ -28,8 +29,6 @@ private:
     float max_speed_ = 70;
 
     float smooth_speed_ = 0;
-
-    bool initialized_ = false;
 
 
 public:
@@ -45,6 +44,7 @@ public:
     explicit LazyCursor(float laziness) noexcept;
 
 
+    void initialize() noexcept override;
     void update() noexcept override;
 
 
@@ -58,8 +58,6 @@ public:
 
 
 private:
-    void initialize() noexcept;
-
     void update_position() noexcept;
     void update_smooth_velocity() noexcept;
 

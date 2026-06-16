@@ -17,21 +17,23 @@ LazyCursor::LazyCursor(const float laziness) noexcept
 
 
 
-void LazyCursor::update() noexcept
-{
-    if (!initialized_)
-        initialize();
-
-    update_position();
-    update_smooth_velocity();
-}
-
 
 void LazyCursor::initialize() noexcept
 {
     last_position_ = current_position_ = target_position;
 
-    initialized_ = true;
+    Initializable::initialize();
+}
+
+
+
+
+void LazyCursor::update() noexcept
+{
+    initialize_if_uninitialized();
+
+    update_position();
+    update_smooth_velocity();
 }
 
 

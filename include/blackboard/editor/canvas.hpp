@@ -28,8 +28,6 @@ private:
 
     animation::LinearInterpolation<Color> background_color_;
 
-    bool initialized_ = false;
-
 
 public:
     // TODO: create logic for stroke mouse collision
@@ -77,7 +75,6 @@ public:
 
 
 private:
-    void initialize() noexcept;
     void recreate_texture_renderer() noexcept;
 
     void update_background_color() noexcept;
