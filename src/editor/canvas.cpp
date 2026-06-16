@@ -16,9 +16,11 @@ using bb::editor::Canvas,
 Canvas::Canvas(const Palette& palette) :
     background_color_(DefaultBackgroundColor, 0.6),
 
+    canvas_renderer(*this),
+    camera(*this, 0.2, 25, 0.13),
+
     stroke_mesh_generator(6),
-    stroke_renderer(stroke_mesh_generator, &canvas_camera),
-    canvas_camera(*this, 0.2, 25, 0.13),
+    stroke_renderer(stroke_mesh_generator, &camera),
 
     palette(palette),
 
@@ -30,7 +32,7 @@ Canvas::Canvas(const Palette& palette) :
     stroke_renderer.should_debug_draw_samples = false;
     stroke_renderer.should_debug_draw_caps = false;
 
-    canvas_camera.bounds_expansion = { 100, 100 };
+    camera.bounds_expansion = { 100, 100 };
 
     current_tool = &brush;
 }
@@ -40,33 +42,13 @@ Canvas::Canvas(const Palette& palette) :
 
 void Canvas::update() noexcept
 {
-    if (!initialized_)
-        initialize();
-
-    if (IsWindowResized())
-        recreate_texture_renderer();
-
     update_background_color();
-    canvas_camera.update();
+    camera.update();
     current_tool->update();
+
+    canvas_renderer.update();
 }
 
-
-void Canvas::initialize() noexcept
-{
-    recreate_texture_renderer();
-
-    initialized_ = true;
-}
-
-
-void Canvas::recreate_texture_renderer() noexcept
-{
-    const Vector2 screen_resolution = WindowRenderer::screen_resolution();
-
-    super_sampled_texture_ = TextureRenderer(screen_resolution * SuperSamplingFactor);
-    final_texture_ = TextureRenderer(screen_resolution);
-}
 
 
 void Canvas::update_background_color() noexcept
@@ -77,46 +59,26 @@ void Canvas::update_background_color() noexcept
         background_color_ = DefaultBackgroundColor;
 
     background_color_.update();
-    super_sampled_texture_.clear_color = background_color_;
 }
 
 
 
 void Canvas::draw() noexcept
 {
-    draw_to_super_sampled_texture();
-    draw_super_sampled_to_final_texture();
+    canvas_renderer.begin_render();
+        draw_content();
+    canvas_renderer.end_render();
 
-    DrawTextureV(final_texture_.contents().texture, {}, WHITE);
+    canvas_renderer.draw_contents_texture();
 }
 
 
-void Canvas::draw_to_super_sampled_texture() noexcept
+void Canvas::draw_content() noexcept
 {
-    super_sampled_texture_.begin_render();
-    canvas_camera.enable();
+    camera.enable();
         draw_strokes();
         current_tool->draw();
-    canvas_camera.disable();
-    super_sampled_texture_.end_render();
-
-    super_sampled_texture_.generate_mipmaps();
-}
-
-
-void Canvas::draw_super_sampled_to_final_texture() noexcept
-{
-    const Texture contents = super_sampled_texture_.contents().texture;
-    SetTextureFilter(contents, TEXTURE_FILTER_TRILINEAR);
-
-    const Vector2 source_size = { (float)contents.width, (float)contents.height };
-    const Vector2 target_size = final_texture_.resolution();
-    const Rectangle source = { 0, 0, source_size.x, source_size.y };
-    const Rectangle destination = { 0, 0, target_size.x, target_size.y };
-
-    final_texture_.begin_render();
-    DrawTexturePro(contents, source, destination, {}, 0, WHITE);
-    final_texture_.end_render();
+    camera.disable();
 }
 
 
