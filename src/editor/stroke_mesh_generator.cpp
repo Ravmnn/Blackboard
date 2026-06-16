@@ -112,7 +112,7 @@ std::vector<StrokeEdge> StrokeMeshGenerator::create_edges(const std::vector<Stro
 StrokeEdge StrokeMeshGenerator::create_edge(const StrokeSample& sample, const Vector2& direction) noexcept
 {
     const Vector2 normal = { -direction.y, direction.x };
-    const float half_thickness = sample.thickness() / 2;
+    const float half_thickness = sample.half_thickness();
 
     return { sample.position(), normal, half_thickness };
 }

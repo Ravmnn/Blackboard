@@ -42,6 +42,7 @@ public:
 
     [[nodiscard]] Vector2 point(const float t) const noexcept { return GetSplinePointCatmullRom(previous_, current_, next_, after_next_, t); }
     [[nodiscard]] float thickness(const float t) const noexcept { return current_thickness + (next_thickness - current_thickness) * t; }
+    [[nodiscard]] float half_thickness(const float t) const noexcept { return thickness(t) / 2; }
 };
 
 
@@ -80,6 +81,7 @@ public:
 
     [[nodiscard]] const Vector2& position() const noexcept { return position_; }
     [[nodiscard]] float thickness() const noexcept { return thickness_; }
+    [[nodiscard]] float half_thickness() const noexcept { return thickness_ / 2; }
     [[nodiscard]] float curvature() const noexcept { return curvature_; }
 
 
@@ -155,6 +157,7 @@ public:
 
     [[nodiscard]] const Vector2& position() const noexcept { return sample_.position(); }
     [[nodiscard]] float thickness() const noexcept { return sample_.thickness(); }
+    [[nodiscard]] float half_thickness() const noexcept { return sample_.half_thickness(); }
 };
 
 
