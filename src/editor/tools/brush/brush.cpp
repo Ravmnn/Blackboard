@@ -75,7 +75,7 @@ void Brush::add_stroke_point() noexcept
     if (!active() || cursor.is_too_slow())
         return;
 
-    stroke_.points.push_back(StrokePoint(cursor.position(), current_thickness_));
+    stroke_.points.emplace_back(cursor.position(), current_thickness_);
     modify_previous_points_thickness(current_thickness_);
 }
 

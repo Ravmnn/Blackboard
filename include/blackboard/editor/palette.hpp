@@ -32,7 +32,7 @@ public:
 
     void set_current_color(const Color& color) noexcept;
 
-    void switch_to_last() noexcept { set_current_color(last_color_); }
+    void switch_to_last() noexcept { set_current_color(Color(last_color_)); /* copy to avoid reference */ }
 };
 
 

@@ -1,7 +1,7 @@
 #include <blackboard/editor/canvas.hpp>
 
+#include <blackboard/math/segment.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
-#include <blackboard/editor/stroke_renderer.hpp>
 
 
 

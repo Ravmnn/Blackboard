@@ -1,6 +1,5 @@
 #pragma once
 
-#include <blackboard/rendering/renderizable.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/palette.hpp>
@@ -41,6 +40,7 @@ public:
     Palette palette;
     bool dynamic_background_color = true;
 
+    // TODO: move tools to Editor
     Brush brush;
     Eraser eraser;
 

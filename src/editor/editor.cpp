@@ -22,8 +22,7 @@ Editor::Editor() noexcept :
     left_button_.press.subscribe([this]() noexcept { canvas.current_tool->enable(); });
     left_button_.release.subscribe([this]() noexcept { canvas.current_tool->disable(); });
 
-    aux_button_.press.subscribe([this]() noexcept { canvas.palette.switch_to_last(); canvas.current_tool->enable(); });
-    aux_button_.release.subscribe([this]() noexcept { canvas.palette.switch_to_last(); canvas.current_tool->disable(); });
+    aux_button_.click.subscribe([this]() noexcept { canvas.alternate_tool(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
 
