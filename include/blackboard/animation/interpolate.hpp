@@ -19,7 +19,7 @@ class Interpolate
 public:
     static float expolerp(const float start, const float target, const float smoothing, const float speed = 1) noexcept
     {
-        constexpr float Epsilon = 0.01f;
+        constexpr float Epsilon = 0.001f;
         const float factor = 1.0f - powf(smoothing, GetFrameTime() * speed);
 
         return std::abs(target - start) <= Epsilon ? target : lerp(start, target, factor);
