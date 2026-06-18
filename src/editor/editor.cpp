@@ -28,7 +28,7 @@ Editor::Editor() noexcept :
     left_button_.press.subscribe([this]() noexcept { current_tool->enable(); });
     left_button_.release.subscribe([this]() noexcept { current_tool->disable(); });
 
-    aux_button_.click.subscribe([this]() noexcept { alternate_tool(); });
+    right_button_.click.subscribe([this]() noexcept { alternate_tool(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
 
@@ -77,17 +77,24 @@ void Editor::update() noexcept
     update_mouse_buttons();
     update_keybindings();
 
-    current_tool->update();
+    update_tools();
     canvas.update();
 
     ui_context_.update();
 }
 
 
+void Editor::update_tools() noexcept
+{
+    brush.update();
+    eraser.update();
+}
+
+
 void Editor::update_mouse_buttons() noexcept
 {
     left_button_.update();
-    aux_button_.update();
+    right_button_.update();
     middle_button_.update();
 }
 

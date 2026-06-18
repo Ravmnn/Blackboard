@@ -32,7 +32,7 @@ private:
     ColorMenu* color_menu_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
-    MouseButtonEvent aux_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);
+    MouseButtonEvent right_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);
     MouseButtonEvent middle_button_ = MouseButtonEvent(MOUSE_BUTTON_MIDDLE, canvas);
 
     bool draw_statistics_ = false;
@@ -62,6 +62,7 @@ public:
 private:
     void update_mouse_buttons() noexcept;
     void update_keybindings() noexcept;
+    void update_tools() noexcept;
 
     void draw_canvas() noexcept;
     void draw_canvas_content() noexcept;
