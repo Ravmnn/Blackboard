@@ -18,7 +18,15 @@ class Stencil
 public:
     static void enable() noexcept { flush(); glEnable(GL_STENCIL_TEST); }
     static void disable() noexcept { flush(); glDisable(GL_STENCIL_TEST); }
-    static void clear() noexcept { glClear(GL_STENCIL_BUFFER_BIT); }
+
+    static void clear() noexcept
+    {
+        flush();
+
+        glStencilMask(0xFF);
+        glClearStencil(0);
+        glClear(GL_STENCIL_BUFFER_BIT);
+    }
 
 
     static void enable_color() noexcept { glColorMask(true, true, true, true); }
