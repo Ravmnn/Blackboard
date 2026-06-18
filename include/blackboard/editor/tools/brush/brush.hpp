@@ -58,6 +58,7 @@ public:
     void draw() noexcept override;
 
 
+    [[nodiscard]] Vector2 position() const noexcept override { return cursor.position(); }
     [[nodiscard]] const Color& color() const noexcept { return color_; }
 
     [[nodiscard]] const Stroke& stroke() const noexcept { return stroke_; }

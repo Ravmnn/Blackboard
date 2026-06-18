@@ -1,5 +1,7 @@
 #pragma once
 
+#include <raylib.h>
+
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/activatable.hpp>
@@ -28,6 +30,8 @@ public:
 
 
     [[nodiscard]] const Canvas& canvas() const noexcept { return canvas_; }
+
+    [[nodiscard]] virtual Vector2 position() const noexcept = 0;
 };
 
 

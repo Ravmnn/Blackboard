@@ -24,9 +24,6 @@ public:
     using Activatable::active;
 
 
-    virtual ~Renderer() = default;
-
-
     virtual void begin_render() { enable(); clear(); }
     virtual void end_render() { disable(); }
 
