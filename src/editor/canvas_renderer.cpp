@@ -45,7 +45,7 @@ void CanvasRenderer::recreate_texture_renderer() noexcept
 {
     const Vector2 screen_resolution = WindowRenderer::screen_resolution();
 
-    super_sampled_texture_ = TextureRenderer(screen_resolution * SuperSamplingFactor);
+    super_sampled_texture_ = TextureRenderer(screen_resolution * SuperSamplingFactor, true);
     final_texture_ = TextureRenderer(screen_resolution);
 }
 
