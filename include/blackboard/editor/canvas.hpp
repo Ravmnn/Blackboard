@@ -1,7 +1,5 @@
 #pragma once
 
-#include <blackboard/editor/tools/brush/brush.hpp>
-#include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/mouse_position_provider.hpp>
@@ -16,7 +14,7 @@ namespace bb::editor
 
 
 
-class Canvas : public Updateable, public Drawable, public MousePositionProvider
+class Canvas : public Updateable, public MousePositionProvider
 {
 public:
     static constexpr Color DefaultBackgroundColor = Color{ 18, 18, 18, 255 };
@@ -29,8 +27,6 @@ private:
 
 
 public:
-    // TODO: create logic for stroke mouse collision
-
     CanvasRenderer canvas_renderer;
     CanvasCamera camera;
 
@@ -40,18 +36,12 @@ public:
     Palette palette;
     bool dynamic_background_color = true;
 
-    // TODO: move tools to Editor
-    Brush brush;
-    Eraser eraser;
-
-    Tool* current_tool = nullptr;
-
 
     Canvas(const Palette& palette);
 
 
     void update() noexcept override;
-    void draw() noexcept override;
+    void draw_strokes() noexcept;
 
 
     [[nodiscard]] const Camera2D& raylib_camera() const noexcept { return camera.camera(); }
@@ -69,20 +59,10 @@ public:
     void add_stroke(const Stroke& stroke) noexcept;
 
 
-    void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
-
-    void alternate_tool() noexcept { current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
-
-
 private:
     void recreate_texture_renderer() noexcept;
 
     void update_background_color() noexcept;
-
-
-    void draw_content() noexcept;
-
-    void draw_strokes() noexcept;
 };
 
 

@@ -9,9 +9,15 @@ using bb::editor::Editor;
 
 
 Editor::Editor() noexcept :
-    canvas(Palette(DefaultPaletteColor))
+    canvas(Palette(DefaultPaletteColor)),
+
+    brush(canvas, 14),
+    eraser(canvas)
 {
     window_renderer_.use_buffer_texture = false;
+
+
+    current_tool = &brush;
 
 
     color_menu_ = new ColorMenu;
@@ -19,10 +25,10 @@ Editor::Editor() noexcept :
     ui_context_.add_component(*color_menu_);
 
 
-    left_button_.press.subscribe([this]() noexcept { canvas.current_tool->enable(); });
-    left_button_.release.subscribe([this]() noexcept { canvas.current_tool->disable(); });
+    left_button_.press.subscribe([this]() noexcept { current_tool->enable(); });
+    left_button_.release.subscribe([this]() noexcept { current_tool->disable(); });
 
-    aux_button_.click.subscribe([this]() noexcept { canvas.alternate_tool(); });
+    aux_button_.click.subscribe([this]() noexcept { alternate_tool(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
 
@@ -71,6 +77,7 @@ void Editor::update() noexcept
     update_mouse_buttons();
     update_keybindings();
 
+    current_tool->update();
     canvas.update();
 
     ui_context_.update();
@@ -100,12 +107,35 @@ void Editor::update_keybindings() noexcept
 
 void Editor::draw() noexcept
 {
+    draw_canvas();
+
     window_renderer_.begin_render();
-        canvas.draw();
+        draw_canvas_content();
         ui_context_.draw();
 
         draw_statistics();
     window_renderer_.end_render();
+}
+
+
+void Editor::draw_canvas() noexcept
+{
+    canvas.canvas_renderer.begin_render();
+    canvas.camera.enable();
+        canvas.draw_strokes();
+
+        if (!brush.draw_finished())
+            canvas.stroke_renderer.draw_stroke(brush.stroke());
+
+        current_tool->draw();
+    canvas.camera.disable();
+    canvas.canvas_renderer.end_render();
+}
+
+
+void Editor::draw_canvas_content() noexcept
+{
+    canvas.canvas_renderer.draw_contents_texture();
 }
 
 

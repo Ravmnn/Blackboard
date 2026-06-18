@@ -2,6 +2,8 @@
 
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/tools/brush/brush.hpp>
+#include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
@@ -39,6 +41,11 @@ private:
 public:
     Canvas canvas;
 
+    Brush brush;
+    Eraser eraser;
+
+    Tool* current_tool = nullptr;
+
 
     Editor() noexcept;
 
@@ -47,10 +54,17 @@ public:
     void draw() noexcept override;
 
 
+    void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
+
+    void alternate_tool() noexcept { current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
+
+
 private:
     void update_mouse_buttons() noexcept;
     void update_keybindings() noexcept;
 
+    void draw_canvas() noexcept;
+    void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
 };
 

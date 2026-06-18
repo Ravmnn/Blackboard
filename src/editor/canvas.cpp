@@ -1,14 +1,9 @@
 #include <blackboard/editor/canvas.hpp>
 
-#include <blackboard/math/segment.hpp>
-#include <blackboard/rendering/window_renderer.hpp>
 
 
 
-
-using bb::editor::Canvas,
-    bb::rendering::WindowRenderer,
-    bb::rendering::TextureRenderer;
+using bb::editor::Canvas;
 
 
 
@@ -22,10 +17,7 @@ Canvas::Canvas(const Palette& palette) :
     stroke_mesh_generator(6),
     stroke_renderer(stroke_mesh_generator, &camera),
 
-    palette(palette),
-
-    brush(*this, 14),
-    eraser(*this)
+    palette(palette)
 {
     stroke_renderer.should_debug_draw_points = false;
     stroke_renderer.should_debug_draw_edges = false;
@@ -33,8 +25,6 @@ Canvas::Canvas(const Palette& palette) :
     stroke_renderer.should_debug_draw_caps = false;
 
     camera.bounds_expansion = { 100, 100 };
-
-    current_tool = &brush;
 }
 
 
@@ -44,11 +34,9 @@ void Canvas::update() noexcept
 {
     update_background_color();
     camera.update();
-    current_tool->update();
 
     canvas_renderer.update();
 }
-
 
 
 void Canvas::update_background_color() noexcept
@@ -63,33 +51,11 @@ void Canvas::update_background_color() noexcept
 
 
 
-void Canvas::draw() noexcept
-{
-    canvas_renderer.begin_render();
-        draw_content();
-    canvas_renderer.end_render();
-
-    canvas_renderer.draw_contents_texture();
-}
-
-
-void Canvas::draw_content() noexcept
-{
-    camera.enable();
-        draw_strokes();
-        current_tool->draw();
-    camera.disable();
-}
-
-
 
 void Canvas::draw_strokes() noexcept
 {
     for (const auto& mesh : stroke_meshes_)
         stroke_renderer.draw_stroke_mesh(mesh);
-
-    if (!brush.draw_finished())
-        stroke_renderer.draw_stroke(brush.stroke());
 }
 
 
