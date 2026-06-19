@@ -22,11 +22,6 @@ class Brush : public Tool
 private:
     Stroke stroke_;
 
-    // TODO: move this logic to Tool
-    bool was_active_ = false;
-    bool got_inactive_ = false;
-    bool got_active_ = false;
-
     int point_thickness_back_iterating_amount_ = 7;
 
     float current_thickness_ = 0;
@@ -71,7 +66,7 @@ public:
 private:
     void update_cursor() noexcept;
     void update_canvas_actions() noexcept;
-    void update_drawing_state() noexcept;
+    void update_active_state() noexcept;
 
     void add_stroke_point() noexcept;
     void modify_previous_points_thickness(float thickness) noexcept;

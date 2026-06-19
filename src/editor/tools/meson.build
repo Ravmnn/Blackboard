@@ -2,7 +2,7 @@ subdir('brush')
 subdir('eraser')
 
 
-sources = ['bubble.cpp']
+sources = ['tool.cpp', 'bubble.cpp']
 
 
 tools_lib = static_library('tools', sources,

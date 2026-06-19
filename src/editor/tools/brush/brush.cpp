@@ -26,13 +26,14 @@ void Brush::update() noexcept
     if (got_inactive_)
         stroke_.points.clear();
 
+    Tool::update();
+
     color_ = canvas_.palette.current_color();
-    update_drawing_state();
 
     update_cursor();
-    body.update();
-
     update_canvas_actions();
+
+    body.update();
 
     current_thickness_ = thickness_from_speed();
     stroke_.color = color_;
@@ -52,21 +53,6 @@ void Brush::update_canvas_actions() noexcept
 {
     if (got_inactive_)
         canvas_.add_stroke(stroke_);
-}
-
-
-void Brush::update_drawing_state() noexcept
-{
-    got_inactive_ = false;
-    got_active_ = false;
-
-    if (!was_active_ && active())
-        got_active_ = true;
-
-    if (was_active_ && !active())
-        got_inactive_ = true;
-
-    was_active_ = active();
 }
 
 
