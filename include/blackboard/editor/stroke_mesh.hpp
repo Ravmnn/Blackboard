@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <algorithm>
 
 #include <blackboard/editor/stroke.hpp>
@@ -161,7 +162,15 @@ public:
 };
 
 
-using StrokeMesh = std::vector<StrokeMeshNode>;
+class StrokeMesh : public std::vector<StrokeMeshNode>
+{
+public:
+    using std::vector<StrokeMeshNode>::vector;
+
+
+    void set_color(const Color& color) noexcept;
+    void set_alpha(uint8_t alpha) noexcept;
+};
 
 
 
