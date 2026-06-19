@@ -34,27 +34,27 @@ public:
 
 
     void draw_stroke(const Stroke& stroke) noexcept;
-    void draw_stroke_mesh(const std::vector<StrokeMeshNode>& mesh) noexcept;
+    void draw_stroke_mesh(const StrokeMesh& mesh) noexcept;
 
 
 private:
-    void draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    void draw_edges_with_caps(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    void draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>& mesh, size_t i) noexcept;
+    void draw_edges(const StrokeMesh& mesh) noexcept;
+    void draw_edges_with_caps(const StrokeMesh& mesh) noexcept;
+    void draw_cap_if_intense_curve(const StrokeMesh& mesh, size_t i) noexcept;
 
     [[nodiscard]] static bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept
     {
         return Collisions::point_inside_rectangle(node.position(), camera_bounds);
     }
 
-    void draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept;
+    void draw_extreme_caps(const StrokeMesh& mesh) noexcept;
     void draw_cap(const Vector2& center, const Vector2& direction, float radius, const Color& color) const noexcept;
 
-    void draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) const noexcept;
+    void draw_debug_visualization(const StrokeMesh& mesh) const noexcept;
 
-    static void debug_draw_points(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    static void debug_draw_samples(const std::vector<StrokeMeshNode>& mesh) noexcept;
-    static void debug_draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept;
+    static void debug_draw_points(const StrokeMesh& mesh) noexcept;
+    static void debug_draw_samples(const StrokeMesh& mesh) noexcept;
+    static void debug_draw_edges(const StrokeMesh& mesh) noexcept;
 };
 
 

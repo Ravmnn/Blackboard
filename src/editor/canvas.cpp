@@ -54,8 +54,8 @@ void Canvas::update_background_color() noexcept
 
 void Canvas::draw_strokes() noexcept
 {
-    for (const auto& mesh : stroke_meshes_)
-        stroke_renderer.draw_stroke_mesh(mesh);
+    for (const auto& mesh : stroke_meshes)
+        stroke_renderer.draw_stroke_mesh(*mesh);
 }
 
 
@@ -66,5 +66,5 @@ void Canvas::add_stroke(const Stroke& stroke) noexcept
     if (stroke.points.empty())
         return;
 
-    stroke_meshes_.push_back(stroke_mesh_generator.generate_mesh(stroke));
+    stroke_meshes.push_back(stroke_mesh_generator.generate_mesh(stroke));
 }

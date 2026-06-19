@@ -21,8 +21,6 @@ public:
 
 
 private:
-    std::vector<StrokeMesh> stroke_meshes_;
-
     animation::LinearInterpolation<Color> background_color_;
 
 
@@ -30,6 +28,7 @@ public:
     CanvasRenderer canvas_renderer;
     CanvasCamera camera;
 
+    std::vector<std::unique_ptr<StrokeMesh>> stroke_meshes;
     StrokeMeshGenerator stroke_mesh_generator;
     StrokeRenderer stroke_renderer;
 
@@ -45,7 +44,6 @@ public:
 
 
     [[nodiscard]] const Camera2D& raylib_camera() const noexcept { return camera.camera(); }
-    [[nodiscard]] const std::vector<StrokeMesh>& stroke_meshes() const noexcept { return stroke_meshes_; }
     [[nodiscard]] const Color& background_color() const noexcept { return background_color_.current; }
 
     [[nodiscard]] Vector2 mouse_delta() const noexcept override { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }

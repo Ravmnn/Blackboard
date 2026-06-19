@@ -14,11 +14,14 @@ using bb::editor::StrokeRenderer;
 
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
-    draw_stroke_mesh(sampler.generate_mesh(stroke));
+    auto mesh = sampler.generate_mesh(stroke);
+
+    if (mesh)
+        draw_stroke_mesh(*mesh);
 }
 
 
-void StrokeRenderer::draw_stroke_mesh(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
     if (mesh.empty())
         return;
@@ -30,7 +33,7 @@ void StrokeRenderer::draw_stroke_mesh(const std::vector<StrokeMeshNode>& mesh) n
 }
 
 
-void StrokeRenderer::draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::draw_edges(const StrokeMesh& mesh) noexcept
 {
     rlSetTexture(rlGetTextureIdDefault());
     rlBegin(RL_QUADS);
@@ -42,7 +45,7 @@ void StrokeRenderer::draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcep
 }
 
 
-void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
 {
     const Rectangle camera_bounds = camera ? camera->get_world_bounds() : Rectangle{};
 
@@ -64,7 +67,7 @@ void StrokeRenderer::draw_edges_with_caps(const std::vector<StrokeMeshNode>& mes
 }
 
 
-void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>& mesh, const size_t i) noexcept
+void StrokeRenderer::draw_cap_if_intense_curve(const StrokeMesh& mesh, const size_t i) noexcept
 {
     constexpr float MaxCurvature = 0.8;
 
@@ -89,7 +92,7 @@ void StrokeRenderer::draw_cap_if_intense_curve(const std::vector<StrokeMeshNode>
 
 
 
-void StrokeRenderer::draw_extreme_caps(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 {
     if (mesh.size() < 2)
         return;
@@ -130,7 +133,7 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
 
 
 
-void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>& mesh) const noexcept
+void StrokeRenderer::draw_debug_visualization(const StrokeMesh& mesh) const noexcept
 {
     if (should_debug_draw_samples)
         debug_draw_samples(mesh);
@@ -143,21 +146,21 @@ void StrokeRenderer::draw_debug_visualization(const std::vector<StrokeMeshNode>&
 }
 
 
-void StrokeRenderer::debug_draw_points(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::debug_draw_points(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
         DrawCircleV(node.sample().origin().position, DebugCircleRadius, RED);
 }
 
 
-void StrokeRenderer::debug_draw_samples(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::debug_draw_samples(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
         DrawCircleV(node.position(), DebugCircleRadius, BLUE);
 }
 
 
-void StrokeRenderer::debug_draw_edges(const std::vector<StrokeMeshNode>& mesh) noexcept
+void StrokeRenderer::debug_draw_edges(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
     {

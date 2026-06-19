@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 
 #include <blackboard/editor/stroke_mesh.hpp>
 
@@ -27,7 +28,7 @@ public:
         : samples_per_segment(samples_per_segment) {}
 
 
-    [[nodiscard]] std::vector<StrokeMeshNode> generate_mesh(const Stroke& stroke) const noexcept;
+    [[nodiscard]] std::unique_ptr<StrokeMesh> generate_mesh(const Stroke& stroke) const noexcept;
 
 
 private:
@@ -43,7 +44,7 @@ private:
 
     static Vector2 get_direction_from_samples(const std::vector<StrokeSample>& samples, size_t i) noexcept;
 
-    static std::vector<StrokeMeshNode> create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept;
+    static std::unique_ptr<StrokeMesh> create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept;
 };
 
 

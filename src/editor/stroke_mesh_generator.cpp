@@ -9,15 +9,16 @@ using bb::editor::StrokeMeshNode,
     bb::editor::StrokeMeshGenerator,
     bb::editor::StrokePoint,
     bb::editor::StrokeSample,
-    bb::editor::StrokeEdge;
+    bb::editor::StrokeEdge,
+    bb::editor::StrokeMesh;
 
 
 
 
-std::vector<StrokeMeshNode> StrokeMeshGenerator::generate_mesh(const Stroke& stroke) const noexcept
+std::unique_ptr<StrokeMesh> StrokeMeshGenerator::generate_mesh(const Stroke& stroke) const noexcept
 {
     if (stroke.points.empty())
-        return {};
+        return nullptr;
 
     const std::vector<StrokePoint> new_points = add_ghost_points(stroke.points);
     const std::vector<StrokeSample> samples = create_samples(new_points);
@@ -134,13 +135,13 @@ Vector2 StrokeMeshGenerator::get_direction_from_samples(const std::vector<Stroke
 
 
 
-std::vector<StrokeMeshNode> StrokeMeshGenerator::create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept
+std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept
 {
-    std::vector<StrokeMeshNode> mesh;
-    mesh.reserve(samples.size());
+    auto* mesh = new StrokeMesh;
+    mesh->reserve(samples.size());
 
     for (size_t i = 0; i < samples.size(); i++)
-        mesh.emplace_back(samples[i], edges[i], color);
+        mesh->emplace_back(samples[i], edges[i], color);
 
-    return mesh;
+    return std::unique_ptr<StrokeMesh>(mesh);
 }
