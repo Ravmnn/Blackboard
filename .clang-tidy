@@ -1,6 +1,7 @@
 Checks: >
   bugprone-*,
   -bugprone-easily-swappable-parameters,
+  -bugprone-unhandled-exception-at-new,
 
   performance-*,
 
