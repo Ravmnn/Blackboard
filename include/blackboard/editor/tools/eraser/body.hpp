@@ -16,6 +16,11 @@ class Eraser;
 
 class EraserBody : public Bubble
 {
+private:
+    static constexpr float BaseThickness = 20;
+    static constexpr float ThicknessVariationWhenActive = 3;
+
+
 public:
     const Eraser& eraser;
 

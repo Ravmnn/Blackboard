@@ -11,7 +11,7 @@ using bb::editor::EraserBody;
 
 
 
-EraserBody::EraserBody(const Eraser& eraser) noexcept : Bubble(20),
+EraserBody::EraserBody(const Eraser& eraser) noexcept : Bubble(BaseThickness),
     eraser(eraser)
 {
     outline_thickness.set_value_immediately(1.0);
@@ -26,6 +26,10 @@ EraserBody::EraserBody(const Eraser& eraser) noexcept : Bubble(20),
 void EraserBody::update() noexcept
 {
     target = eraser.position();
+    thickness = BaseThickness;
+
+    if (eraser.active())
+        thickness = BaseThickness - ThicknessVariationWhenActive;
 
     Bubble::update();
 }
