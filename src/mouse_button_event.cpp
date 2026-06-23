@@ -37,7 +37,7 @@ void MouseButtonEvent::update_drag_state() noexcept
     if (!press_position_)
         return;
 
-    if (!is_drag_ && distance_from_press_position() >= min_drag_distance_)
+    if (!is_drag_ && distance_from_press_position() >= min_drag_distance)
     {
         is_drag_ = true;
         drag_start.trigger();
@@ -47,7 +47,7 @@ void MouseButtonEvent::update_drag_state() noexcept
 
 void MouseButtonEvent::trigger_press_event() noexcept
 {
-    press_position_ = mouse_position_provider.mouse_position();
+    press_position_ = mouse_position_provider.screen_mouse_position();
 
     press.trigger();
     magic_ = true;
@@ -60,6 +60,7 @@ void MouseButtonEvent::trigger_release_event() noexcept
 
     if (is_drag_)
         drag_end.trigger();
+
     else if (!clickable || magic_)
         click.trigger();
 
@@ -82,5 +83,5 @@ float MouseButtonEvent::distance_from_press_position() const noexcept
     if (!press_position_)
         return 0;
 
-    return Vector2Distance(*press_position_, mouse_position_provider.mouse_position());
+    return Vector2Distance(*press_position_, mouse_position_provider.screen_mouse_position());
 }

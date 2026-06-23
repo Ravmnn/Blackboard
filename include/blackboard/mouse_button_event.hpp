@@ -23,7 +23,6 @@ class MouseButtonEvent : public Updateable
 private:
     std::optional<Vector2> press_position_;
 
-    float min_drag_distance_ = 2;
     bool is_drag_ = false;
 
     bool magic_ = false;
@@ -35,6 +34,7 @@ public:
 
     const MousePositionProvider& mouse_position_provider;
 
+    float min_drag_distance = 20;
     int button_id;
 
     EventType down;
