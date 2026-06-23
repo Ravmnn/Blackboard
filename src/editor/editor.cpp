@@ -3,26 +3,32 @@
 
 
 
-using bb::editor::Editor;
+using bb::editor::Editor,
+    bb::ui::Component,
+    bb::ui::Context;
 
 
 
 
-Editor::Editor() noexcept :
+Editor::Editor(Context& context) noexcept :
+    Component(nullptr, {}), Clickable(&canvas),
+
     canvas(Palette(DefaultPaletteColor)),
 
     brush(canvas, 14),
     eraser(canvas)
 {
-    window_renderer_.use_buffer_texture = false;
+    clip = false;
 
 
     current_tool = &brush;
 
 
-    color_menu_ = new ColorMenu;
+    this->context = &context;
+    this->context->add_component(*this);
 
-    ui_context_.add_component(*color_menu_);
+    color_menu_ = new ColorMenu(this);
+    color_menu_->clip = false;
 
 
     left_button_.press.subscribe([this]() noexcept { current_tool->enable(); });
@@ -34,6 +40,11 @@ Editor::Editor() noexcept :
     right_button_.drag_end.subscribe([this]() noexcept { current_tool->disable(); alternate_tool(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
+
+
+    add_mouse_button_event(left_button_);
+    add_mouse_button_event(right_button_);
+    add_mouse_button_event(middle_button_);
 
 
     new ColorMenuButton(color_menu_, DefaultPaletteColor);
@@ -67,6 +78,7 @@ Editor::Editor() noexcept :
     new ColorMenuButton(color_menu_, { 120, 53, 15, 255 });
     new ColorMenuButton(color_menu_, { 161, 98, 7, 255 });
     new ColorMenuButton(color_menu_, { 214, 188, 150, 255 });
+    color_menu_->hide();
 
 
     color_menu_->color_selected.subscribe([this](const Color& color) { canvas.palette.set_current_color(color); });
@@ -77,13 +89,22 @@ Editor::Editor() noexcept :
 
 void Editor::update() noexcept
 {
-    update_mouse_buttons();
+    update_focus();
     update_keybindings();
-
     update_tools();
-    canvas.update();
 
-    ui_context_.update();
+    canvas.update();
+    draw_canvas();
+
+    Clickable::update();
+    Component::update();
+}
+
+
+void Editor::update_focus() noexcept
+{
+    if (is_pressed() && context->component_with_mouse_input() == this)
+        context->set_focus_to(this);
 }
 
 
@@ -91,14 +112,6 @@ void Editor::update_tools() noexcept
 {
     brush.update();
     eraser.update();
-}
-
-
-void Editor::update_mouse_buttons() noexcept
-{
-    left_button_.update();
-    right_button_.update();
-    middle_button_.update();
 }
 
 
@@ -115,16 +128,10 @@ void Editor::update_keybindings() noexcept
 
 
 
-void Editor::draw() noexcept
+void Editor::draw_self() noexcept
 {
-    draw_canvas();
-
-    window_renderer_.begin_render();
-        draw_canvas_content();
-        ui_context_.draw();
-
-        draw_statistics();
-    window_renderer_.end_render();
+    draw_canvas_content();
+    draw_statistics();
 }
 
 

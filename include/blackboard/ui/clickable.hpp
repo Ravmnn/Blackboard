@@ -20,6 +20,8 @@ private:
     bool was_hover_ = false;
     bool hover_ = false;
 
+
+protected:
     std::map<int, MouseButtonEvent> mouse_buttons_;
 
 
@@ -36,7 +38,6 @@ public:
 
 
     explicit Clickable(const MousePositionProvider* mouse_position_provider) noexcept;
-    virtual ~Clickable() noexcept = default;
 
 
     MouseButtonEvent& operator[](const int button) { return mouse_buttons_[button]; }
@@ -47,10 +48,10 @@ public:
 
     [[nodiscard]] const std::map<int, MouseButtonEvent>& mouse_buttons() const noexcept { return mouse_buttons_; }
 
-    [[nodiscard]] bool is_down() const noexcept { return all_buttons([](const auto& button) { return button.is_down(); }); }
-    [[nodiscard]] bool is_pressed() const noexcept { return all_buttons([](const auto& button) { return button.is_pressed(); }); }
-    [[nodiscard]] bool is_released() const noexcept { return all_buttons([](const auto& button) { return button.is_released(); }); }
-    [[nodiscard]] bool is_clicked() const noexcept { return all_buttons([](const auto& button) { return button.is_clicked(); }); }
+    [[nodiscard]] bool is_down() const noexcept { return any_buttons([](const auto& button) { return button.is_down(); }); }
+    [[nodiscard]] bool is_pressed() const noexcept { return any_buttons([](const auto& button) { return button.is_pressed(); }); }
+    [[nodiscard]] bool is_released() const noexcept { return any_buttons([](const auto& button) { return button.is_released(); }); }
+    [[nodiscard]] bool is_clicked() const noexcept { return any_buttons([](const auto& button) { return button.is_clicked(); }); }
 
     [[nodiscard]] bool is_hover() const noexcept { return hover_; }
 
@@ -61,6 +62,7 @@ public:
 
 
     void add_mouse_button_event(int id) noexcept;
+    void add_mouse_button_event(const MouseButtonEvent& button) noexcept { mouse_buttons_.insert({ button.button_id, button }); }
 
 
 protected:
@@ -75,7 +77,7 @@ protected:
 
     using MouseButtonPredicate = std::function<bool (const MouseButtonEvent&)>;
 
-    [[nodiscard]] bool all_buttons(const MouseButtonPredicate& predicate) const noexcept;
+    [[nodiscard]] bool any_buttons(const MouseButtonPredicate& predicate) const noexcept;
 };
 
 

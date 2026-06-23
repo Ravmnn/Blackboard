@@ -3,7 +3,9 @@
 
 
 
-using bb::editor::Editor;
+using bb::editor::Editor,
+    bb::ui::Context,
+    bb::rendering::WindowRenderer;
 
 
 
@@ -18,12 +20,19 @@ int main(int /*unused*/, char** /*unused*/)
     PollInputEvents();
 
     {
-        Editor editor;
+        WindowRenderer window_renderer;
+        window_renderer.use_buffer_texture = false;
+
+        Context ui_context;
+        Editor editor(ui_context);
 
         while (!WindowShouldClose())
         {
-            editor.update();
-            editor.draw();
+            ui_context.update();
+
+            window_renderer.begin_render();
+            ui_context.draw();
+            window_renderer.end_render();
         }
     }
 

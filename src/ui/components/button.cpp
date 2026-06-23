@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include <blackboard/ui/context.hpp>
+
 
 
 
@@ -50,4 +52,13 @@ void Button::update_self() noexcept
 {
     RoundedRectangle::update_self();
     Clickable::update();
+}
+
+
+
+
+void Button::on_press() noexcept
+{
+    if (context)
+        context->set_focus_to(this);
 }

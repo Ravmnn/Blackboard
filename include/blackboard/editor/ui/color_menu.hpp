@@ -3,6 +3,7 @@
 #include <blackboard/editor/ui/radial_layout.hpp>
 #include <blackboard/ui/components/shape.hpp>
 #include <blackboard/ui/components/button.hpp>
+#include <blackboard/ui/focusable.hpp>
 #include <blackboard/event.hpp>
 
 
@@ -14,7 +15,7 @@ namespace bb::editor
 
 
 
-class ColorMenu : public RadialLayout
+class ColorMenu : public RadialLayout, public ui::Focusable
 {
 private:
     bool is_shown_ = false;
@@ -30,7 +31,7 @@ public:
     Event<Color> color_selected;
 
 
-    ColorMenu() noexcept;
+    ColorMenu(Component* parent) noexcept;
 
 
     void toggle(const Vector2& position) noexcept;
@@ -52,10 +53,16 @@ protected:
         for_each_children<ui::Shape>([opacity](ui::Shape* const child) { child->set_both_opacity(opacity); });
     }
 
-
     void set_children_ignore_interaction(const bool ignore) noexcept {
         for_each_children<ui::Button>([ignore](ui::Button* const child) { child->ignore_event_triggering = ignore; });
     }
+
+    void trigger_children_leaved() noexcept {
+        for_each_children<ui::Button>([](ui::Button* const child) { child->leaved.trigger(); });
+    }
+
+
+    void on_unfocus() noexcept override;
 };
 
 

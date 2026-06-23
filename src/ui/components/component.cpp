@@ -1,5 +1,6 @@
 #include <blackboard/ui/components/component.hpp>
 
+#include <blackboard/ui/context.hpp>
 #include <blackboard/ui/components/component_stencil.hpp>
 
 
@@ -16,8 +17,11 @@ Component::Component(Component* const parent, const Vector2& relative_position) 
 {
     enable();
 
-    if (parent)
-        parent->children.emplace_back(std::unique_ptr<Component>(this));
+    if (!parent)
+        return;
+
+    parent->children.emplace_back(std::unique_ptr<Component>(this));
+    context = parent->context;
 }
 
 
@@ -77,4 +81,23 @@ Vector2 Component::bounding_box_size() const noexcept
 {
     const Rectangle bounding_box = relative_bounding_box();
     return { bounding_box.width, bounding_box.height };
+}
+
+
+
+
+bool Component::is_child_of(Component& parent) const noexcept
+{
+    Component* current_parent = &parent;
+
+    do
+    {
+        if (current_parent == this->parent)
+            return true;
+
+        current_parent = current_parent->parent;
+    }
+    while (current_parent);
+
+    return false;
 }

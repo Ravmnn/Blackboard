@@ -21,6 +21,7 @@ namespace bb::ui
 
 
 class Component;
+class Context;
 
 
 template <typename T>
@@ -41,6 +42,8 @@ public:
 
     Component* parent = nullptr;
     std::vector<std::unique_ptr<Component>> children;
+
+    ui::Context* context = nullptr;
 
     bool visible = true;
     bool clip = true;
@@ -70,6 +73,12 @@ public:
 
     [[nodiscard]] Vector2 bounding_box_size() const noexcept;
 
+
+    template <typename T>
+    T* as() noexcept { return dynamic_cast<T*>(this); }
+
+
+    bool is_child_of(Component& parent) const noexcept;
 
 
 protected:

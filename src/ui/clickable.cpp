@@ -1,5 +1,7 @@
 #include <blackboard/ui/clickable.hpp>
 
+#include <algorithm>
+
 
 
 
@@ -65,11 +67,9 @@ void Clickable::add_mouse_button_event(const int id) noexcept
 
 
 
-bool Clickable::all_buttons(const MouseButtonPredicate& predicate) const noexcept
+bool Clickable::any_buttons(const MouseButtonPredicate& predicate) const noexcept
 {
-    for (const auto& [id, button] : mouse_buttons_)
-        if (!predicate(button))
-            return false;
-
-    return true;
+    return std::ranges::any_of(mouse_buttons_, [&](const auto& pair) {
+        return predicate(pair.second);
+    });
 }

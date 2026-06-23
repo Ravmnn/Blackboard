@@ -1,6 +1,7 @@
 #pragma once
 
 #include <blackboard/ui/clickable.hpp>
+#include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 
 
@@ -12,7 +13,7 @@ namespace bb::ui
 
 
 
-class Button : public RoundedRectangle, public Clickable
+class Button : public RoundedRectangle, public Clickable, public Focusable
 {
 public:
     static constexpr int MainButtonId = MOUSE_BUTTON_LEFT;
@@ -41,7 +42,7 @@ protected:
     void on_leaved() noexcept override {}
 
     virtual void on_down() noexcept {}
-    virtual void on_press() noexcept {}
+    virtual void on_press() noexcept;
     virtual void on_release() noexcept {}
     virtual void on_click() noexcept {}
     virtual void on_drag_start() noexcept {}

@@ -2,6 +2,7 @@
 
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 #include <blackboard/ui/components/button.hpp>
+#include <blackboard/ui/context.hpp>
 
 
 
@@ -11,7 +12,7 @@ using bb::editor::ColorMenu, bb::ui::Button;
 
 
 
-ColorMenu::ColorMenu() noexcept : RadialLayout(nullptr, {}, 0)
+ColorMenu::ColorMenu(Component* const parent) noexcept : RadialLayout(parent, {}, 0)
 {
     color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
 
@@ -48,6 +49,8 @@ void ColorMenu::show(const Vector2& position) noexcept
 
     visible = true;
     is_shown_ = true;
+
+    context->set_focus_to(this);
 }
 
 
@@ -56,8 +59,11 @@ void ColorMenu::hide() noexcept
     set_radius(HiddenRadius);
     set_children_opacity(HiddenOpacity);
     set_children_ignore_interaction(true);
+    trigger_children_leaved();
 
     is_shown_ = false;
+
+    unfocus();
 }
 
 
@@ -71,7 +77,7 @@ void ColorMenu::update_self() noexcept
         if (!child->is_clicked())
             return;
 
-        color_selected.trigger(child->color());
+        color_selected.trigger(ColorAlpha(child->color(), 255));
         child->leaved.trigger();
     });
 }
@@ -94,5 +100,16 @@ Vector2 ColorMenu::get_position_for_child(Component& child, const size_t i) noex
 
 void ColorMenu::on_color_selected(const Color& /*unused*/) noexcept
 {
+    hide();
+}
+
+
+
+
+void ColorMenu::on_unfocus() noexcept
+{
+    if (context->component_with_focus()->is_child_of(*this))
+        return;
+
     hide();
 }

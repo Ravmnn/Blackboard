@@ -14,9 +14,19 @@ void Context::update() noexcept
 {
     component_with_mouse_input_ = nullptr;
 
+    update_focus();
+
     if (!components_.empty())
         for (int i = (int)components_.size() - 1; i >= 0; i--)
             update_component_children_first(*components_[i]);
+}
+
+
+void Context::update_focus() noexcept
+{
+    if (component_with_focus_)
+        if (auto* focusable = component_with_focus_->as<Focusable>(); focusable && !focusable->is_focused())
+            component_with_focus_ = nullptr;
 }
 
 
@@ -67,4 +77,26 @@ void Context::draw_component_parent_first(Component& component) noexcept
     if (component.visible)
         for (std::unique_ptr<Component>& child : component.children)
             draw_component_parent_first(*child);
+}
+
+
+
+
+void Context::for_each_component(const std::function<void (Component&)>& operation) noexcept
+{
+    for (auto& component : components_)
+    {
+        operation(*component);
+        for_each_child_recursively(*component, operation);
+    }
+}
+
+
+void Context::for_each_child_recursively(Component& component, const std::function<void (Component&)>& operation) noexcept
+{
+    for (auto& child : component.children)
+    {
+        operation(*child);
+        for_each_child_recursively(*child, operation);
+    }
 }

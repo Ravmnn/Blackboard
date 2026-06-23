@@ -1,5 +1,8 @@
 #pragma once
 
+#include "blackboard/ui/clickable.hpp"
+#include "blackboard/ui/components/component.hpp"
+#include "raylib.h"
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
@@ -18,17 +21,13 @@ namespace bb::editor
 
 
 
-class Editor final : public Updateable, public Drawable
+class Editor final : public ui::Component, public ui::Clickable, public ui::Focusable
 {
 public:
     static constexpr Color DefaultPaletteColor = Color{ 211, 211, 211, 255 };
 
 
 private:
-    rendering::WindowRenderer window_renderer_;
-
-    ui::Context ui_context_;
-
     ColorMenu* color_menu_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
@@ -39,6 +38,10 @@ private:
 
 
 public:
+    // TODO: close color menu when click outside
+    // TODO: vanish animation when switching tool (similar to FL)
+
+
     Canvas canvas;
 
     Brush brush;
@@ -47,11 +50,10 @@ public:
     Tool* current_tool = nullptr;
 
 
-    Editor() noexcept;
+    Editor(ui::Context& context) noexcept;
 
 
     void update() noexcept override;
-    void draw() noexcept override;
 
 
     void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
@@ -59,11 +61,17 @@ public:
     void alternate_tool() noexcept { current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
 
 
+    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override { return {}; }
+
+    [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
+
+
 private:
-    void update_mouse_buttons() noexcept;
+    void update_focus() noexcept;
     void update_keybindings() noexcept;
     void update_tools() noexcept;
 
+    void draw_self() noexcept override;
     void draw_canvas() noexcept;
     void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
