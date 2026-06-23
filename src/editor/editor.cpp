@@ -28,7 +28,10 @@ Editor::Editor() noexcept :
     left_button_.press.subscribe([this]() noexcept { current_tool->enable(); });
     left_button_.release.subscribe([this]() noexcept { current_tool->disable(); });
 
+    right_button_.min_drag_distance = 150;
     right_button_.click.subscribe([this]() noexcept { alternate_tool(); });
+    right_button_.drag_start.subscribe([this]() noexcept { alternate_tool(); current_tool->enable(); });
+    right_button_.drag_end.subscribe([this]() noexcept { current_tool->disable(); alternate_tool(); });
 
     middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
 
