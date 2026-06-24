@@ -32,6 +32,7 @@ public:
     StrokeMeshGenerator stroke_mesh_generator;
     StrokeRenderer stroke_renderer;
 
+    // TODO: move to Editor
     Palette palette;
     bool dynamic_background_color = true;
 
