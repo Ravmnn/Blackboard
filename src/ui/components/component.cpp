@@ -21,7 +21,7 @@ Component::Component(Component* const parent, const Vector2& relative_position) 
         return;
 
     parent->children.emplace_back(std::unique_ptr<Component>(this));
-    context = parent->context;
+    ui_context = parent->ui_context;
 }
 
 

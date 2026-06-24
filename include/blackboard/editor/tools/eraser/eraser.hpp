@@ -57,7 +57,5 @@ private:
     void remove_stroke(const StrokeMesh& stroke) noexcept;
 };
 
-// TODO: make StrokeMesh an own class instead of an alias and implement StrokeMesh::set_color()
-
 
 }

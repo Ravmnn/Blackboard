@@ -59,6 +59,6 @@ void Button::update_self() noexcept
 
 void Button::on_press() noexcept
 {
-    if (context)
-        context->set_focus_to(this);
+    if (ui_context)
+        ui_context->set_focus_to(this);
 }

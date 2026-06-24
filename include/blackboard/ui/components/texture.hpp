@@ -11,7 +11,7 @@ namespace bb::ui
 
 
 
-// TODO: rename to Texture
+// keep the name as it is to avoid conflicts with raylib's Texture class
 class TextureComponent : public Component
 {
 private:

@@ -15,6 +15,7 @@ namespace bb::editor
 
 
 
+// TODO: after supporting color add/remove operations, make the menu use a multi circle row approach for when there are many colors
 class ColorMenu : public RadialLayout, public ui::Focusable
 {
 private:
@@ -37,6 +38,10 @@ public:
     void toggle(const Vector2& position) noexcept;
     void show(const Vector2& position) noexcept;
     void hide() noexcept;
+
+
+    void add_colors(const std::initializer_list<Color>& colors) noexcept;
+    void add_color(const Color& color) noexcept;
 
 
 protected:

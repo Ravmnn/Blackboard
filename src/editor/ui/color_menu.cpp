@@ -3,6 +3,7 @@
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 #include <blackboard/ui/components/button.hpp>
 #include <blackboard/ui/context.hpp>
+#include <blackboard/editor/ui/color_menu_button.hpp>
 
 
 
@@ -17,6 +18,7 @@ ColorMenu::ColorMenu(Component* const parent) noexcept : RadialLayout(parent, {}
     color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
 
 
+    clip = false;
     visible = false;
     relative_position_.immediate = true;
 
@@ -50,7 +52,7 @@ void ColorMenu::show(const Vector2& position) noexcept
     visible = true;
     is_shown_ = true;
 
-    context->set_focus_to(this);
+    ui_context->set_focus_to(this);
 }
 
 
@@ -64,6 +66,21 @@ void ColorMenu::hide() noexcept
     is_shown_ = false;
 
     unfocus();
+}
+
+
+
+
+void ColorMenu::add_colors(const std::initializer_list<Color>& colors) noexcept
+{
+    for (const auto& color : colors)
+        add_color(color);
+}
+
+
+void ColorMenu::add_color(const Color& color) noexcept
+{
+    new ColorMenuButton(this, color);
 }
 
 
@@ -108,7 +125,7 @@ void ColorMenu::on_color_selected(const Color& /*unused*/) noexcept
 
 void ColorMenu::on_unfocus() noexcept
 {
-    if (context->component_with_focus()->is_child_of(*this))
+    if (ui_context->component_with_focus()->is_child_of(*this))
         return;
 
     hide();

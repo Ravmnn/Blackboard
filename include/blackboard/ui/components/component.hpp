@@ -43,7 +43,7 @@ public:
     Component* parent = nullptr;
     std::vector<std::unique_ptr<Component>> children;
 
-    ui::Context* context = nullptr;
+    ui::Context* ui_context = nullptr;
 
     bool visible = true;
     bool clip = true;

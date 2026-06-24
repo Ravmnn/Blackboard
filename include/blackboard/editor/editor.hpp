@@ -38,7 +38,6 @@ private:
 
 
 public:
-    // TODO: close color menu when click outside
     // TODO: vanish animation when switching tool (similar to FL)
 
 
@@ -50,7 +49,7 @@ public:
     Tool* current_tool = nullptr;
 
 
-    Editor(ui::Context& context) noexcept;
+    Editor(ui::Context& ui_context) noexcept;
 
 
     void update() noexcept override;
@@ -67,6 +66,8 @@ public:
 
 
 private:
+    void initialize_mouse_button_events() noexcept;
+
     void update_focus() noexcept;
     void update_keybindings() noexcept;
     void update_tools() noexcept;
