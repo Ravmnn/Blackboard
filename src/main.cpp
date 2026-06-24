@@ -1,3 +1,4 @@
+#include <blackboard/rendering/window_renderer.hpp>
 #include <blackboard/editor/editor.hpp>
 
 

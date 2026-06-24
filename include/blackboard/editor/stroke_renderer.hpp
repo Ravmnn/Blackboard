@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <blackboard/collisions.hpp>
 #include <blackboard/editor/stroke_mesh_generator.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
@@ -25,12 +27,19 @@ public:
     bool should_debug_draw_edges = false;
     bool should_debug_draw_caps = false;
 
-    const StrokeMeshGenerator& sampler;
+    int primitive_shape_mode;
+
+    bool outline_only = false;
+    float outline_thickness = 1.0f;
+    std::optional<Color> outline_color;
+
+    // TODO: add negative shader and use it with borders?
+
+    const StrokeMeshGenerator* sampler;
     const CanvasCamera* camera;
 
 
-    explicit StrokeRenderer(const StrokeMeshGenerator& sampler, const CanvasCamera* const camera = nullptr) noexcept
-        : sampler(sampler), camera(camera) {}
+    explicit StrokeRenderer(const StrokeMeshGenerator* sampler, const CanvasCamera* camera = nullptr) noexcept;
 
 
     void draw_stroke(const Stroke& stroke) noexcept;
@@ -40,6 +49,7 @@ public:
 private:
     void draw_edges(const StrokeMesh& mesh) noexcept;
     void draw_edges_with_caps(const StrokeMesh& mesh) noexcept;
+    void draw_edges_primitives(const Vector2& top, const Vector2& bottom, const Vector2& next_top, const Vector2& next_bottom, const Color& color) const noexcept;
     void draw_cap_if_intense_curve(const StrokeMesh& mesh, size_t i) noexcept;
 
     [[nodiscard]] static bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept

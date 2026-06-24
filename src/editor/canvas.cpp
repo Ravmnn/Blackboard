@@ -15,7 +15,7 @@ Canvas::Canvas(const Palette& palette) :
     camera(*this, 0.2, 25, 0.13),
 
     stroke_mesh_generator(6),
-    stroke_renderer(stroke_mesh_generator, &camera),
+    stroke_renderer(&stroke_mesh_generator, &camera),
 
     palette(palette)
 {

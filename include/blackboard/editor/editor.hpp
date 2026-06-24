@@ -1,16 +1,12 @@
 #pragma once
 
-#include "blackboard/ui/clickable.hpp"
-#include "blackboard/ui/components/component.hpp"
-#include "raylib.h"
 #include <blackboard/ui/context.hpp>
+#include <blackboard/rendering/effects/effect.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
-#include <blackboard/rendering/window_renderer.hpp>
-#include <blackboard/animation/interpolation.hpp>
 
 
 
@@ -69,8 +65,8 @@ private:
     void initialize_mouse_button_events() noexcept;
 
     void update_focus() noexcept;
-    void update_keybindings() noexcept;
     void update_tools() noexcept;
+    void update_keybindings() noexcept;
 
     void draw_self() noexcept override;
     void draw_canvas() noexcept;

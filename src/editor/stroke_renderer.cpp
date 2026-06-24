@@ -12,9 +12,22 @@ using bb::editor::StrokeRenderer;
 
 
 
+StrokeRenderer::StrokeRenderer(const StrokeMeshGenerator* sampler, const CanvasCamera* camera) noexcept :
+    sampler(sampler),
+    camera(camera)
+{
+    primitive_shape_mode = RL_QUADS;
+}
+
+
+
+
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
-    auto mesh = sampler.generate_mesh(stroke);
+    if (!sampler)
+        return;
+
+    auto mesh = sampler->generate_mesh(stroke);
 
     if (mesh)
         draw_stroke_mesh(*mesh);
@@ -36,11 +49,7 @@ void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 void StrokeRenderer::draw_edges(const StrokeMesh& mesh) noexcept
 {
     rlSetTexture(rlGetTextureIdDefault());
-    rlBegin(RL_QUADS);
-
         draw_edges_with_caps(mesh);
-
-    rlEnd();
     rlSetTexture(0);
 }
 
@@ -55,14 +64,40 @@ void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
             continue;
 
         const Color& color = mesh[i].color;
+
+        const Vector2 top = mesh[i].edge().top();
+        const Vector2 bottom = mesh[i].edge().bottom();
+        const Vector2 next_top = mesh[i + 1].edge().top();
+        const Vector2 next_bottom = mesh[i + 1].edge().bottom();
+
+        draw_edges_primitives(top, bottom, next_top, next_bottom, color);
+        draw_cap_if_intense_curve(mesh, i);
+    }
+}
+
+
+void StrokeRenderer::draw_edges_primitives(const Vector2& top, const Vector2& bottom, const Vector2& next_top, const Vector2& next_bottom, const Color& color) const noexcept
+{
+    // TODO: use polymorphism, StrokeEdgeRenderer
+
+    if (!outline_only)
+    {
+        rlBegin(primitive_shape_mode);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        rlVertex2f(mesh[i].edge().top().x, mesh[i].edge().top().y);
-        rlVertex2f(mesh[i + 1].edge().top().x, mesh[i + 1].edge().top().y);
-        rlVertex2f(mesh[i + 1].edge().bottom().x, mesh[i + 1].edge().bottom().y);
-        rlVertex2f(mesh[i].edge().bottom().x, mesh[i].edge().bottom().y);
+        rlVertex2f(top.x, top.y);
+        rlVertex2f(next_top.x, next_top.y);
+        rlVertex2f(next_bottom.x, next_bottom.y);
+        rlVertex2f(bottom.x, bottom.y);
 
-        draw_cap_if_intense_curve(mesh, i);
+        rlEnd();
+    }
+    else
+    {
+        const Color outline_color = this->outline_color.value_or(color);
+
+        DrawLineEx(top, next_top, outline_thickness, outline_color);
+        DrawLineEx(bottom, next_bottom, outline_thickness, outline_color);
     }
 }
 
@@ -126,7 +161,20 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
         const Vector2 v0 = { normal.x * cosf(a0) - normal.y * sinf(a0), normal.x * sinf(a0) + normal.y * cosf(a0) };
         const Vector2 v1 = { normal.x * cosf(a1) - normal.y * sinf(a1), normal.x * sinf(a1) + normal.y * cosf(a1) };
 
-        DrawTriangle(center, center + v1 * radius, center + v0 * radius, true_color);
+        const Vector2 begin = center + v1 * radius;
+        const Vector2 end = center + v0 * radius;
+
+        // TODO: use polymorphism, StrokeCapRenderer
+
+        if (!outline_only)
+            DrawTriangle(center, begin, end, true_color);
+        else
+        {
+            DrawLineEx(
+                Vector2MoveTowards(begin, end, -outline_thickness / 5),
+                Vector2MoveTowards(end, begin, -outline_thickness / 5),
+            outline_thickness, outline_color.value_or(true_color));
+        }
     }
 }
 

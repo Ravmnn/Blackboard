@@ -72,8 +72,8 @@ void Editor::initialize_mouse_button_events() noexcept
 void Editor::update() noexcept
 {
     update_focus();
-    update_keybindings();
     update_tools();
+    update_keybindings();
 
     canvas.update();
     draw_canvas();
@@ -119,9 +119,18 @@ void Editor::draw_self() noexcept
 
 void Editor::draw_canvas() noexcept
 {
+    canvas.stroke_renderer.outline_color = BLUE;
+
     canvas.canvas_renderer.begin_render();
     canvas.camera.enable();
         canvas.draw_strokes();
+
+        if (canvas.stroke_meshes.size() > 0)
+        {
+            canvas.stroke_renderer.outline_only = true;
+            canvas.stroke_renderer.draw_stroke_mesh(*canvas.stroke_meshes[0]);
+            canvas.stroke_renderer.outline_only = false;
+        }
 
         if (!brush.draw_finished())
             canvas.stroke_renderer.draw_stroke(brush.stroke());

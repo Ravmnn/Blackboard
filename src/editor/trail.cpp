@@ -9,7 +9,7 @@ using bb::editor::Trail;
 
 
 Trail::Trail(const StrokePoint& origin, const float decay) noexcept : Stroke({}, {}),
-    trail_renderer_(trail_mesh_generator_), trail_mesh_generator_(4), origin(origin), decay(decay)
+    trail_renderer_(&trail_mesh_generator_), trail_mesh_generator_(4), origin(origin), decay(decay)
 {}
 
 
