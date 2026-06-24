@@ -31,11 +31,16 @@ public:
     {}
 
 
+    T operator=(const T& value) noexcept { return this->value = value; }
+
+
     void update() noexcept override { update_shader_value(); }
 
 
     [[nodiscard]] int id() const noexcept { return id_; }
     [[nodiscard]] int type() const noexcept;
+
+    void set_value_and_update(const T& value) noexcept { this->value = value; update(); }
 
 
 private:
@@ -49,11 +54,26 @@ template<> inline int EffectProperty<float>::type() const noexcept { return SHAD
 template<> inline int EffectProperty<Vector2>::type() const noexcept { return SHADER_UNIFORM_VEC2; }
 template<> inline int EffectProperty<Vector3>::type() const noexcept { return SHADER_UNIFORM_VEC3; }
 template<> inline int EffectProperty<Vector4>::type() const noexcept { return SHADER_UNIFORM_VEC4; }
+template<> inline int EffectProperty<Color>::type() const noexcept { return SHADER_UNIFORM_VEC4; }
 template<> inline int EffectProperty<Texture>::type() const noexcept { return SHADER_UNIFORM_SAMPLER2D; }
 
 
-template<typename T> inline void EffectProperty<T>::update_shader_value() const noexcept { SetShaderValue(shader, id_, &value, type()); }
-template<> inline void EffectProperty<Texture>::update_shader_value() const noexcept { SetShaderValueTexture(shader, id_, value); }
+template<typename T> inline void EffectProperty<T>::update_shader_value() const noexcept
+{
+    SetShaderValue(shader, id_, &value, type());
+}
+
+
+template<> inline void EffectProperty<Color>::update_shader_value() const noexcept
+{
+    const Vector4 normalized = ColorNormalize(value);
+    SetShaderValue(shader, id_, &normalized, type());
+}
+
+template<> inline void EffectProperty<Texture>::update_shader_value() const noexcept
+{
+    SetShaderValueTexture(shader, id_, value);
+}
 
 
 

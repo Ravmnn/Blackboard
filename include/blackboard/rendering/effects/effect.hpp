@@ -1,12 +1,11 @@
 #pragma once
 
-#include <memory>
-#include <optional>
-
 #include <raylib.h>
 
 #include <blackboard/updateable.hpp>
 #include <blackboard/activatable.hpp>
+
+#include <blackboard/rendering/effects/effect_property.hpp>
 
 
 
@@ -20,25 +19,28 @@ namespace bb::rendering
 class Effect : public Activatable, public Updateable
 {
 private:
-    std::unique_ptr<Shader> shader_;
+    Shader shader_;
 
 
 public:
-    explicit Effect(std::unique_ptr<Shader> shader) : shader_(std::move(shader)) {}
-    virtual ~Effect() { UnloadShader(*shader_); }
+    rendering::EffectProperty<Vector2> resolution;
+    bool use_window_resolution = true;
 
 
-    void enable(const std::optional<Texture>& texture) noexcept;
+    explicit Effect(const char* fragment_shader);
+    explicit Effect(const Shader& shader);
+
+    ~Effect() override { UnloadShader(shader_); }
+
+
+    void update() noexcept override;
+
 
     void enable() noexcept override;
     void disable() noexcept override;
 
 
-    [[nodiscard]] Shader* shader() const noexcept { return shader_.get(); };
-
-
-    virtual Texture* target_texture() noexcept = 0;
-    virtual Vector2* target_texture_resolution() noexcept = 0;
+    [[nodiscard]] const Shader& shader() const noexcept { return shader_; };
 };
 
 
