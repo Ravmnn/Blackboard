@@ -1,12 +1,11 @@
 #pragma once
 
 #include <blackboard/ui/context.hpp>
-#include <blackboard/rendering/effects/effect.hpp>
+#include <blackboard/ui/clickable.hpp>
+#include <blackboard/editor/effects/negative.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
-#include <blackboard/editor/ui/color_menu.hpp>
-#include <blackboard/editor/ui/color_menu_button.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 
 
@@ -16,6 +15,9 @@ namespace bb::editor
 {
 
 
+
+
+class ColorMenu;
 
 
 class Editor final : public ui::Component, public ui::Clickable, public ui::Focusable
@@ -35,7 +37,12 @@ private:
 
 
     StrokeMeshRenderer default_mesh_renderer_;
-    StrokeMeshOutlineRenderer outline_mesh_renderer_;
+    StrokeMeshOutlineRenderer selection_outline_mesh_renderer_;
+
+    static constexpr float SelectionOutlineBaseThickness = 12;
+
+
+    NegativeEffect negative_effect_;
 
 
 public:
@@ -75,6 +82,7 @@ private:
     void update_tools() noexcept;
     void update_keybindings() noexcept;
     void update_canvas_background() noexcept;
+    void update_effects() noexcept;
 
     void draw_self() noexcept override;
     void draw_to_canvas() noexcept;

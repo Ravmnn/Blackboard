@@ -1,3 +1,4 @@
+subdir('effects')
 subdir('stroke')
 subdir('tools')
 subdir('ui')
@@ -12,5 +13,5 @@ sources = files(
 
 editor_lib = static_library('editor', sources,
     dependencies: global_deps,
-    link_with: [stroke_lib, tools_lib, editor_ui_lib]
+    link_with: [editor_effects_lib, editor_stroke_lib, editor_tools_lib, editor_ui_lib]
 )

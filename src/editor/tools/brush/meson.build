@@ -1,5 +1,5 @@
 sources = files('brush.cpp', 'body.cpp')
 
-brush_lib = static_library('tools', sources,
+tool_brush_lib = static_library('brush', sources,
     dependencies: global_deps
 )

@@ -1,5 +1,8 @@
 #include <blackboard/editor/editor.hpp>
 
+#include <blackboard/editor/ui/color_menu.hpp>
+#include <blackboard/editor/ui/color_menu_button.hpp>
+
 
 
 
@@ -22,7 +25,7 @@ Editor::Editor(Context& ui_context) noexcept :
 {
     clip = false;
 
-    outline_mesh_renderer_.overwrite_color = BLUE;
+    negative_effect_.default_color = RED;
 
     current_tool = &brush;
 
@@ -79,6 +82,7 @@ void Editor::update() noexcept
     update_tools();
     update_keybindings();
     update_canvas_background();
+    update_effects();
 
     canvas.update();
 
@@ -123,6 +127,12 @@ void Editor::update_canvas_background() noexcept
 }
 
 
+void Editor::update_effects() noexcept
+{
+    negative_effect_.update();
+}
+
+
 
 
 void Editor::draw_self() noexcept
@@ -154,9 +164,13 @@ void Editor::draw_selected_strokes() noexcept
     if (canvas.stroke_meshes.size() == 0)
         return;
 
-    canvas.stroke_renderer.set_mesh_renderer(outline_mesh_renderer_);
-    canvas.stroke_renderer.draw_stroke_mesh(*canvas.stroke_meshes[0]);
+    selection_outline_mesh_renderer_.outline_thickness = SelectionOutlineBaseThickness / canvas.raylib_camera().zoom;
+
+    negative_effect_.enable();
+    canvas.stroke_renderer.set_mesh_renderer(selection_outline_mesh_renderer_);
+    canvas.draw_strokes();
     canvas.stroke_renderer.set_mesh_renderer(default_mesh_renderer_);
+    negative_effect_.disable();
 }
 
 
