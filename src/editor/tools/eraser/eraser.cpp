@@ -1,6 +1,6 @@
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 
-#include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/stroke_mesh_collider.hpp>
 
 
@@ -12,7 +12,7 @@ using bb::editor::Eraser,
 
 
 
-Eraser::Eraser(Canvas& canvas) noexcept : Tool(canvas),
+Eraser::Eraser(Editor& editor) noexcept : Tool(editor),
     body(*this)
 {}
 
@@ -53,7 +53,7 @@ void Eraser::update_strokes_to_remove() noexcept
 
 StrokeMesh* Eraser::get_canvas_stroke_at_point(const Vector2& point) noexcept
 {
-    for (auto& stroke : canvas_.stroke_meshes)
+    for (auto& stroke : editor_.canvas.stroke_meshes)
         if (StrokeMeshCollider::stroke_contains_point(*stroke, point)) // TODO: use segment-segment intersection instead of point collision
             return stroke.get();
 
@@ -81,7 +81,7 @@ void Eraser::remove_strokes_from_remove_queue() noexcept
 
 void Eraser::remove_stroke(const StrokeMesh& stroke) noexcept
 {
-    std::erase_if(canvas_.stroke_meshes, [&](const std::unique_ptr<StrokeMesh>& stroke_mesh) {
+    std::erase_if(editor_.canvas.stroke_meshes, [&](const std::unique_ptr<StrokeMesh>& stroke_mesh) {
         return stroke_mesh.get() == &stroke;
     });
 }
@@ -99,5 +99,5 @@ void Eraser::draw() noexcept
 
 Vector2 Eraser::position() const noexcept
 {
-    return canvas_.mouse_position();
+    return editor_.canvas.mouse_position();
 }

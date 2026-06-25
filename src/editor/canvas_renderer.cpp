@@ -37,7 +37,7 @@ void CanvasRenderer::update() noexcept
     if (IsWindowResized())
         recreate_texture_renderer();
 
-    super_sampled_texture_.clear_color = canvas.background_color();
+    super_sampled_texture_.clear_color = canvas.background_color;
 }
 
 

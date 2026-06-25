@@ -19,11 +19,11 @@ namespace bb::editor
 
 class Editor final : public ui::Component, public ui::Clickable, public ui::Focusable
 {
-public:
-    static constexpr Color DefaultPaletteColor = Color{ 211, 211, 211, 255 };
-
-
 private:
+    static constexpr Color DefaultPaletteColor = { 211, 211, 211, 255 };
+    static constexpr Color DefaultBackgroundColor = { 18, 18, 18, 255 };
+
+
     ColorMenu* color_menu_;
 
     MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
@@ -38,6 +38,8 @@ public:
 
 
     Canvas canvas;
+    Palette palette;
+    bool dynamic_background_color = true;
 
     Brush brush;
     Eraser eraser;
@@ -67,6 +69,7 @@ private:
     void update_focus() noexcept;
     void update_tools() noexcept;
     void update_keybindings() noexcept;
+    void update_canvas_background() noexcept;
 
     void draw_self() noexcept override;
     void draw_canvas() noexcept;

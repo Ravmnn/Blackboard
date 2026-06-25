@@ -1,6 +1,6 @@
 #include <blackboard/editor/tools/brush/brush.hpp>
 
-#include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/editor.hpp>
 
 
 
@@ -10,9 +10,9 @@ using bb::editor::Brush;
 
 
 
-Brush::Brush(Canvas& canvas, const float thickness) noexcept : Tool(canvas),
+Brush::Brush(Editor& editor, const float thickness) noexcept : Tool(editor),
     stroke_({}, BLACK),
-    color_(canvas.palette.current_color()),
+    color_(editor_.palette.current_color()),
     thickness(thickness),
     cursor(2),
     body(*this)
@@ -28,7 +28,7 @@ void Brush::update() noexcept
 
     Tool::update();
 
-    color_ = canvas_.palette.current_color();
+    color_ = editor_.palette.current_color();
 
     update_cursor();
     update_canvas_actions();
@@ -43,7 +43,7 @@ void Brush::update() noexcept
 
 void Brush::update_cursor() noexcept
 {
-    cursor.target_position = canvas_.mouse_position();
+    cursor.target_position = editor_.canvas.mouse_position();
     cursor.immediate = !active();
     cursor.update();
 }
@@ -52,7 +52,7 @@ void Brush::update_cursor() noexcept
 void Brush::update_canvas_actions() noexcept
 {
     if (got_inactive_)
-        canvas_.add_stroke(stroke_);
+        editor_.canvas.add_stroke(stroke_);
 }
 
 

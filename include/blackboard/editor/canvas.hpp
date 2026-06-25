@@ -17,14 +17,6 @@ namespace bb::editor
 class Canvas : public Updateable, public MousePositionProvider
 {
 public:
-    static constexpr Color DefaultBackgroundColor = Color{ 18, 18, 18, 255 };
-
-
-private:
-    animation::LinearInterpolation<Color> background_color_;
-
-
-public:
     CanvasRenderer canvas_renderer;
     CanvasCamera camera;
 
@@ -32,12 +24,10 @@ public:
     StrokeMeshGenerator stroke_mesh_generator;
     StrokeRenderer stroke_renderer;
 
-    // TODO: move to Editor
-    Palette palette;
-    bool dynamic_background_color = true;
+    animation::LinearInterpolation<Color> background_color;
 
 
-    Canvas(const Palette& palette);
+    Canvas() noexcept;
 
 
     void update() noexcept override;
@@ -45,7 +35,6 @@ public:
 
 
     [[nodiscard]] const Camera2D& raylib_camera() const noexcept { return camera.camera(); }
-    [[nodiscard]] const Color& background_color() const noexcept { return background_color_.current; }
 
     [[nodiscard]] Vector2 mouse_delta() const noexcept override { return map_point(GetMousePosition()) - map_point(GetMousePosition() - GetMouseDelta()); }
     [[nodiscard]] Vector2 mouse_position() const noexcept override { return map_point(screen_mouse_position() * CanvasRenderer::SuperSamplingFactor); }
@@ -60,8 +49,6 @@ public:
 
 private:
     void recreate_texture_renderer() noexcept;
-
-    void update_background_color() noexcept;
 };
 
 

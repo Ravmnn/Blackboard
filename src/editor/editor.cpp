@@ -13,10 +13,10 @@ using bb::editor::Editor,
 Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}), Clickable(&canvas),
 
-    canvas(Palette(DefaultPaletteColor)),
+    palette(DefaultPaletteColor),
 
-    brush(canvas, 14),
-    eraser(canvas)
+    brush(*this, 14),
+    eraser(*this)
 {
     clip = false;
 
@@ -41,7 +41,7 @@ Editor::Editor(Context& ui_context) noexcept :
     });
     color_menu_->hide();
 
-    color_menu_->color_selected.subscribe([this](const Color& color) { canvas.palette.set_current_color(color); });
+    color_menu_->color_selected.subscribe([this](const Color& color) { palette.set_current_color(color); });
 
 
     initialize_mouse_button_events();
@@ -74,6 +74,7 @@ void Editor::update() noexcept
     update_focus();
     update_tools();
     update_keybindings();
+    update_canvas_background();
 
     canvas.update();
     draw_canvas();
@@ -105,6 +106,17 @@ void Editor::update_keybindings() noexcept
     if (IsKeyPressed(KEY_THREE)) canvas.stroke_renderer.should_debug_draw_samples = !canvas.stroke_renderer.should_debug_draw_samples;
     if (IsKeyPressed(KEY_FOUR)) canvas.stroke_renderer.should_debug_draw_edges = !canvas.stroke_renderer.should_debug_draw_edges;
     if (IsKeyPressed(KEY_FIVE)) canvas.stroke_renderer.should_debug_draw_caps = !canvas.stroke_renderer.should_debug_draw_caps;
+}
+
+
+void Editor::update_canvas_background() noexcept
+{
+    if (dynamic_background_color)
+        canvas.background_color = palette.background_color_from_current();
+    else
+        canvas.background_color = DefaultBackgroundColor;
+
+    canvas.background_color.update();
 }
 
 

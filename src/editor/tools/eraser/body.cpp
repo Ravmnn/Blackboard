@@ -1,7 +1,6 @@
 #include <blackboard/editor/tools/eraser/body.hpp>
 
-#include <blackboard/editor/tools/eraser/eraser.hpp>
-#include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/editor.hpp>
 
 
 
@@ -37,7 +36,7 @@ void EraserBody::update() noexcept
 
 void EraserBody::update_trail() noexcept
 {
-    trail.color = eraser.canvas().palette.current_color();
+    trail.color = eraser.editor().palette.current_color();
     trail.color.a = 150;
 
     Bubble::update_trail();
@@ -46,7 +45,7 @@ void EraserBody::update_trail() noexcept
 
 void EraserBody::update_color() noexcept
 {
-    Color color = eraser.canvas().palette.current_color();
+    Color color = eraser.editor().palette.current_color();
     color.a = 215;
     outline_color = color;
 

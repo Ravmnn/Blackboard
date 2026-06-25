@@ -15,14 +15,14 @@ namespace bb::editor
 
 
 
-class Canvas;
+class Editor;
 class Palette;
 
 
 class Tool : public Updateable, public Drawable, public Activatable
 {
 protected:
-    Canvas& canvas_;
+    Editor& editor_;
 
     bool was_active_ = false;
     bool got_inactive_ = false;
@@ -30,13 +30,13 @@ protected:
 
 
 public:
-    explicit Tool(Canvas& canvas) noexcept : canvas_(canvas) {}
+    explicit Tool(Editor& editor) noexcept : editor_(editor) {}
 
 
     void update() noexcept override;
 
 
-    [[nodiscard]] const Canvas& canvas() const noexcept { return canvas_; }
+    [[nodiscard]] const Editor& editor() const noexcept { return editor_; }
 
     [[nodiscard]] virtual Vector2 position() const noexcept = 0;
 

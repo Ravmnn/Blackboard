@@ -31,7 +31,7 @@ public:
     EraserBody body;
 
 
-    explicit Eraser(Canvas& canvas) noexcept;
+    explicit Eraser(Editor& editor) noexcept;
 
 
     void update() noexcept override;
