@@ -7,6 +7,7 @@
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 
 
 
@@ -31,6 +32,10 @@ private:
     MouseButtonEvent middle_button_ = MouseButtonEvent(MOUSE_BUTTON_MIDDLE, canvas);
 
     bool draw_statistics_ = false;
+
+
+    StrokeMeshRenderer default_mesh_renderer_;
+    StrokeMeshOutlineRenderer outline_mesh_renderer_;
 
 
 public:
@@ -72,7 +77,8 @@ private:
     void update_canvas_background() noexcept;
 
     void draw_self() noexcept override;
-    void draw_canvas() noexcept;
+    void draw_to_canvas() noexcept;
+    void draw_selected_strokes() noexcept;
     void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
 };

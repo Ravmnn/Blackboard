@@ -4,7 +4,7 @@
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/rendering/texture_renderer.hpp>
-#include <blackboard/editor/stroke_renderer.hpp>
+#include <blackboard/editor/stroke/stroke_renderer.hpp>
 
 
 

@@ -13,12 +13,16 @@ using bb::editor::Editor,
 Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}), Clickable(&canvas),
 
+    canvas(default_mesh_renderer_),
+
     palette(DefaultPaletteColor),
 
     brush(*this, 14),
     eraser(*this)
 {
     clip = false;
+
+    outline_mesh_renderer_.overwrite_color = BLUE;
 
     current_tool = &brush;
 
@@ -77,7 +81,6 @@ void Editor::update() noexcept
     update_canvas_background();
 
     canvas.update();
-    draw_canvas();
 
     Clickable::update();
     Component::update();
@@ -124,25 +127,18 @@ void Editor::update_canvas_background() noexcept
 
 void Editor::draw_self() noexcept
 {
+    draw_to_canvas();
     draw_canvas_content();
     draw_statistics();
 }
 
 
-void Editor::draw_canvas() noexcept
+void Editor::draw_to_canvas() noexcept
 {
-    canvas.stroke_renderer.outline_color = BLUE;
-
     canvas.canvas_renderer.begin_render();
     canvas.camera.enable();
         canvas.draw_strokes();
-
-        if (canvas.stroke_meshes.size() > 0)
-        {
-            canvas.stroke_renderer.outline_only = true;
-            canvas.stroke_renderer.draw_stroke_mesh(*canvas.stroke_meshes[0]);
-            canvas.stroke_renderer.outline_only = false;
-        }
+        draw_selected_strokes();
 
         if (!brush.draw_finished())
             canvas.stroke_renderer.draw_stroke(brush.stroke());
@@ -150,6 +146,17 @@ void Editor::draw_canvas() noexcept
         current_tool->draw();
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();
+}
+
+
+void Editor::draw_selected_strokes() noexcept
+{
+    if (canvas.stroke_meshes.size() == 0)
+        return;
+
+    canvas.stroke_renderer.set_mesh_renderer(outline_mesh_renderer_);
+    canvas.stroke_renderer.draw_stroke_mesh(*canvas.stroke_meshes[0]);
+    canvas.stroke_renderer.set_mesh_renderer(default_mesh_renderer_);
 }
 
 

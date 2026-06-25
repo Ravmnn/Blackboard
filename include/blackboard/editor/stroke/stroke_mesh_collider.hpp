@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/editor/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
 

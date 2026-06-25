@@ -1,4 +1,4 @@
-#include <blackboard/editor/stroke_mesh_collider.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 
 #include <blackboard/math/segment.hpp>
 

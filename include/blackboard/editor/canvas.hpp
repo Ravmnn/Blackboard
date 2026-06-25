@@ -21,13 +21,14 @@ public:
     CanvasCamera camera;
 
     std::vector<std::unique_ptr<StrokeMesh>> stroke_meshes;
+
     StrokeMeshGenerator stroke_mesh_generator;
     StrokeRenderer stroke_renderer;
 
     animation::LinearInterpolation<Color> background_color;
 
 
-    Canvas() noexcept;
+    Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept;
 
 
     void update() noexcept override;

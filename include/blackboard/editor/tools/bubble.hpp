@@ -4,7 +4,7 @@
 
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
-#include <blackboard/editor/trail.hpp>
+#include <blackboard/editor/stroke/trail.hpp>
 
 
 

@@ -1,8 +1,10 @@
-#include <blackboard/editor/stroke_renderer.hpp>
+#include <blackboard/editor/stroke/stroke_renderer.hpp>
+
+#include <cassert>
 
 #include <rlgl.h>
 
-#include <blackboard/editor/stroke.hpp>
+#include <blackboard/editor/stroke/stroke.hpp>
 
 
 
@@ -12,20 +14,18 @@ using bb::editor::StrokeRenderer;
 
 
 
-StrokeRenderer::StrokeRenderer(const StrokeMeshGenerator* sampler, const CanvasCamera* camera) noexcept :
+StrokeRenderer::StrokeRenderer(const StrokeMeshRenderer& mesh_renderer, const StrokeMeshGenerator* sampler, const CanvasCamera* camera) noexcept :
+    mesh_renderer_(&mesh_renderer),
     sampler(sampler),
     camera(camera)
-{
-    primitive_shape_mode = RL_QUADS;
-}
+{}
 
 
 
 
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
-    if (!sampler)
-        return;
+    assert(sampler);
 
     auto mesh = sampler->generate_mesh(stroke);
 
@@ -36,21 +36,15 @@ void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 
 void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
+    assert(mesh_renderer_);
+
     if (mesh.empty())
         return;
 
-    draw_edges(mesh);
+    draw_edges_with_caps(mesh);
     draw_extreme_caps(mesh);
 
     draw_debug_visualization(mesh);
-}
-
-
-void StrokeRenderer::draw_edges(const StrokeMesh& mesh) noexcept
-{
-    rlSetTexture(rlGetTextureIdDefault());
-        draw_edges_with_caps(mesh);
-    rlSetTexture(0);
 }
 
 
@@ -63,41 +57,8 @@ void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
         if (camera && !mesh_node_is_in_camera_bounds(mesh[i], camera_bounds))
             continue;
 
-        const Color& color = mesh[i].color;
-
-        const Vector2 top = mesh[i].edge().top();
-        const Vector2 bottom = mesh[i].edge().bottom();
-        const Vector2 next_top = mesh[i + 1].edge().top();
-        const Vector2 next_bottom = mesh[i + 1].edge().bottom();
-
-        draw_edges_primitives(top, bottom, next_top, next_bottom, color);
+        mesh_renderer_->render(StrokeMeshQuad(mesh[i], mesh[i + 1]));
         draw_cap_if_intense_curve(mesh, i);
-    }
-}
-
-
-void StrokeRenderer::draw_edges_primitives(const Vector2& top, const Vector2& bottom, const Vector2& next_top, const Vector2& next_bottom, const Color& color) const noexcept
-{
-    // TODO: use polymorphism, StrokeEdgeRenderer
-
-    if (!outline_only)
-    {
-        rlBegin(primitive_shape_mode);
-        rlColor4ub(color.r, color.g, color.b, color.a);
-
-        rlVertex2f(top.x, top.y);
-        rlVertex2f(next_top.x, next_top.y);
-        rlVertex2f(next_bottom.x, next_bottom.y);
-        rlVertex2f(bottom.x, bottom.y);
-
-        rlEnd();
-    }
-    else
-    {
-        const Color outline_color = this->outline_color.value_or(color);
-
-        DrawLineEx(top, next_top, outline_thickness, outline_color);
-        DrawLineEx(bottom, next_bottom, outline_thickness, outline_color);
     }
 }
 
@@ -146,7 +107,7 @@ void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) const noexcept
 {
-    static constexpr int CapResolution = 32;
+    constexpr int CapResolution = 32;
 
     const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;
@@ -164,17 +125,7 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
         const Vector2 begin = center + v1 * radius;
         const Vector2 end = center + v0 * radius;
 
-        // TODO: use polymorphism, StrokeCapRenderer
-
-        if (!outline_only)
-            DrawTriangle(center, begin, end, true_color);
-        else
-        {
-            DrawLineEx(
-                Vector2MoveTowards(begin, end, -outline_thickness / 5),
-                Vector2MoveTowards(end, begin, -outline_thickness / 5),
-            outline_thickness, outline_color.value_or(true_color));
-        }
+        mesh_renderer_->render(StrokeMeshCapSegment(center, begin, end, true_color));
     }
 }
 

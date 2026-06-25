@@ -1,7 +1,7 @@
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 
 #include <blackboard/editor/editor.hpp>
-#include <blackboard/editor/stroke_mesh_collider.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 
 
 

@@ -1,9 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <algorithm>
 
-#include <blackboard/editor/stroke.hpp>
+#include <blackboard/editor/stroke/stroke.hpp>
 
 
 
@@ -13,9 +12,11 @@ namespace bb::editor
 
 
 
+// TODO: no raw getters, make fields public
 
 class StrokeSplineSegment
 {
+private:
     Vector2 previous_, current_, next_, after_next_;
     float current_thickness, next_thickness;
 
@@ -23,15 +24,7 @@ class StrokeSplineSegment
 public:
     StrokeSplineSegment() = default;
 
-    StrokeSplineSegment(const std::vector<StrokePoint>& points, const int i) noexcept :
-        previous_(points[i - 1].position),
-        current_(points[i].position),
-        next_(points[i + 1].position),
-        after_next_(points[i + 2].position),
-
-        current_thickness(points[i].thickness),
-        next_thickness(points[i + 1].thickness)
-    {}
+    StrokeSplineSegment(const std::vector<StrokePoint>& points, int i) noexcept;
 
 
     [[nodiscard]] StrokePoint stroke_point() const noexcept { return {current_, current_thickness}; }
@@ -51,6 +44,7 @@ public:
 
 class StrokeSample
 {
+private:
     StrokeSplineSegment segment_;
     int index_;
     int max_index_;
@@ -63,15 +57,7 @@ class StrokeSample
 public:
     StrokeSample() = default;
 
-    StrokeSample(const StrokeSplineSegment& segment, const int index, const int max_index) noexcept :
-        segment_(segment),
-        index_(index),
-        max_index_(max_index),
-        position_(segment.point(t())),
-        thickness_(segment.thickness(t()))
-    {
-        curvature_ = calculate_curvature();
-    }
+    StrokeSample(const StrokeSplineSegment& segment, int index, int max_index) noexcept;
 
 
     [[nodiscard]] const StrokeSplineSegment& segment() const noexcept { return segment_; }
@@ -86,25 +72,9 @@ public:
     [[nodiscard]] float curvature() const noexcept { return curvature_; }
 
 
-    [[nodiscard]] float calculate_curvature() const noexcept
-    {
-        const Vector2 previous = segment_.point((float)(index_ - 1) / (float)max_index_);
-        const Vector2 next = segment_.point((float)(index_ + 1) / (float)max_index_);
+    [[nodiscard]] float calculate_curvature() const noexcept;
 
-        return calculate_curvature(previous, position_, next);
-    }
-
-
-    static float calculate_curvature(const Vector2& previous, const Vector2& current, const Vector2& next) noexcept
-    {
-        const Vector2 d1 = Vector2Normalize(current - previous);
-        const Vector2 d2 = Vector2Normalize(next - current);
-
-        float dot = Vector2DotProduct(d1, d2);
-        dot = std::clamp(dot, -1.0f, 1.0f);
-
-        return acosf(dot);
-    }
+    static float calculate_curvature(const Vector2& previous, const Vector2& current, const Vector2& next) noexcept;
 };
 
 
@@ -112,6 +82,7 @@ public:
 
 class StrokeEdge
 {
+private:
     Vector2 top_, bottom_;
     Vector2 normal_;
 
@@ -119,11 +90,8 @@ class StrokeEdge
 public:
     StrokeEdge() = default;
 
-    StrokeEdge(const Vector2& position, const Vector2& normal, const float half_thickness) noexcept
-        : StrokeEdge(position + normal * half_thickness, position - normal * half_thickness) {}
-
-    StrokeEdge(const Vector2& top, const Vector2& bottom) noexcept
-        : top_(top), bottom_(bottom), normal_(Vector2Normalize(top - bottom / 2)) {}
+    StrokeEdge(const Vector2& position, const Vector2& normal, float half_thickness) noexcept;
+    StrokeEdge(const Vector2& top, const Vector2& bottom) noexcept;
 
 
     [[nodiscard]] const Vector2& top() const noexcept { return top_; }
@@ -136,6 +104,7 @@ public:
 
 class StrokeMeshNode
 {
+private:
     StrokeSample sample_;
     StrokeEdge edge_;
 
@@ -145,10 +114,7 @@ public:
 
 
     StrokeMeshNode() = default;
-
-    StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge, const Color& color) noexcept
-        : sample_(sample), edge_(edge), color(color) {}
-
+    StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge, const Color& color) noexcept;
 
 
     [[nodiscard]] const StrokeSample& sample() const noexcept { return sample_; }
@@ -159,6 +125,46 @@ public:
     [[nodiscard]] const Vector2& position() const noexcept { return sample_.position(); }
     [[nodiscard]] float thickness() const noexcept { return sample_.thickness(); }
     [[nodiscard]] float half_thickness() const noexcept { return sample_.half_thickness(); }
+};
+
+
+class StrokeMeshQuad
+{
+private:
+    StrokeMeshNode first_;
+    StrokeMeshNode second_;
+
+
+public:
+    StrokeMeshQuad(const StrokeMeshNode& first, const StrokeMeshNode& second) noexcept;
+
+
+    [[nodiscard]] const Vector2& top() const noexcept { return first_.edge().top(); }
+    [[nodiscard]] const Vector2& bottom() const noexcept { return first_.edge().bottom(); }
+    [[nodiscard]] const Vector2& next_top() const noexcept { return second_.edge().top(); }
+    [[nodiscard]] const Vector2& next_bottom() const noexcept { return second_.edge().bottom(); }
+
+    [[nodiscard]] const Color& color() const noexcept { return first_.color; }
+};
+
+
+class StrokeMeshCapSegment
+{
+private:
+    Vector2 center_;
+    Vector2 begin_;
+    Vector2 end_;
+    Color color_;
+
+
+public:
+    StrokeMeshCapSegment(const Vector2& center, const Vector2& begin, const Vector2& end, const Color& color) noexcept;
+
+
+    [[nodiscard]] const Vector2& center() const noexcept { return center_; }
+    [[nodiscard]] const Vector2& begin() const noexcept { return begin_; }
+    [[nodiscard]] const Vector2& end() const noexcept { return end_; }
+    [[nodiscard]] const Color& color() const noexcept { return color_; }
 };
 
 

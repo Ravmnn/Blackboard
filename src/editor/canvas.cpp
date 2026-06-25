@@ -8,12 +8,12 @@ using bb::editor::Canvas;
 
 
 
-Canvas::Canvas() noexcept :
+Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept :
     canvas_renderer(*this),
     camera(*this, 0.2, 25, 0.13),
 
     stroke_mesh_generator(6),
-    stroke_renderer(&stroke_mesh_generator, &camera),
+    stroke_renderer(mesh_renderer, &stroke_mesh_generator, &camera),
 
     background_color(BLACK, 0.6)
 {
