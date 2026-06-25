@@ -75,9 +75,9 @@ void StrokeRenderer::draw_cap_if_intense_curve(const StrokeMesh& mesh, const siz
     if (current_node.curvature() <= MaxCurvature)
         return;
 
-    const Vector2 previous = mesh[i - 1].sample().position();
-    const Vector2 current = current_node.sample().position();
-    const Vector2 next = mesh[i + 1].sample().position();
+    const Vector2 previous = mesh[i - 1].sample.position;
+    const Vector2 current = current_node.sample.position;
+    const Vector2 next = mesh[i + 1].sample.position;
     const Vector2 dir1 = Vector2Normalize(Vector2Subtract(current, previous));
     const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
@@ -148,7 +148,7 @@ void StrokeRenderer::draw_debug_visualization(const StrokeMesh& mesh) const noex
 void StrokeRenderer::debug_draw_points(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
-        DrawCircleV(node.sample().origin().position, DebugCircleRadius, RED);
+        DrawCircleV(node.sample.origin().position, DebugCircleRadius, RED);
 }
 
 
@@ -163,7 +163,7 @@ void StrokeRenderer::debug_draw_edges(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
     {
-        DrawCircleV(node.edge().top(), DebugCircleRadius, BLUE);
-        DrawCircleV(node.edge().bottom(), DebugCircleRadius, BLUE);
+        DrawCircleV(node.edge.top, DebugCircleRadius, BLUE);
+        DrawCircleV(node.edge.bottom, DebugCircleRadius, BLUE);
     }
 }

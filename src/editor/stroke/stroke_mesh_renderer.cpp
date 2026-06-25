@@ -35,6 +35,6 @@ void StrokeMeshRenderer::render(const StrokeMeshQuad& quad) const noexcept
 
 void StrokeMeshRenderer::render(const StrokeMeshCapSegment& cap_segment) const noexcept
 {
-    const Color& color = overwrite_color.value_or(cap_segment.color());
-    DrawTriangle(cap_segment.center(), cap_segment.begin(), cap_segment.end(), color);
+    const Color& color = overwrite_color.value_or(cap_segment.color);
+    DrawTriangle(cap_segment.center, cap_segment.begin, cap_segment.end, color);
 }

@@ -19,10 +19,10 @@ void StrokeMeshOutlineRenderer::render(const StrokeMeshQuad& quad) const noexcep
 
 void StrokeMeshOutlineRenderer::render(const StrokeMeshCapSegment& cap_segment) const noexcept
 {
-    const Color color = overwrite_color.value_or(cap_segment.color());
+    const Color color = overwrite_color.value_or(cap_segment.color);
 
     DrawLineEx(
-        Vector2MoveTowards(cap_segment.begin(), cap_segment.end(), -outline_thickness / 5),
-        Vector2MoveTowards(cap_segment.end(), cap_segment.begin(), -outline_thickness / 5),
+        Vector2MoveTowards(cap_segment.begin, cap_segment.end, -outline_thickness / 5),
+        Vector2MoveTowards(cap_segment.end, cap_segment.begin, -outline_thickness / 5),
     outline_thickness, color);
 }

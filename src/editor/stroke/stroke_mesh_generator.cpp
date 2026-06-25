@@ -99,7 +99,7 @@ std::vector<StrokeEdge> StrokeMeshGenerator::create_edges(const std::vector<Stro
 
         if (Vector2Length(direction) < DirectionEpsilon)
         {
-            edges[i] = (i > 0) ? edges[i - 1] : StrokeEdge(samples[i].position(), samples[i].position());
+            edges[i] = (i > 0) ? edges[i - 1] : StrokeEdge(samples[i].position, samples[i].position);
             continue;
         }
 
@@ -115,7 +115,7 @@ StrokeEdge StrokeMeshGenerator::create_edge(const StrokeSample& sample, const Ve
     const Vector2 normal = { -direction.y, direction.x };
     const float half_thickness = sample.half_thickness();
 
-    return { sample.position(), normal, half_thickness };
+    return { sample.position, normal, half_thickness };
 }
 
 
@@ -124,12 +124,12 @@ Vector2 StrokeMeshGenerator::get_direction_from_samples(const std::vector<Stroke
     const size_t samples_count = samples.size();
 
     if (i == 0)
-        return samples[1].position() - samples[0].position();
+        return samples[1].position - samples[0].position;
 
     if (i == samples_count - 1)
-        return samples[samples_count - 1].position() - samples[samples_count - 2].position();
+        return samples[samples_count - 1].position - samples[samples_count - 2].position;
 
-    return samples[i + 1].position() - samples[i - 1].position();
+    return samples[i + 1].position - samples[i - 1].position;
 }
 
 
