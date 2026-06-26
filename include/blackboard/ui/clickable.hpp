@@ -2,6 +2,7 @@
 
 #include <map>
 #include <functional>
+#include <memory>
 
 #include <blackboard/mouse_button_event.hpp>
 
@@ -20,9 +21,11 @@ private:
     bool was_hover_ = false;
     bool hover_ = false;
 
+    std::vector<std::unique_ptr<MouseButtonEvent>> allocated_buttons_;
+
 
 protected:
-    std::map<int, MouseButtonEvent> mouse_buttons_;
+    std::map<int, MouseButtonEvent*> mouse_buttons_;
 
 
 public:
@@ -40,13 +43,13 @@ public:
     explicit Clickable(const MousePositionProvider* mouse_position_provider) noexcept;
 
 
-    MouseButtonEvent& operator[](const int button) { return mouse_buttons_[button]; }
+    MouseButtonEvent& operator[](const int button) { return *mouse_buttons_[button]; }
 
 
     void update() noexcept override;
 
 
-    [[nodiscard]] const std::map<int, MouseButtonEvent>& mouse_buttons() const noexcept { return mouse_buttons_; }
+    [[nodiscard]] const std::map<int, MouseButtonEvent*>& mouse_buttons() const noexcept { return mouse_buttons_; }
 
     [[nodiscard]] bool is_down() const noexcept { return any_buttons([](const auto& button) { return button.is_down(); }); }
     [[nodiscard]] bool is_pressed() const noexcept { return any_buttons([](const auto& button) { return button.is_pressed(); }); }
@@ -62,7 +65,7 @@ public:
 
 
     void add_mouse_button_event(int id) noexcept;
-    void add_mouse_button_event(const MouseButtonEvent& button) noexcept { mouse_buttons_.insert({ button.button_id, button }); }
+    void add_mouse_button_event(MouseButtonEvent& button) noexcept { mouse_buttons_.insert({ button.button_id, &button }); }
 
 
 protected:

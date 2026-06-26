@@ -50,7 +50,7 @@ void Clickable::update_interaction() noexcept
 void Clickable::update_mouse_buttons() noexcept
 {
     for (auto& [_, button] : mouse_buttons_)
-        button.update();
+        button->update();
 }
 
 
@@ -58,9 +58,10 @@ void Clickable::update_mouse_buttons() noexcept
 
 void Clickable::add_mouse_button_event(const int id) noexcept
 {
-    MouseButtonEvent button(id, *mouse_position_provider);
-    button.clickable = this;
+    auto* button = new MouseButtonEvent(id, *mouse_position_provider);
+    button->clickable = this;
 
+    allocated_buttons_.push_back(std::unique_ptr<MouseButtonEvent>(button));
     mouse_buttons_.insert({ id, button });
 }
 
@@ -70,6 +71,6 @@ void Clickable::add_mouse_button_event(const int id) noexcept
 bool Clickable::any_buttons(const MouseButtonPredicate& predicate) const noexcept
 {
     return std::ranges::any_of(mouse_buttons_, [&](const auto& pair) {
-        return predicate(pair.second);
+        return predicate(*pair.second);
     });
 }
