@@ -7,8 +7,9 @@ subdir('ui')
 
 
 sources = files(
-    'canvas.cpp', 'editor.cpp', 'canvas_camera.cpp',
-    'lazy_cursor.cpp', 'palette.cpp', 'canvas_renderer.cpp'
+    'canvas.cpp', 'editor.cpp', 'canvas_camera.cpp', 'editor_environment.cpp',
+    'lazy_cursor.cpp', 'palette.cpp', 'canvas_renderer.cpp', 'editor_drawing_environment.cpp',
+    'editor_selection_environment.cpp'
 )
 
 editor_lib = static_library('editor', sources,

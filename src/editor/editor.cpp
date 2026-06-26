@@ -20,20 +20,21 @@ Editor::Editor(Context& ui_context) noexcept :
 
     palette(DefaultPaletteColor),
 
-    brush(*this, 14),
-    eraser(*this)
+    draw_environment(*this),
+    selection_environment(*this)
 {
     clip = false;
 
     negative_effect_.default_color = RED;
 
-    current_tool = &brush;
+    current_environment = &draw_environment;
+    current_tool = &draw_environment.brush;
 
     this->ui_context = &ui_context;
     this->ui_context->add_component(*this);
 
-    color_menu_ = new ColorMenu(this);
-    color_menu_->add_colors({
+    color_menu = new ColorMenu(this);
+    color_menu->add_colors({
         DefaultPaletteColor,
         { 255, 255, 255, 255 }, { 0, 0, 0, 255 }, { 50, 50, 50, 255 },
         { 128, 128, 128, 255 }, { 200, 200, 200, 255 }, { 220, 38, 38, 255 },
@@ -46,31 +47,9 @@ Editor::Editor(Context& ui_context) noexcept :
         { 253, 224, 71, 255 }, { 234, 88, 12, 255 }, { 251, 146, 60, 255 },
         { 120, 53, 15, 255 }, { 161, 98, 7, 255 }, { 214, 188, 150, 255 }
     });
-    color_menu_->hide();
+    color_menu->hide();
 
-    color_menu_->color_selected.subscribe([this](const Color& color) { palette.set_current_color(color); });
-
-
-    initialize_mouse_button_events();
-}
-
-
-void Editor::initialize_mouse_button_events() noexcept
-{
-    left_button_.press.subscribe([this]() noexcept { current_tool->enable(); });
-    left_button_.release.subscribe([this]() noexcept { current_tool->disable(); });
-
-    right_button_.min_drag_distance = 75;
-    right_button_.click.subscribe([this]() noexcept { alternate_tool(); });
-    right_button_.drag_start.subscribe([this]() noexcept { alternate_tool(); current_tool->enable(); });
-    right_button_.drag_end.subscribe([this]() noexcept { current_tool->disable(); alternate_tool(); });
-
-    middle_button_.click.subscribe([this]() noexcept { color_menu_->toggle(GetMousePosition()); });
-
-
-    add_mouse_button_event(left_button_);
-    add_mouse_button_event(right_button_);
-    add_mouse_button_event(middle_button_);
+    color_menu->color_selected.subscribe([this](const Color& color) { palette.set_current_color(color); });
 }
 
 
@@ -79,10 +58,11 @@ void Editor::initialize_mouse_button_events() noexcept
 void Editor::update() noexcept
 {
     update_focus();
-    update_tools();
     update_keybindings();
     update_canvas_background();
     update_effects();
+
+    current_environment->update();
 
     canvas.update();
 
@@ -95,13 +75,6 @@ void Editor::update_focus() noexcept
 {
     if (is_pressed() && ui_context->component_with_mouse_input() == this)
         ui_context->set_focus_to(this);
-}
-
-
-void Editor::update_tools() noexcept
-{
-    brush.update();
-    eraser.update();
 }
 
 
@@ -150,9 +123,7 @@ void Editor::draw_to_canvas() noexcept
         canvas.draw_strokes();
         draw_selected_strokes();
 
-        if (!brush.draw_finished())
-            canvas.stroke_renderer.draw_stroke(brush.stroke());
-
+        current_environment->draw();
         current_tool->draw();
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();

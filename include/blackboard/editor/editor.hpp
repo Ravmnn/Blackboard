@@ -4,9 +4,9 @@
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/editor/effects/negative.hpp>
 #include <blackboard/editor/canvas.hpp>
-#include <blackboard/editor/tools/brush/brush.hpp>
-#include <blackboard/editor/tools/eraser/eraser.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
+#include <blackboard/editor/editor_drawing_environment.hpp>
+#include <blackboard/editor/editor_selection_environment.hpp>
 
 
 
@@ -26,12 +26,6 @@ private:
     static constexpr Color DefaultPaletteColor = { 211, 211, 211, 255 };
     static constexpr Color DefaultBackgroundColor = { 18, 18, 18, 255 };
 
-
-    ColorMenu* color_menu_;
-
-    MouseButtonEvent left_button_ = MouseButtonEvent(MOUSE_BUTTON_LEFT, canvas);
-    MouseButtonEvent right_button_ = MouseButtonEvent(MOUSE_BUTTON_RIGHT, canvas);
-    MouseButtonEvent middle_button_ = MouseButtonEvent(MOUSE_BUTTON_MIDDLE, canvas);
 
     bool draw_statistics_ = false;
 
@@ -53,10 +47,14 @@ public:
     Palette palette;
     bool dynamic_background_color = true;
 
-    Brush brush;
-    Eraser eraser;
+    EditorDrawingEnvironment draw_environment;
+    EditorSelectionEnvironment selection_environment;
+    EditorEnvironment* current_environment = nullptr;
 
     Tool* current_tool = nullptr;
+
+
+    ColorMenu* color_menu;
 
 
     Editor(ui::Context& ui_context) noexcept;
@@ -67,8 +65,6 @@ public:
 
     void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
 
-    void alternate_tool() noexcept { current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush; }
-
 
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept override { return {}; }
 
@@ -76,10 +72,7 @@ public:
 
 
 private:
-    void initialize_mouse_button_events() noexcept;
-
     void update_focus() noexcept;
-    void update_tools() noexcept;
     void update_keybindings() noexcept;
     void update_canvas_background() noexcept;
     void update_effects() noexcept;

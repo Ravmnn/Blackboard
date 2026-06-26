@@ -29,8 +29,6 @@ public:
     bool should_debug_draw_edges = false;
     bool should_debug_draw_caps = false;
 
-    // TODO: add negative shader and use it with borders?
-
     const StrokeMeshGenerator* sampler;
     const CanvasCamera* camera;
 
