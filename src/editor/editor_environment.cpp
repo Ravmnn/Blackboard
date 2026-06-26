@@ -11,15 +11,13 @@ using bb::editor::EditorEnvironment;
 
 
 EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
-    left_button_(MouseButtonEvent(MOUSE_BUTTON_LEFT, editor.canvas)),
-    right_button_(MouseButtonEvent(MOUSE_BUTTON_RIGHT, editor.canvas)),
-    middle_button_(MouseButtonEvent(MOUSE_BUTTON_MIDDLE, editor.canvas)),
+    editor(editor),
 
-    editor(editor)
+    left_button(MouseButtonEvent(MOUSE_BUTTON_LEFT, editor.canvas)),
+    right_button(MouseButtonEvent(MOUSE_BUTTON_RIGHT, editor.canvas)),
+    middle_button(MouseButtonEvent(MOUSE_BUTTON_MIDDLE, editor.canvas))
 {
-    editor.add_mouse_button_event(left_button_);
-    editor.add_mouse_button_event(right_button_);
-    editor.add_mouse_button_event(middle_button_);
+    middle_button.enable_late_mode = true;
 }
 
 
@@ -29,4 +27,16 @@ void EditorEnvironment::update() noexcept
 {
     for (auto& tool : tools_)
         tool->update();
+}
+
+
+
+
+void EditorEnvironment::enable() noexcept
+{
+    editor.add_mouse_button_event_or_assign(left_button);
+    editor.add_mouse_button_event_or_assign(right_button);
+    editor.add_mouse_button_event_or_assign(middle_button);
+
+    Activatable::enable();
 }

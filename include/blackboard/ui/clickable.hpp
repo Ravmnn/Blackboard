@@ -65,7 +65,9 @@ public:
 
 
     void add_mouse_button_event(int id) noexcept;
-    void add_mouse_button_event(MouseButtonEvent& button) noexcept { mouse_buttons_.insert({ button.button_id, &button }); }
+    void add_mouse_button_event_or_assign(MouseButtonEvent& button) noexcept {
+        mouse_buttons_.insert_or_assign(button.button_id, &button);
+    }
 
 
 protected:

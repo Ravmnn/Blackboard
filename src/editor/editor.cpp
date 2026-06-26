@@ -27,8 +27,10 @@ Editor::Editor(Context& ui_context) noexcept :
 
     negative_effect_.default_color = RED;
 
-    current_environment = &draw_environment;
+    set_current_environment(draw_environment);
     current_tool = &draw_environment.brush;
+
+    time_to_enter_late_mode_ = current_environment->left_button.time_to_enter_late_mode;
 
     this->ui_context = &ui_context;
     this->ui_context->add_component(*this);
@@ -61,6 +63,9 @@ void Editor::update() noexcept
     update_keybindings();
     update_canvas_background();
     update_effects();
+
+    if (is_pressed())
+        mouse_button_late_mode_stopwatch_.reset();
 
     current_environment->update();
 
@@ -125,6 +130,13 @@ void Editor::draw_to_canvas() noexcept
 
         current_environment->draw();
         current_tool->draw();
+
+        if (is_down())
+        {
+            const float t = (float)mouse_button_late_mode_stopwatch_.elapsed_ms().count() / (float)time_to_enter_late_mode_.count();
+            DrawCircleSectorLines(canvas.mouse_position(), 15, 0, animation::Interpolate::linear(0, 360, t), 32, GRAY);
+        }
+
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();
 }

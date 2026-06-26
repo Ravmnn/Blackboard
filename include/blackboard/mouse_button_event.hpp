@@ -1,9 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <chrono>
 
 #include <blackboard/event.hpp>
 #include <blackboard/updateable.hpp>
+#include <blackboard/stopwatch.hpp>
 #include <blackboard/mouse_position_provider.hpp>
 
 
@@ -24,6 +26,10 @@ private:
     std::optional<Vector2> press_position_;
 
     bool is_drag_ = false;
+    bool is_late_ = false;
+    bool late_pressed_ = false;
+
+    Stopwatch late_mode_stopwatch_;
 
 
 public:
@@ -33,6 +39,11 @@ public:
     const MousePositionProvider& mouse_position_provider;
 
     float min_drag_distance = 20;
+
+    std::chrono::milliseconds time_to_enter_late_mode = std::chrono::milliseconds(500);
+    bool enable_late_mode = false;
+    bool exclusive_late_mode = false;
+
     int button_id;
 
     EventType down;
@@ -41,6 +52,13 @@ public:
     EventType click;
     EventType drag_start;
     EventType drag_end;
+
+    EventType late_down;
+    EventType late_press;
+    EventType late_release;
+    EventType late_click;
+    EventType late_drag_start;
+    EventType late_drag_end;
 
     const ui::Clickable* clickable = nullptr;
 
@@ -52,13 +70,22 @@ public:
     void update() noexcept override;
 
 
+    [[nodiscard]] bool is_down() const noexcept { return down.triggered(); }
     [[nodiscard]] bool is_clicked() const noexcept { return click.triggered(); }
     [[nodiscard]] bool is_pressed() const noexcept { return press.triggered(); }
     [[nodiscard]] bool is_released() const noexcept { return release.triggered(); }
-    [[nodiscard]] bool is_down() const noexcept { return down.triggered(); }
+
+    [[nodiscard]] bool is_late() const noexcept { return is_late_; }
+
+    [[nodiscard]] bool is_late_down() const noexcept { return late_down.triggered(); }
+    [[nodiscard]] bool is_late_clicked() const noexcept { return late_click.triggered(); }
+    [[nodiscard]] bool is_late_pressed() const noexcept { return late_press.triggered(); }
+    [[nodiscard]] bool is_late_released() const noexcept { return late_release.triggered(); }
 
 
 private:
+    void update_is_late_mode() noexcept;
+    void update_mouse_button_events() noexcept;
     void update_drag_state() noexcept;
 
     void trigger_press_event() noexcept;

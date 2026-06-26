@@ -39,6 +39,10 @@ private:
     NegativeEffect negative_effect_;
 
 
+    Stopwatch mouse_button_late_mode_stopwatch_;
+    std::chrono::milliseconds time_to_enter_late_mode_;
+
+
 public:
     // TODO: vanish animation when switching tool (similar to FL)
 
@@ -64,6 +68,7 @@ public:
 
 
     void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
+    void set_current_environment(EditorEnvironment& environment) noexcept { current_environment = &environment; current_environment->enable(); }
 
 
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept override { return {}; }

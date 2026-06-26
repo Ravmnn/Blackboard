@@ -14,18 +14,18 @@ namespace bb::editor
 
 
 
-class EditorEnvironment : public Updateable, public Drawable
+class EditorEnvironment : public Updateable, public Drawable, public Activatable
 {
 protected:
     std::vector<Tool*> tools_;
 
-    MouseButtonEvent left_button_;
-    MouseButtonEvent right_button_;
-    MouseButtonEvent middle_button_;
-
 
 public:
     Editor& editor;
+
+    MouseButtonEvent left_button;
+    MouseButtonEvent right_button;
+    MouseButtonEvent middle_button;
 
 
     explicit EditorEnvironment(Editor& editor) noexcept;
@@ -33,6 +33,9 @@ public:
 
     void update() noexcept override;
     void draw() noexcept override {}
+
+
+    void enable() noexcept override;
 };
 
 
