@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <blackboard/event.hpp>
 
 
 
@@ -18,11 +18,15 @@ private:
 
 
 public:
+    Event<> enabled;
+    Event<> disabled;
+
+
     virtual ~Activatable() = default;
 
 
-    virtual void enable() { active_ = true; }
-    virtual void disable() { active_ = false; }
+    virtual void enable() { active_ = true; enabled.trigger(); }
+    virtual void disable() { active_ = false; disabled.trigger(); }
 
     void set_active(const bool active) noexcept { active ? enable() : disable(); }
 
