@@ -25,8 +25,6 @@ private:
 
     bool is_drag_ = false;
 
-    bool magic_ = false;
-
 
 public:
     using EventType = Event<>;

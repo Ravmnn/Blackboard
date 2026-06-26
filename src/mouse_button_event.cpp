@@ -50,7 +50,6 @@ void MouseButtonEvent::trigger_press_event() noexcept
     press_position_ = mouse_position_provider.screen_mouse_position();
 
     press.trigger();
-    magic_ = true;
 }
 
 
@@ -61,12 +60,11 @@ void MouseButtonEvent::trigger_release_event() noexcept
     if (is_drag_)
         drag_end.trigger();
 
-    else if (!clickable || magic_)
+    else if (!clickable || press_position_.has_value())
         click.trigger();
 
     is_drag_ = false;
     press_position_.reset();
-    magic_ = false;
 }
 
 
