@@ -1,5 +1,6 @@
 #include <blackboard/editor/editor.hpp>
 
+#include <blackboard/draw.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
 
@@ -64,6 +65,8 @@ void Editor::update() noexcept
     update_canvas_background();
     update_effects();
 
+    Clickable::update();
+
     if (is_pressed())
         mouse_button_late_mode_stopwatch_.reset();
 
@@ -71,7 +74,6 @@ void Editor::update() noexcept
 
     canvas.update();
 
-    Clickable::update();
     Component::update();
 }
 
@@ -134,7 +136,7 @@ void Editor::draw_to_canvas() noexcept
         if (is_down())
         {
             const float t = (float)mouse_button_late_mode_stopwatch_.elapsed_ms().count() / (float)time_to_enter_late_mode_.count();
-            DrawCircleSectorLines(canvas.mouse_position(), 15, 0, animation::Interpolate::linear(0, 360, t), 32, GRAY);
+            Draw::circle_section_outline(canvas.mouse_position(), 20, 0, animation::Interpolate::linear(0, 360, std::min(t, 1.0f)), 3, GRAY, 64);
         }
 
     canvas.camera.disable();
