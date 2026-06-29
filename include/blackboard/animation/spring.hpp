@@ -41,7 +41,7 @@ public:
     bool immediate = false;
 
 
-    Spring(const T& current, const T& target, const float damping, const float speed) noexcept
+    Spring(const T& current, const T& target, const float damping = 0.6f, const float speed = 6) noexcept
         : current(current), target(target), damping(damping), speed(speed) {}
 
 
@@ -77,7 +77,7 @@ public:
     {
         apply_min_max();
 
-        constexpr float Epsilon = 0.15f;
+        constexpr float Epsilon = 0.01f;
 
         if (immediate || distance_of_current_to_target() <= Epsilon)
             current = target;

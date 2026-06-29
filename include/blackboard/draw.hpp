@@ -28,9 +28,26 @@ private:
 
 
 public:
-    static void stretched_ellipse(const Vector2& position, const float radius, const float stretch, const Color& color = WHITE) noexcept {
+    static void stretched_ellipse(const Vector2& position, const float radius, const float stretch, const Color& color = WHITE) noexcept
+    {
         DrawEllipse((int)position.x, (int)position.y, radius + stretch, radius,color);
     }
+
+
+
+
+    static void circle(const Vector2& center, const float radius, const Color& color, const uint32_t resolution = 32) noexcept
+    {
+        circle_section(center, radius, 0, 360, color, resolution);
+    }
+
+
+    static void circle_outline(const Vector2& center, const float radius, const float thickness, const Color& color, const uint32_t resolution = 32) noexcept
+    {
+        circle_section_outline(center, radius, 0, 360, thickness, color, resolution);
+    }
+
+
 
 
     static void circle_section(const Vector2& center, const float radius, const float start_angle, const float end_angle, const Color& color, const uint32_t resolution = 32) noexcept
@@ -82,10 +99,8 @@ private:
 
     static void draw_circle_selection_outline(const CircleSectionTriangle& triangle, const float thickness, const Color& color) noexcept
     {
-        DrawLineEx(
-            Vector2MoveTowards(triangle.current, triangle.next, -thickness / 5),
-            Vector2MoveTowards(triangle.next, triangle.current, -thickness / 5),
-        thickness, color);
+        DrawLineEx(triangle.current, triangle.next, thickness, color);
+        DrawCircleV(triangle.next, thickness / 2, color);
     }
 };
 

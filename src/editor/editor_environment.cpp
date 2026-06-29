@@ -17,7 +17,9 @@ EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
     right_button(MouseButtonEvent(MOUSE_BUTTON_RIGHT, editor.canvas)),
     middle_button(MouseButtonEvent(MOUSE_BUTTON_MIDDLE, editor.canvas))
 {
-    middle_button.enable_late_mode = true;
+    left_button.clickable = &editor;
+    right_button.clickable = &editor;
+    middle_button.clickable = &editor;
 }
 
 

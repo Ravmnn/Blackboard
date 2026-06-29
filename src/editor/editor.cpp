@@ -3,6 +3,7 @@
 #include <blackboard/draw.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
+#include <ios>
 
 
 
@@ -15,14 +16,17 @@ using bb::editor::Editor,
 
 
 Editor::Editor(Context& ui_context) noexcept :
-    Component(nullptr, {}), Clickable(&canvas),
+    Component(nullptr, {}),
+    Clickable(canvas),
 
     canvas(default_mesh_renderer_),
 
     palette(DefaultPaletteColor),
 
     draw_environment(*this),
-    selection_environment(*this)
+    selection_environment(*this),
+
+    mouse_late_mode_indicator(canvas, *this)
 {
     clip = false;
 
@@ -30,8 +34,6 @@ Editor::Editor(Context& ui_context) noexcept :
 
     set_current_environment(draw_environment);
     current_tool = &draw_environment.brush;
-
-    time_to_enter_late_mode_ = current_environment->left_button.time_to_enter_late_mode;
 
     this->ui_context = &ui_context;
     this->ui_context->add_component(*this);
@@ -67,10 +69,8 @@ void Editor::update() noexcept
 
     Clickable::update();
 
-    if (is_pressed())
-        mouse_button_late_mode_stopwatch_.reset();
-
     current_environment->update();
+    mouse_late_mode_indicator.update();
 
     canvas.update();
 
@@ -128,17 +128,12 @@ void Editor::draw_to_canvas() noexcept
     canvas.canvas_renderer.begin_render();
     canvas.camera.enable();
         canvas.draw_strokes();
-        draw_selected_strokes();
+        draw_selected_strokes(); // TODO: move this to SelectionEnvironment?
 
         current_environment->draw();
         current_tool->draw();
 
-        if (is_down())
-        {
-            const float t = (float)mouse_button_late_mode_stopwatch_.elapsed_ms().count() / (float)time_to_enter_late_mode_.count();
-            Draw::circle_section_outline(canvas.mouse_position(), 20, 0, animation::Interpolate::linear(0, 360, std::min(t, 1.0f)), 3, GRAY, 64);
-        }
-
+        mouse_late_mode_indicator.draw();
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();
 }

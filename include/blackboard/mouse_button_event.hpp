@@ -4,7 +4,7 @@
 #include <chrono>
 
 #include <blackboard/event.hpp>
-#include <blackboard/updateable.hpp>
+#include <blackboard/activatable.hpp>
 #include <blackboard/stopwatch.hpp>
 #include <blackboard/mouse_position_provider.hpp>
 
@@ -20,7 +20,7 @@ namespace bb
 namespace ui { class Clickable; }
 
 
-class MouseButtonEvent : public Updateable
+class MouseButtonEvent : public Updateable, public Activatable
 {
 private:
     std::optional<Vector2> press_position_;
@@ -33,14 +33,14 @@ private:
 
 
 public:
-    using EventType = Event<>;
+    using EventType = Event<MouseButtonEvent>;
 
 
     const MousePositionProvider& mouse_position_provider;
 
     float min_drag_distance = 20;
 
-    std::chrono::milliseconds time_to_enter_late_mode = std::chrono::milliseconds(500);
+    std::chrono::milliseconds time_to_enter_late_mode = std::chrono::milliseconds(1000);
     bool enable_late_mode = false;
     bool exclusive_late_mode = false;
 
@@ -63,8 +63,10 @@ public:
     const ui::Clickable* clickable = nullptr;
 
 
-    explicit MouseButtonEvent(const int button_id = MOUSE_BUTTON_LEFT, const MousePositionProvider& mouse_position_provider = {}) noexcept
-        : mouse_position_provider(mouse_position_provider), button_id(button_id) {}
+    explicit MouseButtonEvent(int button_id = MOUSE_BUTTON_LEFT, const MousePositionProvider& mouse_position_provider = {}) noexcept;
+
+
+    bool operator==(const MouseButtonEvent& other) const noexcept { return button_id == other.button_id; }
 
 
     void update() noexcept override;
@@ -86,6 +88,7 @@ public:
 private:
     void update_is_late_mode() noexcept;
     void update_mouse_button_events() noexcept;
+    void update_first_late_mode_press() noexcept;
     void update_drag_state() noexcept;
 
     void trigger_press_event() noexcept;

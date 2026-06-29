@@ -105,7 +105,7 @@ void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 }
 
 
-// TODO: try to use Draw method here
+
 void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) const noexcept
 {
     constexpr int CapResolution = 32;

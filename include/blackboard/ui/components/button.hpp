@@ -1,5 +1,6 @@
 #pragma once
 
+#include "blackboard/mouse_button_event.hpp"
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/components/rounded_rectangle.hpp>
@@ -41,12 +42,12 @@ protected:
     void on_entered() noexcept override {}
     void on_leaved() noexcept override {}
 
-    virtual void on_down() noexcept {}
-    virtual void on_press() noexcept;
-    virtual void on_release() noexcept {}
-    virtual void on_click() noexcept {}
-    virtual void on_drag_start() noexcept {}
-    virtual void on_drag_end() noexcept {}
+    virtual void on_down(const MouseButtonEvent& /* unused */) noexcept {}
+    virtual void on_press(const MouseButtonEvent& /* unused */) noexcept;
+    virtual void on_release(const MouseButtonEvent& /* unused */) noexcept {}
+    virtual void on_click(const MouseButtonEvent& /* unused */) noexcept {}
+    virtual void on_drag_start(const MouseButtonEvent& /* unused */) noexcept {}
+    virtual void on_drag_end(const MouseButtonEvent& /* unused */) noexcept {}
 };
 
 

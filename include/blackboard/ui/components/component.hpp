@@ -28,7 +28,7 @@ template <typename T>
 concept ComponentDerived = std::derived_from<T, Component>;
 
 
-class Component : public virtual Updateable, public Drawable, public Activatable
+class Component : public Updateable, public Drawable, public Activatable
 {
 protected:
     animation::Spring<Vector2> relative_position_;

@@ -16,6 +16,7 @@ namespace bb::ui
 class RoundedRectangle : public Shape
 {
 protected:
+    // TODO: move to public
     animation::Spring<Vector2> size_;
     animation::ExponentialInterpolation<float> radius_;
 

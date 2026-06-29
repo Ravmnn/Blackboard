@@ -8,22 +8,24 @@
 
 
 
-using bb::editor::ColorMenu, bb::ui::Button;
+using bb::editor::ColorMenu,
+    bb::ui::Button,
+    bb::ui::Clickable;
 
 
 
 
 ColorMenu::ColorMenu(Component* const parent) noexcept : RadialLayout(parent, {}, 0)
 {
-    color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
-
-
     clip = false;
     visible = false;
     relative_position_.immediate = true;
 
     radius_.set_value_immediately(HiddenRadius);
     set_children_opacity(HiddenOpacity);
+
+
+    color_selected.subscribe([this](const Color& color) { on_color_selected(color); });
 }
 
 

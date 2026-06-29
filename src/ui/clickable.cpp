@@ -1,7 +1,5 @@
 #include <blackboard/ui/clickable.hpp>
 
-#include <algorithm>
-
 
 
 
@@ -10,12 +8,12 @@ using bb::ui::Clickable;
 
 
 
-Clickable::Clickable(const MousePositionProvider* const mouse_position_provider) noexcept
+Clickable::Clickable(const MousePositionProvider& mouse_position_provider) noexcept
     : mouse_position_provider(mouse_position_provider)
 {
-    entered.subscribe([this]() { on_entered(); });
-    leaved.subscribe([this]() { on_leaved(); });
-    hover.subscribe([this]() { on_hover(); });
+    entered.subscribe([this]() { on_entered(); }, "bb::Clickable::entered_event_callback");
+    leaved.subscribe([this]() { on_leaved(); }, "bb::Clickable::leaved_event_callback");
+    hover.subscribe([this]() { on_hover(); }, "bb::Clickable::hover_event_callback");
 }
 
 
@@ -24,7 +22,8 @@ Clickable::Clickable(const MousePositionProvider* const mouse_position_provider)
 void Clickable::update() noexcept
 {
     update_interaction();
-    update_mouse_buttons();
+
+    MouseButtonSet::update();
 }
 
 
@@ -44,33 +43,4 @@ void Clickable::update_interaction() noexcept
 
     if (hover_)
         hover.trigger();
-}
-
-
-void Clickable::update_mouse_buttons() noexcept
-{
-    for (auto& [_, button] : mouse_buttons_)
-        button->update();
-}
-
-
-
-
-void Clickable::add_mouse_button_event(const int id) noexcept
-{
-    auto* button = new MouseButtonEvent(id, *mouse_position_provider);
-    button->clickable = this;
-
-    allocated_buttons_.push_back(std::unique_ptr<MouseButtonEvent>(button));
-    mouse_buttons_.insert({ id, button });
-}
-
-
-
-
-bool Clickable::any_buttons(const MouseButtonPredicate& predicate) const noexcept
-{
-    return std::ranges::any_of(mouse_buttons_, [&](const auto& pair) {
-        return predicate(*pair.second);
-    });
 }

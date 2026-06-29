@@ -40,7 +40,7 @@ void Shape::draw_self() noexcept
 }
 
 
-void Shape::draw_outline() noexcept
+void Shape::    draw_outline() noexcept
 {
     if (outline_thickness_ <= 0)
         return;

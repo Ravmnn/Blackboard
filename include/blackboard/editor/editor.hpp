@@ -2,6 +2,7 @@
 
 #include <blackboard/ui/context.hpp>
 #include <blackboard/ui/clickable.hpp>
+#include <blackboard/editor/mouse_late_mode_indicator.hpp>
 #include <blackboard/editor/effects/negative.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
@@ -39,10 +40,6 @@ private:
     NegativeEffect negative_effect_;
 
 
-    Stopwatch mouse_button_late_mode_stopwatch_;
-    std::chrono::milliseconds time_to_enter_late_mode_;
-
-
 public:
     // TODO: vanish animation when switching tool (similar to FL)
 
@@ -56,6 +53,8 @@ public:
     EditorEnvironment* current_environment = nullptr;
 
     Tool* current_tool = nullptr;
+
+    MouseLateModeIndicator mouse_late_mode_indicator;
 
 
     ColorMenu* color_menu;

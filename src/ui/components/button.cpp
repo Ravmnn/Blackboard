@@ -1,3 +1,4 @@
+#include "blackboard/mouse_button_event.hpp"
 #include <blackboard/ui/components/button.hpp>
 
 #include <algorithm>
@@ -13,18 +14,19 @@ using bb::ui::Button;
 
 
 Button::Button(Component* const parent, const Vector2& position, const Vector2& size, const float radius, const Color& color,
-    const float outline_thickness, const Color& outline_color) noexcept
-    : RoundedRectangle(parent, position, size, radius, color, outline_thickness, outline_color),
-        Clickable(new MousePositionProvider) // TODO: mouse provider free is responsibility of this class
-{
-    add_mouse_button_event(MainButtonId);
+    const float outline_thickness, const Color& outline_color) noexcept :
 
-    main_button().down.subscribe([this]() { on_down(); });
-    main_button().press.subscribe([this]() { on_press(); });
-    main_button().release.subscribe([this]() { on_release(); });
-    main_button().click.subscribe([this]() { on_click(); });
-    main_button().drag_start.subscribe([this]() { on_drag_start(); });
-    main_button().drag_end.subscribe([this]() { on_drag_end(); });
+    RoundedRectangle(parent, position, size, radius, color, outline_thickness, outline_color),
+    Clickable(MousePositionProvider::screen())
+{
+    add_mouse_button_event(MainButtonId, mouse_position_provider, this);
+
+    main_button().down.subscribe([this](const auto& button) { on_down(button); });
+    main_button().press.subscribe([this](const auto& button) { on_press(button); });
+    main_button().release.subscribe([this](const auto& button) { on_release(button); });
+    main_button().click.subscribe([this](const auto& button) { on_click(button); });
+    main_button().drag_start.subscribe([this](const auto& button) { on_drag_start(button); });
+    main_button().drag_end.subscribe([this](const auto& button) { on_drag_end(button); });
 }
 
 
@@ -57,7 +59,7 @@ void Button::update_self() noexcept
 
 
 
-void Button::on_press() noexcept
+void Button::on_press(const MouseButtonEvent& /* unused */) noexcept
 {
     if (ui_context)
         ui_context->set_focus_to(this);

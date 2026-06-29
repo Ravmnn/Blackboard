@@ -12,19 +12,27 @@ using bb::MouseButtonEvent, bb::ui::Clickable;
 
 
 
+MouseButtonEvent::MouseButtonEvent(const int button_id, const MousePositionProvider& mouse_position_provider) noexcept
+    : mouse_position_provider(mouse_position_provider), button_id(button_id)
+{
+    enable();
+}
+
+
+
+
 void MouseButtonEvent::update() noexcept
 {
+    if (!active())
+        return;
+
     update_is_late_mode();
     update_mouse_button_events();
 
     if (clickable && !clickable->is_hover())
         return;
 
-    if (IsMouseButtonDown(button_id) && is_late_ && !late_pressed_)
-    {
-        late_press.trigger();
-        late_pressed_ = true;
-    }
+    update_first_late_mode_press();
 
     if (IsMouseButtonPressed(button_id)) trigger_press_event();
     if (IsMouseButtonReleased(button_id)) trigger_release_event();
@@ -62,6 +70,16 @@ void MouseButtonEvent::update_mouse_button_events() noexcept
 }
 
 
+void MouseButtonEvent::update_first_late_mode_press() noexcept
+{
+    if (!IsMouseButtonDown(button_id) || !is_late_ || late_pressed_)
+        return;
+
+    late_press.trigger(*this);
+    late_pressed_ = true;
+}
+
+
 void MouseButtonEvent::update_drag_state() noexcept
 {
     if (!press_position_)
@@ -72,10 +90,10 @@ void MouseButtonEvent::update_drag_state() noexcept
         is_drag_ = true;
 
         if (!is_late_ || !exclusive_late_mode)
-            drag_start.trigger();
+            drag_start.trigger(*this);
 
         if (is_late_)
-            late_drag_start.trigger();
+            late_drag_start.trigger(*this);
     }
 }
 
@@ -87,35 +105,34 @@ void MouseButtonEvent::trigger_press_event() noexcept
     press_position_ = mouse_position_provider.screen_mouse_position();
     late_mode_stopwatch_.reset();
 
-    press.trigger();
+    press.trigger(*this);
 }
 
 
 void MouseButtonEvent::trigger_release_event() noexcept
 {
     if (!is_late_ || !exclusive_late_mode)
-        release.trigger();
+        release.trigger(*this);
 
     if (is_late_)
-        late_release.trigger();
-
+        late_release.trigger(*this);
 
     if (is_drag_)
     {
         if (!is_late_ || !exclusive_late_mode)
-            drag_end.trigger();
+            drag_end.trigger(*this);
 
         if (is_late_)
-            late_drag_end.trigger();
+            late_drag_end.trigger(*this);
     }
 
     else if (!clickable || press_position_.has_value())
     {
         if (!is_late_ || !exclusive_late_mode)
-            click.trigger();
+            click.trigger(*this);
 
         if (is_late_)
-            late_click.trigger();
+            late_click.trigger(*this);
     }
 
 
@@ -129,10 +146,10 @@ void MouseButtonEvent::trigger_release_event() noexcept
 void MouseButtonEvent::trigger_down_event() noexcept
 {
     if (!is_late_ || !exclusive_late_mode)
-        down.trigger();
+        down.trigger(*this);
 
     if (is_late_)
-        late_down.trigger();
+        late_down.trigger(*this);
 }
 
 
