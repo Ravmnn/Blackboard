@@ -30,6 +30,7 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
 
 
     right_button.enable_late_mode = true;
+    right_button.exclusive_late_mode = true;
 }
 
 

@@ -87,7 +87,7 @@ void Bubble::draw() noexcept
 void Bubble::draw_trail() noexcept
 {
     Stencil::enable();
-        Stencil::begin_mask(GL_GREATER, 1);
+        Stencil::begin_mask(GL_NOTEQUAL, 1);
         trail.draw();
     Stencil::disable();
 }
@@ -123,34 +123,18 @@ void Bubble::draw_ellipse() noexcept
     Stencil::enable();
         Stencil::begin_write(GL_ALWAYS, 1, GL_REPLACE);
         draw_ellipse_inner();
-
-        Stencil::begin_write(GL_NOTEQUAL, 1, GL_INCR);
         draw_ellipse_outline();
     Stencil::disable();
-
-    draw_ellipse_inner();
 }
 
 
 void Bubble::draw_ellipse_inner() noexcept
 {
-    Draw::stretched_ellipse(position_, thickness - outline_thickness, stretch, color);
-
-    // DrawEllipse(
-    //     (int)position_.x, (int)position_.y,
-    //     thickness + stretch - outline_thickness, thickness - outline_thickness,
-    //     color
-    // );
+    Draw::stretched_ellipse(position_, thickness, stretch, color, EllipseResolution);
 }
 
 
 void Bubble::draw_ellipse_outline() noexcept
 {
-    Draw::stretched_ellipse(position_, thickness, stretch, outline_color);
-
-    // DrawEllipse(
-    //     (int)position_.x, (int)position_.y,
-    //     thickness + stretch, thickness,
-    //     outline_color
-    // );
+    Draw::stretched_ellipse_outline(position_, thickness, stretch, outline_thickness, outline_color, EllipseResolution);
 }

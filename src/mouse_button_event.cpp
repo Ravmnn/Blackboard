@@ -44,7 +44,7 @@ void MouseButtonEvent::update() noexcept
 
 void MouseButtonEvent::update_is_late_mode() noexcept
 {
-    if (late_mode_stopwatch_.elapsed_ms() >= time_to_enter_late_mode)
+    if (late_mode_stopwatch_.elapsed_ms() >= time_to_enter_late_mode && !is_drag_)
         is_late_ = enable_late_mode;
 
     if (!is_down())

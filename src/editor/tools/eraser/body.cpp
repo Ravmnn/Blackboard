@@ -28,7 +28,7 @@ void EraserBody::update() noexcept
     thickness = BaseThickness;
 
     if (eraser.active())
-        thickness = BaseThickness - ThicknessVariationWhenActive;
+        thickness = BaseThickness - IdleThicknessVariation;
 
     Bubble::update();
 }

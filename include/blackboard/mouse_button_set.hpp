@@ -35,6 +35,13 @@ public:
     ButtonEvent drag_start;
     ButtonEvent drag_end;
 
+    ButtonEvent late_down;
+    ButtonEvent late_press;
+    ButtonEvent late_release;
+    ButtonEvent late_click;
+    ButtonEvent late_drag_start;
+    ButtonEvent late_drag_end;
+
 
     MouseButtonEvent& operator[](const int button) { return *mouse_buttons_[button]; }
 
@@ -50,6 +57,13 @@ public:
     [[nodiscard]] bool is_clicked() const noexcept { return click.triggered(); }
     [[nodiscard]] bool has_drag_started() const noexcept { return drag_start.triggered(); }
     [[nodiscard]] bool has_drag_ended() const noexcept { return drag_end.triggered(); }
+
+    [[nodiscard]] bool is_late_down() const noexcept { return late_down.triggered(); }
+    [[nodiscard]] bool is_late_pressed() const noexcept { return late_press.triggered(); }
+    [[nodiscard]] bool is_late_released() const noexcept { return late_release.triggered(); }
+    [[nodiscard]] bool is_late_clicked() const noexcept { return late_click.triggered(); }
+    [[nodiscard]] bool has_late_drag_started() const noexcept { return late_drag_start.triggered(); }
+    [[nodiscard]] bool has_late_drag_ended() const noexcept { return late_drag_end.triggered(); }
 
 
     MouseButtonEvent& add_mouse_button_event(int id, const MousePositionProvider& provider = {}, ui::Clickable* clickable = nullptr) noexcept;

@@ -40,7 +40,7 @@ public:
 
     float min_drag_distance = 20;
 
-    std::chrono::milliseconds time_to_enter_late_mode = std::chrono::milliseconds(1000);
+    std::chrono::milliseconds time_to_enter_late_mode = std::chrono::milliseconds(300);
     bool enable_late_mode = false;
     bool exclusive_late_mode = false;
 

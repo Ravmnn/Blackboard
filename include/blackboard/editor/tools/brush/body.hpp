@@ -15,6 +15,10 @@ class Brush;
 
 class BrushBody : public Bubble
 {
+private:
+    static constexpr float IdleThicknessVariation = 2;
+
+
 public:
     Brush& brush;
 

@@ -18,8 +18,9 @@ namespace bb::editor
 class Bubble : public Updateable, public Drawable
 {
 protected:
-    static constexpr float IdleThicknessVariation = 2;
     static constexpr float StretchSpeedFactor = 1.0 / 3.0;
+    static constexpr uint32_t EllipseResolution = 64;
+
 
     float last_rotation_ = 0;
     Vector2 last_position_ = {};
