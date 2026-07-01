@@ -34,8 +34,6 @@ private:
 
 
 public:
-    // TODO: late mode not working fully correctly
-
     const MousePositionProvider& mouse_provider;
     MouseButtonSet& buttons;
 
