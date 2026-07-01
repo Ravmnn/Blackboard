@@ -3,7 +3,6 @@
 #include <blackboard/draw.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
-#include <ios>
 
 
 
@@ -19,7 +18,7 @@ Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
     Clickable(canvas),
 
-    canvas(default_mesh_renderer_),
+    canvas(default_stroke_mesh_renderer_),
 
     palette(DefaultPaletteColor),
 
@@ -30,10 +29,7 @@ Editor::Editor(Context& ui_context) noexcept :
 {
     clip = false;
 
-    negative_effect_.default_color = RED;
-
     set_current_environment(draw_environment);
-    current_tool = &draw_environment.brush;
 
     this->ui_context = &ui_context;
     this->ui_context->add_component(*this);
@@ -65,7 +61,6 @@ void Editor::update() noexcept
     update_focus();
     update_keybindings();
     update_canvas_background();
-    update_effects();
 
     Clickable::update();
 
@@ -107,12 +102,6 @@ void Editor::update_canvas_background() noexcept
 }
 
 
-void Editor::update_effects() noexcept
-{
-    negative_effect_.update();
-}
-
-
 
 
 void Editor::draw_self() noexcept
@@ -128,29 +117,12 @@ void Editor::draw_to_canvas() noexcept
     canvas.canvas_renderer.begin_render();
     canvas.camera.enable();
         canvas.draw_strokes();
-        draw_selected_strokes(); // TODO: move this to SelectionEnvironment?
 
         current_environment->draw();
-        current_tool->draw();
 
         mouse_late_mode_indicator.draw();
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();
-}
-
-
-void Editor::draw_selected_strokes() noexcept
-{
-    if (canvas.stroke_meshes.size() == 0)
-        return;
-
-    selection_outline_mesh_renderer_.outline_thickness = SelectionOutlineBaseThickness / canvas.raylib_camera().zoom;
-
-    negative_effect_.enable();
-    canvas.stroke_renderer.set_mesh_renderer(selection_outline_mesh_renderer_);
-    canvas.draw_strokes();
-    canvas.stroke_renderer.set_mesh_renderer(default_mesh_renderer_);
-    negative_effect_.disable();
 }
 
 

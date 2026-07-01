@@ -27,12 +27,14 @@ public:
     MouseButtonEvent right_button;
     MouseButtonEvent middle_button;
 
+    Tool* current_tool = nullptr;
+
 
     explicit EditorEnvironment(Editor& editor) noexcept;
 
 
     void update() noexcept override;
-    void draw() noexcept override {}
+    void draw() noexcept override;
 
 
     void enable() noexcept override;

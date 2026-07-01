@@ -27,8 +27,18 @@ EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
 
 void EditorEnvironment::update() noexcept
 {
+    assert(current_tool);
+
     for (auto& tool : tools_)
         tool->update();
+}
+
+
+
+
+void EditorEnvironment::draw() noexcept
+{
+    current_tool->draw();
 }
 
 

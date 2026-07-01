@@ -1,11 +1,10 @@
 #pragma once
 
+#include "blackboard/editor/stroke/stroke_mesh_renderer.hpp"
 #include <blackboard/ui/context.hpp>
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/editor/mouse_late_mode_indicator.hpp>
-#include <blackboard/editor/effects/negative.hpp>
 #include <blackboard/editor/canvas.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
 
@@ -31,13 +30,7 @@ private:
     bool draw_statistics_ = false;
 
 
-    StrokeMeshRenderer default_mesh_renderer_;
-    StrokeMeshOutlineRenderer selection_outline_mesh_renderer_;
-
-    static constexpr float SelectionOutlineBaseThickness = 12;
-
-
-    NegativeEffect negative_effect_;
+    StrokeMeshRenderer default_stroke_mesh_renderer_;
 
 
 public:
@@ -52,8 +45,6 @@ public:
     EditorSelectionEnvironment selection_environment;
     EditorEnvironment* current_environment = nullptr;
 
-    Tool* current_tool = nullptr;
-
     MouseLateModeIndicator mouse_late_mode_indicator;
 
 
@@ -66,24 +57,23 @@ public:
     void update() noexcept override;
 
 
-    void set_current_tool(Tool& tool) noexcept { current_tool = &tool; }
-    void set_current_environment(EditorEnvironment& environment) noexcept { current_environment = &environment; current_environment->enable(); }
-
-
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept override { return {}; }
 
     [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
+
+    [[nodiscard]] const StrokeMeshRenderer& default_stroke_mesh_renderer() const noexcept { return default_stroke_mesh_renderer_; }
+
+
+    void set_current_environment(EditorEnvironment& environment) noexcept { current_environment = &environment; current_environment->enable(); }
 
 
 private:
     void update_focus() noexcept;
     void update_keybindings() noexcept;
     void update_canvas_background() noexcept;
-    void update_effects() noexcept;
 
     void draw_self() noexcept override;
     void draw_to_canvas() noexcept;
-    void draw_selected_strokes() noexcept;
     void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
 };
