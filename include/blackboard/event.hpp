@@ -89,7 +89,7 @@ public:
     void clear() noexcept { callbacks_.clear(); }
 
 
-    void trigger(const Args&... args) noexcept
+    void trigger(Args... args) noexcept
     {
         triggered_last_frame_ = true;
 
