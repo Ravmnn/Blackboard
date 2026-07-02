@@ -21,7 +21,7 @@ private:
 
 
 public:
-    using Tool::Tool;
+    friend class EraserBody;
 
 
     size_t iteration_amount = 8;

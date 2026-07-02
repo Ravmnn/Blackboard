@@ -23,7 +23,7 @@ protected:
 
 
 public:
-    unsigned int segments = 16;
+    unsigned int resolution = 32;
 
 
     RoundedRectangle(Component* parent, const Vector2& position, const Vector2& size, float radius = 0,

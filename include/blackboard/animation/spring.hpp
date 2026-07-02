@@ -84,6 +84,9 @@ public:
     }
 
 
+    void set_value_immediately(const T& value) noexcept { current = target = value; velocity = {}; }
+
+
 private:
     void apply_min_max() noexcept
     {

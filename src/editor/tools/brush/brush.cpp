@@ -12,7 +12,7 @@ using bb::editor::Brush;
 
 Brush::Brush(Editor& editor, const float thickness) noexcept : Tool(editor),
     stroke_({}, BLACK),
-    color_(editor_.palette.current_color()),
+    color_(editor.palette.current_color()),
     thickness(thickness),
     cursor(2),
     body(*this)
@@ -28,7 +28,7 @@ void Brush::update() noexcept
 
     Tool::update();
 
-    color_ = editor_.palette.current_color();
+    color_ = editor.palette.current_color();
 
     update_cursor();
     update_canvas_actions();
@@ -43,7 +43,7 @@ void Brush::update() noexcept
 
 void Brush::update_cursor() noexcept
 {
-    cursor.target_position = editor_.canvas.mouse_position();
+    cursor.target_position = editor.canvas.mouse_position();
     cursor.immediate = !active();
     cursor.update();
 }
@@ -52,7 +52,7 @@ void Brush::update_cursor() noexcept
 void Brush::update_canvas_actions() noexcept
 {
     if (got_inactive_)
-        editor_.canvas.add_stroke(stroke_);
+        editor.canvas.add_stroke(stroke_);
 }
 
 
@@ -81,7 +81,15 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 void Brush::draw() noexcept
 {
     if (!draw_finished())
-        editor_.canvas.stroke_renderer.draw_stroke(stroke());
+        editor.canvas.stroke_renderer.draw_stroke(stroke());
 
     body.draw();
+}
+
+
+
+
+Vector2 Brush::position() const noexcept
+{
+    return active() ? cursor.position() : editor.canvas.mouse_position();
 }

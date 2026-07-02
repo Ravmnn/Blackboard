@@ -49,4 +49,6 @@ void EditorEnvironment::on_enabled() noexcept
     editor.add_mouse_button_event_or_assign(left_button);
     editor.add_mouse_button_event_or_assign(right_button);
     editor.add_mouse_button_event_or_assign(middle_button);
+
+    editor.reset_buttons_state();
 }

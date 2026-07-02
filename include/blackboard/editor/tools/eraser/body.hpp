@@ -22,18 +22,21 @@ private:
 
 
 public:
-    const Eraser& eraser;
+    Eraser& eraser;
 
 
-    EraserBody(const Eraser& eraser) noexcept;
+    EraserBody(Eraser& eraser) noexcept;
 
 
     void update() noexcept override;
 
 
-protected:
+private:
     void update_trail() noexcept override;
     void update_color() noexcept override;
+
+
+    void on_editor_environment_changed() noexcept;
 };
 
 

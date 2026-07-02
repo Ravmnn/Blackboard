@@ -20,7 +20,7 @@ private:
     Stopwatch mouse_button_late_mode_stopwatch_;
     std::chrono::milliseconds time_to_enter_late_mode_;
 
-    std::optional<int> pressed_button_id_ = std::nullopt;
+    MouseButtonEvent* pressed_button_ = nullptr;
 
 
     animation::Spring<float> ring_radius_;

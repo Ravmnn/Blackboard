@@ -150,4 +150,6 @@ void Editor::set_current_environment(EditorEnvironment& environment) noexcept
 
     current_environment = &environment;
     current_environment->enable();
+
+    environment_changed.trigger();
 }

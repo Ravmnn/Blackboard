@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/stroke/trail.hpp>

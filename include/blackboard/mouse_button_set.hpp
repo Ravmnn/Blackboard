@@ -49,6 +49,9 @@ public:
     void update() noexcept override;
 
 
+    void reset_buttons_state() noexcept;
+
+
     [[nodiscard]] const std::map<int, MouseButtonEvent*>& mouse_buttons() const noexcept { return mouse_buttons_; }
 
     [[nodiscard]] bool is_down() const noexcept { return down.triggered(); }

@@ -40,9 +40,13 @@ public:
     Palette palette;
     bool dynamic_background_color = false;
 
+
+    Event<> environment_changed;
+
     EditorDrawingEnvironment draw_environment;
     EditorSelectionEnvironment selection_environment;
     EditorEnvironment* current_environment = nullptr;
+
 
     MouseLateModeIndicator mouse_late_mode_indicator;
 

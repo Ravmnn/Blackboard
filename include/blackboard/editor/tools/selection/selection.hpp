@@ -21,6 +21,9 @@ private:
 
 
 public:
+    friend class SelectionBody;
+
+
     SelectionBody body;
 
 

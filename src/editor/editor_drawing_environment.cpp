@@ -1,7 +1,11 @@
+#include "blackboard/editor/editor_environment.hpp"
 #include <blackboard/editor/editor_drawing_environment.hpp>
 
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
+
+#include <ios>
+#include <iostream>
 
 
 

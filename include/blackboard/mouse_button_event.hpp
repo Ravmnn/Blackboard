@@ -72,6 +72,9 @@ public:
     void update() noexcept override;
 
 
+    void reset_state() noexcept;
+
+
     [[nodiscard]] bool is_button_down() const noexcept { return IsMouseButtonDown(button_id); }
     [[nodiscard]] bool is_button_pressed() const noexcept { return IsMouseButtonPressed(button_id); }
     [[nodiscard]] bool is_button_released() const noexcept { return IsMouseButtonReleased(button_id); }

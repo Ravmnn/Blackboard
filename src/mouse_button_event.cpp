@@ -44,11 +44,11 @@ void MouseButtonEvent::update() noexcept
 
 void MouseButtonEvent::update_is_late_mode() noexcept
 {
-    if (late_mode_stopwatch_.elapsed_ms() >= time_to_enter_late_mode && !is_drag_)
-        is_late_ = enable_late_mode;
-
     if (!is_button_down())
         late_mode_stopwatch_.reset();
+
+    if (late_mode_stopwatch_.elapsed_ms() >= time_to_enter_late_mode && !is_drag_)
+        is_late_ = enable_late_mode;
 }
 
 
@@ -136,10 +136,7 @@ void MouseButtonEvent::trigger_release_event() noexcept
     }
 
 
-    is_drag_ = false;
-    is_late_ = false;
-    late_pressed_ = false;
-    press_position_.reset();
+    reset_state();
 }
 
 
@@ -150,6 +147,17 @@ void MouseButtonEvent::trigger_down_event() noexcept
 
     if (is_late_)
         late_down.trigger(*this);
+}
+
+
+
+
+void MouseButtonEvent::reset_state() noexcept
+{
+    is_drag_ = false;
+    is_late_ = false;
+    late_pressed_ = false;
+    press_position_.reset();
 }
 
 

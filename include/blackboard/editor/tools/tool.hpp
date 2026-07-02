@@ -16,27 +16,25 @@ namespace bb::editor
 
 
 class Editor;
-class Palette;
 
 
 class Tool : public Updateable, public Drawable, public Activatable
 {
 protected:
-    Editor& editor_;
-
     bool was_active_ = false;
     bool got_inactive_ = false;
     bool got_active_ = false;
 
 
 public:
-    explicit Tool(Editor& editor) noexcept : editor_(editor) {}
+    Editor& editor;
+
+
+    explicit Tool(Editor& editor) noexcept : editor(editor) {}
 
 
     void update() noexcept override;
 
-
-    [[nodiscard]] const Editor& editor() const noexcept { return editor_; }
 
     [[nodiscard]] virtual Vector2 position() const noexcept = 0;
 

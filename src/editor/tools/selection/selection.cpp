@@ -1,14 +1,11 @@
 #include <blackboard/editor/tools/selection/selection.hpp>
 
-#include <blackboard/draw.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
 
 
-using bb::editor::Selection,
-    bb::Draw,
-    bb::math::Rect;
+using bb::editor::Selection;
 
 
 
@@ -40,7 +37,7 @@ void Selection::draw() noexcept
 
 Vector2 Selection::position() const noexcept
 {
-    return editor_.canvas.mouse_position();
+    return editor.canvas.mouse_position();
 }
 
 

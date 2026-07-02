@@ -45,6 +45,15 @@ void MouseButtonSet::update_events() noexcept
 
 
 
+void MouseButtonSet::reset_buttons_state() noexcept
+{
+    for (auto& pair : mouse_buttons_)
+        pair.second->reset_state();
+}
+
+
+
+
 bb::MouseButtonEvent& MouseButtonSet::add_mouse_button_event(const int id, const MousePositionProvider& provider, Clickable* clickable) noexcept
 {
     auto* const button = new MouseButtonEvent(id, provider);

@@ -35,11 +35,11 @@ void RoundedRectangle::update_self() noexcept
 
 void RoundedRectangle::draw_filled() noexcept
 {
-    Draw::rounded_rectangle(top_left_absolute_position(), size_, radius_, color_, segments);
+    Draw::rounded_rectangle(top_left_absolute_position(), size_, radius_, color_, resolution);
 }
 
 
 void RoundedRectangle::draw_outlined() noexcept
 {
-    Draw::rounded_rectangle_outline(top_left_absolute_position(), size_, radius_, outline_thickness_, color_, segments);
+    Draw::rounded_rectangle_outline(top_left_absolute_position(), size_, radius_, outline_thickness_, outline_color_, resolution);
 }

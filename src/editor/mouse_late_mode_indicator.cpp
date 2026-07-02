@@ -13,8 +13,8 @@ using bb::editor::MouseLateModeIndicator;
 
 
 MouseLateModeIndicator::MouseLateModeIndicator(const MousePositionProvider& mouse_provider, MouseButtonSet& buttons) noexcept :
-    ring_radius_(0, 0, 0.3, 30),
-    ring_transparency_(0, 4),
+    ring_radius_(0, 0, 0.3, 25),
+    ring_transparency_(0, 3),
 
     mouse_provider(mouse_provider),
     buttons(buttons)
@@ -33,6 +33,9 @@ void MouseLateModeIndicator::update() noexcept
     if (!buttons.mouse_buttons().empty())
         time_to_enter_late_mode_ = buttons.mouse_buttons().begin()->second->time_to_enter_late_mode;
 
+    if (pressed_button_ && pressed_button_ != &buttons[pressed_button_->button_id])
+        leave_late_mode();
+
     update_appearence();
     update_animations();
 }
@@ -40,7 +43,7 @@ void MouseLateModeIndicator::update() noexcept
 
 void MouseLateModeIndicator::update_appearence() noexcept
 {
-    if (!pressed_button_id_)
+    if (!pressed_button_)
         base_appearence();
     else
         late_mode_appearence();
@@ -101,13 +104,13 @@ void MouseLateModeIndicator::draw() noexcept
 void MouseLateModeIndicator::enter_late_mode(const MouseButtonEvent& button) noexcept
 {
     mouse_button_late_mode_stopwatch_.reset();
-    pressed_button_id_ = button.button_id;
+    pressed_button_ = &buttons[button.button_id];
 }
 
 
 void MouseLateModeIndicator::leave_late_mode() noexcept
 {
-    pressed_button_id_.reset();
+    pressed_button_ = nullptr;
 }
 
 
@@ -115,7 +118,7 @@ void MouseLateModeIndicator::leave_late_mode() noexcept
 
 void MouseLateModeIndicator::on_button_press(const MouseButtonEvent& button) noexcept
 {
-    if (!button.enable_late_mode || pressed_button_id_)
+    if (!button.enable_late_mode || pressed_button_)
         return;
 
     enter_late_mode(button);
@@ -124,7 +127,7 @@ void MouseLateModeIndicator::on_button_press(const MouseButtonEvent& button) noe
 
 void MouseLateModeIndicator::on_button_release(const MouseButtonEvent& button) noexcept
 {
-    if (!pressed_button_id_ || button.button_id != *pressed_button_id_)
+    if (!pressed_button_ || button.button_id != pressed_button_->button_id)
         return;
 
     leave_late_mode();

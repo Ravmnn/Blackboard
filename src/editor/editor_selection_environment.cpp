@@ -21,8 +21,13 @@ EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept 
     negative_effect_.default_color = RED;
 
 
-    left_button.press.subscribe([this](const auto&) noexcept { current_tool->enable(); });
-    left_button.release.subscribe([this](const auto&) noexcept { current_tool->disable(); });
+    left_button.min_drag_distance = 5;
+    left_button.drag_start.subscribe([this](auto&) noexcept { current_tool->enable(); });
+    left_button.drag_end.subscribe([this](const auto&) noexcept { current_tool->disable(); });
+
+    left_button.click.subscribe([&](const auto&) noexcept { editor.set_current_environment(editor.draw_environment); });
+
+    right_button.release.subscribe([this](const auto&) noexcept { current_tool->disable(); });
 }
 
 

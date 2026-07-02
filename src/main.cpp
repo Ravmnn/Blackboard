@@ -25,7 +25,7 @@ int main(int /*unused*/, char** /*unused*/)
         window_renderer.use_buffer_texture = false;
 
         Context ui_context;
-        Editor editor(ui_context);
+        new Editor(ui_context);
 
         while (!WindowShouldClose())
         {
