@@ -15,14 +15,16 @@ using bb::editor::CanvasRenderer,
 
 CanvasRenderer::CanvasRenderer(const Canvas& canvas) noexcept :
     canvas(canvas)
-{}
+{
+    super_sampled_texture_.load_stencil();
+}
 
 
 
 
 void CanvasRenderer::initialize() noexcept
 {
-    recreate_texture_renderer();
+    resize_texture_renderer();
 
     Initializable::initialize();
 }
@@ -35,18 +37,18 @@ void CanvasRenderer::update() noexcept
     initialize_if_uninitialized();
 
     if (IsWindowResized())
-        recreate_texture_renderer();
+        resize_texture_renderer();
 
     super_sampled_texture_.clear_color = canvas.background_color;
 }
 
 
-void CanvasRenderer::recreate_texture_renderer() noexcept
+void CanvasRenderer::resize_texture_renderer() noexcept
 {
     const Vector2 screen_resolution = WindowRenderer::screen_resolution();
 
-    super_sampled_texture_ = TextureRenderer(screen_resolution * SuperSamplingFactor, true);
-    final_texture_ = TextureRenderer(screen_resolution);
+    super_sampled_texture_.resize(screen_resolution * SuperSamplingFactor);
+    final_texture_.resize(screen_resolution);
 }
 
 

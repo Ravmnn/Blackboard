@@ -45,7 +45,7 @@ public:
 
 
 private:
-    void recreate_texture_renderer() noexcept;
+    void resize_texture_renderer() noexcept;
 
     void draw_super_sampled_to_final_texture() noexcept;
 };
