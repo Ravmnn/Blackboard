@@ -36,26 +36,26 @@ public:
     ~TextureRenderer() override { unload_stencil(); }
 
 
-    TextureRenderer& operator=(TextureRenderer&&) = default;
-
-
     void begin_render() noexcept override;
     void end_render() noexcept override;
 
 
+    void load_stencil() noexcept;
+    void unload_stencil() noexcept;
+
+
     void generate_mipmaps() noexcept { GenTextureMipmaps(&render_texture_.texture()); }
+
+    void resize(const Vector2& size) noexcept;
 
 
     [[nodiscard]] RenderTexture contents() const noexcept override { return render_texture_; }
     RenderTexture release_contents() noexcept { return render_texture_.release(); }
 
+    [[nodiscard]] bool has_stencil_and_depth_buffer() const noexcept { return stencil_id_ != 0; }
+
 
     static void draw_y_inverted_texture(const Texture& texture) noexcept;
-
-
-private:
-    void load_stencil() noexcept;
-    void unload_stencil() noexcept;
 };
 
 

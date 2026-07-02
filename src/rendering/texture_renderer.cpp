@@ -36,14 +36,6 @@ void TextureRenderer::end_render() noexcept
 
 
 
-void TextureRenderer::draw_y_inverted_texture(const Texture& texture) noexcept
-{
-    DrawTextureRec(texture, { 0, 0, (float)texture.width, (float)-texture.height }, {}, WHITE);
-}
-
-
-
-
 void TextureRenderer::load_stencil() noexcept
 {
     const Vector2 texture_size = render_texture_.size();
@@ -62,4 +54,28 @@ void TextureRenderer::load_stencil() noexcept
 void TextureRenderer::unload_stencil() noexcept
 {
     glDeleteRenderbuffers(1, &stencil_id_);
+    stencil_id_ = 0;
+}
+
+
+
+
+void TextureRenderer::resize(const Vector2& size) noexcept
+{
+    UnloadRenderTexture(render_texture_);
+    render_texture_ = ScopedRenderTexture(size);
+
+    if (!has_stencil_and_depth_buffer())
+        return;
+
+    unload_stencil();
+    load_stencil();
+}
+
+
+
+
+void TextureRenderer::draw_y_inverted_texture(const Texture& texture) noexcept
+{
+    DrawTextureRec(texture, { 0, 0, (float)texture.width, (float)-texture.height }, {}, WHITE);
 }
