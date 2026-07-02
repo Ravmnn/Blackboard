@@ -80,5 +80,8 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 
 void Brush::draw() noexcept
 {
+    if (!draw_finished())
+        editor_.canvas.stroke_renderer.draw_stroke(stroke());
+
     body.draw();
 }

@@ -10,9 +10,19 @@ using bb::editor::EditorSelectionEnvironment;
 
 
 
-EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor)
+EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
+    selection(editor)
 {
+    tools_.push_back(&selection);
+
+    current_tool = &selection;
+
+
     negative_effect_.default_color = RED;
+
+
+    left_button.press.subscribe([this](const auto&) noexcept { current_tool->enable(); });
+    left_button.release.subscribe([this](const auto&) noexcept { current_tool->disable(); });
 }
 
 
@@ -20,6 +30,8 @@ EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept 
 
 void EditorSelectionEnvironment::update() noexcept
 {
+    EditorEnvironment::update();
+
     negative_effect_.update();
 }
 
@@ -29,6 +41,8 @@ void EditorSelectionEnvironment::update() noexcept
 void EditorSelectionEnvironment::draw() noexcept
 {
     draw_selected_strokes();
+
+    EditorEnvironment::draw();
 }
 
 
@@ -44,4 +58,14 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
     editor.canvas.draw_strokes();
     editor.canvas.stroke_renderer.set_mesh_renderer(editor.default_stroke_mesh_renderer());
     negative_effect_.disable();
+}
+
+
+
+
+void EditorSelectionEnvironment::on_enabled() noexcept
+{
+    EditorEnvironment::on_enabled();
+
+    editor.dynamic_background_color = false;
 }

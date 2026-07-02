@@ -25,7 +25,7 @@ protected:
 
 
 public:
-    using ButtonEvent = Event<MouseButtonEvent>;
+    using ButtonEvent = Event<const MouseButtonEvent&>;
 
 
     ButtonEvent down;

@@ -23,10 +23,11 @@ public:
     explicit EditorDrawingEnvironment(Editor& editor) noexcept;
 
 
-    void draw() noexcept override;
-
-
     void alternate_brush_and_eraser() noexcept;
+
+
+protected:
+    void on_enabled() noexcept override;
 };
 
 

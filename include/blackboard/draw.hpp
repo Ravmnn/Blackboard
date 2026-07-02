@@ -4,10 +4,10 @@
 #include <cstddef>
 #include <cmath>
 
-#include <raylib.h>
-#include <raymath.h>
-
+#include <blackboard/math/rect.hpp>
 #include <blackboard/rendering/stencil.hpp>
+
+#include <raymath.h>
 
 
 
@@ -30,6 +30,34 @@ private:
 
 
 public:
+    static void rounded_rectangle(const Rectangle& rectangle, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
+    {
+        rounded_rectangle({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, color, resolution);
+    }
+
+
+    static void rounded_rectangle_outline(const Rectangle& rectangle, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32)
+    {
+        rounded_rectangle_outline({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, thickness, color, resolution);
+    }
+
+
+    static void rounded_rectangle(const Vector2& position, const Vector2& size, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
+    {
+        const float normalized_radius = math::Rect::get_normalized_radius(size, radius);
+        DrawRectangleRounded({ position.x, position.y, size.x, size.y }, normalized_radius, (int)resolution, color);
+    }
+
+
+    static void rounded_rectangle_outline(const Vector2& position, const Vector2& size, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32)
+    {
+        const float normalized_radius = math::Rect::get_normalized_radius(size, radius);
+        DrawRectangleRoundedLinesEx({ position.x, position.y, size.x, size.y }, normalized_radius, (int)resolution, thickness, color);
+    }
+
+
+
+
     static void stretched_ellipse(const Vector2& position, const float radius, const float stretch, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         ellipse(position, radius + stretch, radius, color, resolution);

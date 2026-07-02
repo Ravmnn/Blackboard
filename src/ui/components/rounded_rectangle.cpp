@@ -1,9 +1,12 @@
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 
+#include <blackboard/draw.hpp>
 
 
 
-using bb::ui::RoundedRectangle;
+
+using bb::ui::RoundedRectangle,
+    bb::Draw;
 
 
 
@@ -32,13 +35,11 @@ void RoundedRectangle::update_self() noexcept
 
 void RoundedRectangle::draw_filled() noexcept
 {
-    const float normalized_radius = get_normalized_radius(radius_);
-    DrawRectangleRounded({ top_left_absolute_position().x, top_left_absolute_position().y, size_.current.x, size_.current.y }, normalized_radius, (int)segments, color_);
+    Draw::rounded_rectangle(top_left_absolute_position(), size_, radius_, color_, segments);
 }
 
 
 void RoundedRectangle::draw_outlined() noexcept
 {
-    const float normalized_radius = get_normalized_radius(radius_);
-    DrawRectangleRoundedLinesEx({ top_left_absolute_position().x, top_left_absolute_position().y, size_.current.x, size_.current.y }, normalized_radius, (int)segments, outline_thickness_, outline_color_);
+    Draw::rounded_rectangle_outline(top_left_absolute_position(), size_, radius_, outline_thickness_, color_, segments);
 }

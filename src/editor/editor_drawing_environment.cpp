@@ -29,6 +29,11 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
     right_button.drag_start.subscribe([&](const auto&) noexcept { alternate_brush_and_eraser(); current_tool->enable(); });
     right_button.drag_end.subscribe([&](const auto&) noexcept { current_tool->disable(); alternate_brush_and_eraser(); });
 
+    right_button.late_drag_start.subscribe([&](const auto&) noexcept {
+        editor.set_current_environment(editor.selection_environment);
+        editor.selection_environment.current_tool->enable();
+    });
+
     middle_button.click.subscribe([&](const auto&) noexcept { editor.color_menu->toggle(GetMousePosition()); });
 
 
@@ -39,18 +44,17 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
 
 
 
-void EditorDrawingEnvironment::draw() noexcept
+void EditorDrawingEnvironment::alternate_brush_and_eraser() noexcept
 {
-    EditorEnvironment::draw();
-
-    if (!brush.draw_finished())
-        editor.canvas.stroke_renderer.draw_stroke(brush.stroke());
+    current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush;
 }
 
 
 
 
-void EditorDrawingEnvironment::alternate_brush_and_eraser() noexcept
+void EditorDrawingEnvironment::on_enabled() noexcept
 {
-    current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush;
+    EditorEnvironment::on_enabled();
+
+    editor.dynamic_background_color = true;
 }

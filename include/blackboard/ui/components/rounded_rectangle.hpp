@@ -1,5 +1,6 @@
 #pragma once
 
+#include <blackboard/math/rect.hpp>
 #include <blackboard/ui/components/shape.hpp>
 
 #include <raymath.h>
@@ -37,10 +38,9 @@ public:
     void set_radius(const float radius) noexcept { radius_.target = radius;}
 
 
-    void set_normalized_radius(const float normalized_radius) noexcept { radius_.target = get_radius_from_normalized(normalized_radius); }
-
-    [[nodiscard]] float get_radius_from_normalized(const float normalized_radius) const noexcept { return normalized_radius * std::min(size_.current.x, size_.current.y); }
-    [[nodiscard]] float get_normalized_radius(const float radius) const noexcept { return (radius * 2) / std::min(size_.current.x, size_.current.y); }
+    void set_normalized_radius(const float normalized_radius) noexcept {
+        radius_.target = math::Rect::get_corner_radius_from_normalized(size_, normalized_radius);
+    }
 
 
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {

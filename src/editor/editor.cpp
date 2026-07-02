@@ -139,3 +139,15 @@ void Editor::draw_statistics() const noexcept
 
     DrawText(std::to_string(GetFPS()).c_str(), 0, 0, 30, WHITE);
 }
+
+
+
+
+void Editor::set_current_environment(EditorEnvironment& environment) noexcept
+{
+    if (current_environment)
+        current_environment->disable();
+
+    current_environment = &environment;
+    current_environment->enable();
+}

@@ -37,7 +37,8 @@ public:
     void draw() noexcept override;
 
 
-    void enable() noexcept override;
+protected:
+    void on_enabled() noexcept override;
 };
 
 

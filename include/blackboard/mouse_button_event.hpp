@@ -33,7 +33,7 @@ private:
 
 
 public:
-    using EventType = Event<MouseButtonEvent>;
+    using EventType = Event<const MouseButtonEvent&>;
 
 
     const MousePositionProvider& mouse_position_provider;

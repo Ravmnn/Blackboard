@@ -1,6 +1,5 @@
 #pragma once
 
-#include "blackboard/editor/stroke/stroke_mesh_renderer.hpp"
 #include <blackboard/ui/context.hpp>
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/editor/mouse_late_mode_indicator.hpp>
@@ -39,7 +38,7 @@ public:
 
     Canvas canvas;
     Palette palette;
-    bool dynamic_background_color = true;
+    bool dynamic_background_color = false;
 
     EditorDrawingEnvironment draw_environment;
     EditorSelectionEnvironment selection_environment;
@@ -64,7 +63,7 @@ public:
     [[nodiscard]] const StrokeMeshRenderer& default_stroke_mesh_renderer() const noexcept { return default_stroke_mesh_renderer_; }
 
 
-    void set_current_environment(EditorEnvironment& environment) noexcept { current_environment = &environment; current_environment->enable(); }
+    void set_current_environment(EditorEnvironment& environment) noexcept;
 
 
 private:
