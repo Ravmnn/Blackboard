@@ -15,8 +15,8 @@ using bb::editor::Bubble,
 
 
 Bubble::Bubble(const float thickness) noexcept :
-    thickness(thickness, thickness, 0.15, 40),
-    stretch(0, 0, 0.01, 30),
+    thickness(thickness, 0.15, 40),
+    stretch(0, 0.01, 30),
     outline_thickness(2, 5),
 
     color(WHITE, 5),

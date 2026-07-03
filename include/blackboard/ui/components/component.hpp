@@ -1,5 +1,6 @@
 #pragma once
 
+#include "raylib.h"
 #include <memory>
 #include <vector>
 #include <functional>
@@ -57,7 +58,7 @@ public:
 
 
     [[nodiscard]] Vector2 relative_position() const noexcept { return relative_position_.current; }
-    [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : relative_position_; }
+    [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : (Vector2)relative_position_; }
 
     [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position() - bounding_box_size() / 2; }
     [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
@@ -102,7 +103,7 @@ protected:
     template <typename T>
     static animation::Spring<T> create_default_spring(const T& current) noexcept
     {
-        return animation::Spring<T>(current, current, DefaultSpringDamping, DefaultSpringSpeed);
+        return animation::Spring<T>(current, DefaultSpringDamping, DefaultSpringSpeed);
     }
 
 

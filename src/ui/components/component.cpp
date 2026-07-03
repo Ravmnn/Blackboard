@@ -12,7 +12,7 @@ using bb::ui::Component;
 
 
 Component::Component(Component* const parent, const Vector2& relative_position) noexcept :
-    relative_position_(relative_position, relative_position, DefaultSpringDamping, DefaultSpringSpeed),
+    relative_position_(relative_position, DefaultSpringDamping, DefaultSpringSpeed),
     parent(parent)
 {
     enable();

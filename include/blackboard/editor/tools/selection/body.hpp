@@ -1,5 +1,6 @@
 #pragma once
 
+#include "blackboard/animation/interpolation.hpp"
 #include "blackboard/animation/spring.hpp"
 #include <raylib.h>
 
@@ -21,11 +22,11 @@ class Selection;
 class SelectionBody : public Updateable, public Drawable
 {
 private:
-    animation::Spring<Vector2> rectangle_position_;
-    animation::Spring<Vector2> rectangle_size_;
+    animation::ExponentialInterpolation<Vector2> rectangle_position_;
+    animation::ExponentialInterpolation<Vector2> rectangle_size_;
 
-    Color rectangle_color_ = ColorAlpha(RED, 0.5);
-    Color rectangle_outline_color_ = ColorAlpha(RED, 0.85);
+    Color rectangle_color_ = ColorAlpha(RED, 0.3);
+    Color rectangle_outline_color_ = ColorAlpha(RED, 0.7);
 
     static constexpr float IdleSize = 20;
     static constexpr float Radius = 5;
