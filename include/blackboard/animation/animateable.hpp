@@ -1,8 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <algorithm>
-
 #include <blackboard/updateable.hpp>
 #include <blackboard/vector.hpp>
 
@@ -26,6 +23,9 @@ public:
     Animateable() = default;
     explicit Animateable(const T& current) noexcept
         : current(current), target(current) {}
+
+
+    Animateable<T>& operator=(const Animateable<T>&) = delete;
 
 
     operator T() const noexcept { return current; }

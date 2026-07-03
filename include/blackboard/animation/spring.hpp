@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <raylib.h>
 
 #include <blackboard/animation/animateable.hpp>

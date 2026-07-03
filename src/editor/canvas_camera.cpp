@@ -14,7 +14,13 @@ using bb::editor::CanvasCamera, bb::animation::ExponentialInterpolation;
 
 
 CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept :
-    canvas(canvas), min_zoom(min_zoom), max_zoom(max_zoom), zoom_factor(zoom_factor)
+    movement_interpolation_(target_camera_.target, 6),
+    zoom_interpolation_(target_camera_.zoom, 5),
+
+    canvas(canvas),
+    min_zoom(min_zoom),
+    max_zoom(max_zoom),
+    zoom_factor(zoom_factor)
 {
     target_camera_ = Camera2D{
         .target = {},
@@ -23,9 +29,6 @@ CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const flo
     };
 
     camera_ = target_camera_;
-
-    movement_interpolation_ = ExponentialInterpolation(target_camera_.target, 6);
-    zoom_interpolation_ = ExponentialInterpolation(target_camera_.zoom, 5);
 }
 
 

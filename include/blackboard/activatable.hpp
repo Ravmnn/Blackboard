@@ -11,7 +11,6 @@ namespace bb
 
 
 
-// TODO: go through all project and check whether a class should be copiable, movable or neither
 class Activatable
 {
 private:
