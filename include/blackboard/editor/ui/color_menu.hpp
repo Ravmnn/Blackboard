@@ -1,7 +1,7 @@
 #pragma once
 
 #include <blackboard/event.hpp>
-#include <blackboard/collisions.hpp>
+#include <blackboard/math/collisions.hpp>
 #include <blackboard/editor/ui/radial_layout.hpp>
 #include <blackboard/ui/components/shape.hpp>
 #include <blackboard/ui/components/button.hpp>

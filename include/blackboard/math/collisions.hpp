@@ -6,7 +6,7 @@
 
 
 
-namespace bb
+namespace bb::math
 {
 
 

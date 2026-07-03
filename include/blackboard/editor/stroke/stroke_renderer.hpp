@@ -1,6 +1,6 @@
 #pragma once
 
-#include <blackboard/collisions.hpp>
+#include <blackboard/math/collisions.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
@@ -51,7 +51,7 @@ private:
 
     [[nodiscard]] static bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept
     {
-        return Collisions::point_inside_rectangle(node.position(), camera_bounds);
+        return math::Collisions::point_inside_rectangle(node.position(), camera_bounds);
     }
 
     void draw_extreme_caps(const StrokeMesh& mesh) noexcept;
