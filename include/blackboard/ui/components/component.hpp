@@ -31,10 +31,6 @@ concept ComponentDerived = std::derived_from<T, Component>;
 
 class Component : public Updateable, public Drawable, public Activatable
 {
-protected:
-    animation::Spring<Vector2> relative_position_;
-
-
 public:
     static constexpr float DefaultSpringSpeed = 12.0f;
     static constexpr float DefaultSpringDamping = 0.6f;
@@ -50,6 +46,9 @@ public:
     bool clip = true;
 
 
+    animation::Spring<Vector2> relative_position;
+
+
     explicit Component(Component* parent, const Vector2& relative_position) noexcept;
 
 
@@ -57,14 +56,12 @@ public:
     void draw() noexcept override;
 
 
-    [[nodiscard]] Vector2 relative_position() const noexcept { return relative_position_.current; }
-    [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position_ : (Vector2)relative_position_; }
+    [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position : (Vector2)relative_position; }
 
-    [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position() - bounding_box_size() / 2; }
+    [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position - bounding_box_size() / 2; }
     [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
 
-    void set_relative_position(const Vector2& position) noexcept { relative_position_.target = position; }
-    void set_absolute_position(const Vector2& position) noexcept { relative_position_.target = position - (parent ? parent->absolute_position() : Vector2{}); }
+    void set_absolute_position(const Vector2& position) noexcept { relative_position.target = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
     [[nodiscard]] virtual Rectangle relative_bounding_box() const noexcept = 0;

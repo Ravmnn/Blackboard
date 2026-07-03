@@ -15,10 +15,10 @@ ColorMenuButton::ColorMenuButton(ColorMenu* const parent, const Color& color) no
 {
     clip = false;
 
-    relative_position_.speed = size_.speed = SpringSpeed;
-    relative_position_.damping = size_.damping = SpringDamping;
+    relative_position.speed = size.speed = SpringSpeed;
+    relative_position.damping = size.damping = SpringDamping;
 
-    color_.speed = ColorInterpolationSpeed;
+    this->color.speed = ColorInterpolationSpeed;
 }
 
 
@@ -28,7 +28,7 @@ void ColorMenuButton::on_entered() noexcept
 {
     Button::on_entered();
 
-    set_size(DefaultHoveredSize);
+    size = DefaultHoveredSize;
 }
 
 
@@ -36,5 +36,5 @@ void ColorMenuButton::on_leaved() noexcept
 {
     Button::on_leaved();
 
-    set_size(DefaultSize);
+    size = DefaultSize;
 }

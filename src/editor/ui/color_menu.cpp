@@ -19,7 +19,7 @@ ColorMenu::ColorMenu(Component* const parent) noexcept : RadialLayout(parent, {}
 {
     clip = false;
     visible = false;
-    relative_position_.immediate = true;
+    relative_position.immediate = true;
 
     radius_.set_value_immediately(HiddenRadius);
     set_children_opacity(HiddenOpacity);
@@ -96,7 +96,7 @@ void ColorMenu::update_self() noexcept
         if (!child->is_clicked())
             return;
 
-        color_selected.trigger(ColorAlpha(child->color(), 255));
+        color_selected.trigger(ColorAlpha(child->color, 255));
         child->leaved.trigger();
     });
 }

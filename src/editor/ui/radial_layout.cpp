@@ -27,7 +27,7 @@ void RadialLayout::update_self() noexcept
 void RadialLayout::update_children_position() noexcept
 {
     for (size_t i = 0; i < children.size(); i++)
-        children[i]->set_relative_position(get_position_for_child(*children[i], i));
+        children[i]->relative_position = get_position_for_child(*children[i], i);
 }
 
 

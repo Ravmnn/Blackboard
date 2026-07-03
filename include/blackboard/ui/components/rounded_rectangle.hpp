@@ -16,13 +16,10 @@ namespace bb::ui
 
 class RoundedRectangle : public Shape
 {
-protected:
-    // TODO: move to public
-    animation::Spring<Vector2> size_;
-    animation::ExponentialInterpolation<float> radius_;
-
-
 public:
+    animation::Spring<Vector2> size;
+    animation::ExponentialInterpolation<float> radius;
+
     unsigned int resolution = 32;
 
 
@@ -30,21 +27,16 @@ public:
         const Color& color = WHITE, float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
 
 
-    [[nodiscard]] const Vector2& size() const noexcept { return size_.current; }
-    [[nodiscard]] Vector2 half_size() const noexcept { return size() / 2; }
-    [[nodiscard]] float radius() const noexcept { return radius_; }
-
-    void set_size(const Vector2& size) noexcept { size_.target = size; }
-    void set_radius(const float radius) noexcept { radius_.target = radius;}
+    [[nodiscard]] Vector2 half_size() const noexcept { return size / 2; }
 
 
     void set_normalized_radius(const float normalized_radius) noexcept {
-        radius_.target = math::Rect::get_corner_radius_from_normalized(size_, normalized_radius);
+        radius.target = math::Rect::get_corner_radius_from_normalized(size, normalized_radius);
     }
 
 
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
-        return { relative_position_.current.x - half_size().x, relative_position_.current.y - half_size().y, size_.current.x, size_.current.y };
+        return { relative_position.current.x - half_size().x, relative_position.current.y - half_size().y, size.current.x, size.current.y };
     }
 
 

@@ -14,7 +14,7 @@ using bb::editor::MouseLateModeIndicator;
 
 MouseLateModeIndicator::MouseLateModeIndicator(const MousePositionProvider& mouse_provider, MouseButtonSet& buttons) noexcept :
     ring_radius_(0, 0.3, 25),
-    ring_transparency_(0, 3),
+    ring_transparency_(0, 3.75),
 
     mouse_provider(mouse_provider),
     buttons(buttons)

@@ -1,4 +1,3 @@
-#include "blackboard/mouse_button_event.hpp"
 #include <blackboard/ui/components/button.hpp>
 
 #include <algorithm>
@@ -37,14 +36,14 @@ bool Button::is_point_over(const Vector2& point) const noexcept
     const Vector2 top_left = top_left_absolute_position();
 
     const Vector2 inner = {
-        std::clamp(point.x, top_left.x + radius_, top_left.x + size().x - radius_),
-        std::clamp(point.y, top_left.y + radius_, top_left.y + size().y - radius_)
+        std::clamp(point.x, top_left.x + radius, top_left.x + size.current.x - radius),
+        std::clamp(point.y, top_left.y + radius, top_left.y + size.current.y - radius)
     };
 
     const float dx = point.x - inner.x;
     const float dy = point.y - inner.y;
 
-    return dx * dx + dy * dy <= radius_ * radius_;
+    return dx * dx + dy * dy <= radius * radius;
 }
 
 

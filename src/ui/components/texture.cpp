@@ -21,6 +21,6 @@ TextureComponent::TextureComponent(Component* const parent, const Vector2& posit
 void TextureComponent::draw_self() noexcept
 {
     begin_drawing();
-    DrawTexturePro(texture_, { 0, 0, (float)texture_.width, (float)texture_.height }, { relative_position().x, relative_position().y, size.x, size.y }, {}, 0, tint);
+    DrawTexturePro(texture_, { 0, 0, (float)texture_.width, (float)texture_.height }, { relative_position.current.x, relative_position.current.y, size.x, size.y }, {}, 0, tint);
     end_drawing();
 }

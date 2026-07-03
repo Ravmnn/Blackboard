@@ -12,8 +12,8 @@ using bb::ui::Component;
 
 
 Component::Component(Component* const parent, const Vector2& relative_position) noexcept :
-    relative_position_(relative_position, DefaultSpringDamping, DefaultSpringSpeed),
-    parent(parent)
+    parent(parent),
+    relative_position(relative_position, DefaultSpringDamping, DefaultSpringSpeed)
 {
     enable();
 
@@ -71,7 +71,7 @@ void Component::end_drawing() noexcept
 
 void Component::update_self() noexcept
 {
-    relative_position_.update();
+    relative_position.update();
 }
 
 
