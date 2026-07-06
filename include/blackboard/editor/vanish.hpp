@@ -40,10 +40,10 @@ public:
     explicit Vanish(T& object, const float scale_speed = 2, const float transparency_speed = 1.5) noexcept :
         texture_(true),
 
-        scale(1, scale_speed),
-        transparency(1.5, transparency_speed),
+        object(object),
 
-        object(object)
+        scale(1, scale_speed),
+        transparency(1.5, transparency_speed)
     {
         scale = 1.5;
         transparency = 0;
