@@ -1,11 +1,7 @@
-#include "blackboard/editor/editor_environment.hpp"
 #include <blackboard/editor/editor_drawing_environment.hpp>
 
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
-
-#include <ios>
-#include <iostream>
 
 
 
@@ -15,6 +11,7 @@ using bb::editor::EditorDrawingEnvironment;
 
 
 
+// TODO: LMB selecting replaces selection. RMB selecting appends selection
 EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
     brush(editor, 14),
     eraser(editor)
@@ -30,10 +27,7 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
 
     right_button.min_drag_distance = 75;
     right_button.click.subscribe([&](const auto&) noexcept { alternate_brush_and_eraser(); });
-    right_button.drag_start.subscribe([&](const auto&) noexcept { alternate_brush_and_eraser(); current_tool->enable(); });
-    right_button.drag_end.subscribe([&](const auto&) noexcept { current_tool->disable(); alternate_brush_and_eraser(); });
-
-    right_button.late_drag_start.subscribe([&](const auto&) noexcept {
+    right_button.drag_start.subscribe([&](const auto&) noexcept {
         editor.set_current_environment(editor.selection_environment);
         editor.selection_environment.current_tool->enable();
     });

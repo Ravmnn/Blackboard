@@ -16,8 +16,8 @@ using bb::editor::SelectionBody,
 
 // TODO: selection should last until the user leave the selection mode
 SelectionBody::SelectionBody(Selection& selection) noexcept :
-    rectangle_position_({}, 7),
-    rectangle_size_({}, 7),
+    rectangle_position_({}, 6),
+    rectangle_size_({}, 6),
 
     selection(selection)
 {
