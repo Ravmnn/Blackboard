@@ -56,10 +56,7 @@ void SelectionBody::set_rectangle_to_selection_two_points() noexcept
 
 void SelectionBody::set_rectangle_idle() noexcept
 {
-    Vector2 position = selection.position();
-    position -= Vector2{ IdleSize, IdleSize } / 2;
-
-    rectangle_position_ = position;
+    rectangle_position_ = selection.position() - Vector2{ IdleSize, IdleSize } / 2;
     rectangle_size_ = { IdleSize, IdleSize };
 }
 
@@ -85,5 +82,6 @@ void SelectionBody::draw() noexcept
 
 void SelectionBody::on_editor_environment_changed() noexcept
 {
-    rectangle_position_.set_value_immediately(selection.position());
+    set_rectangle_idle();
+    rectangle_position_.set_value_immediately(rectangle_position_.target);
 }

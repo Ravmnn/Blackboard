@@ -3,8 +3,6 @@
 #include <blackboard/math/rect.hpp>
 #include <blackboard/ui/components/shape.hpp>
 
-#include <raymath.h>
-
 
 
 
@@ -35,7 +33,7 @@ public:
     }
 
 
-    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
+    [[nodiscard]] Rectangle bounding_box() const noexcept override {
         return { relative_position.current.x - half_size().x, relative_position.current.y - half_size().y, size.current.x, size.current.y };
     }
 

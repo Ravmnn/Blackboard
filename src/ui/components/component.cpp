@@ -77,10 +77,12 @@ void Component::update_self() noexcept
 
 
 
-Vector2 Component::bounding_box_size() const noexcept
+Rectangle Component::absolute_bounding_box() const noexcept
 {
-    const Rectangle bounding_box = relative_bounding_box();
-    return { bounding_box.width, bounding_box.height };
+    const Vector2 absolute_position = top_left_absolute_position();
+    const Vector2 size = box_size();
+
+    return { absolute_position.x, absolute_position.y, size.x, size.y };
 }
 
 

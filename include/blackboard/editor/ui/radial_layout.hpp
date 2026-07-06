@@ -21,7 +21,7 @@ public:
     RadialLayout(Component* parent, const Vector2& position, float radius) noexcept;
 
 
-    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
+    [[nodiscard]] Rectangle bounding_box() const noexcept override {
         return { relative_position.current.x, relative_position.current.y, radius_ * 2, radius_ * 2 };
     }
 

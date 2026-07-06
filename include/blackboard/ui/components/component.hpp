@@ -1,6 +1,5 @@
 #pragma once
 
-#include "raylib.h"
 #include <memory>
 #include <vector>
 #include <functional>
@@ -11,6 +10,7 @@
 #include <blackboard/drawable.hpp>
 #include <blackboard/vector.hpp>
 #include <blackboard/activatable.hpp>
+#include <blackboard/bounds.hpp>
 
 
 
@@ -29,7 +29,7 @@ template <typename T>
 concept ComponentDerived = std::derived_from<T, Component>;
 
 
-class Component : public Updateable, public Drawable, public Activatable
+class Component : public Updateable, public Drawable, public Activatable, public Bounds
 {
 public:
     static constexpr float DefaultSpringSpeed = 12.0f;
@@ -58,18 +58,14 @@ public:
 
     [[nodiscard]] Vector2 absolute_position() const noexcept { return parent ? parent->absolute_position() + relative_position : (Vector2)relative_position; }
 
-    [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position - bounding_box_size() / 2; }
-    [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - bounding_box_size() / 2; }
+    [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position - box_size() / 2; }
+    [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - box_size() / 2; }
 
     void set_absolute_position(const Vector2& position) noexcept { relative_position.target = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
-    [[nodiscard]] virtual Rectangle relative_bounding_box() const noexcept = 0;
-    [[nodiscard]] virtual Rectangle absolute_bounding_box() const noexcept {
-        return { top_left_absolute_position().x, top_left_absolute_position().y, bounding_box_size().x, bounding_box_size().y };
-    }
-
-    [[nodiscard]] Vector2 bounding_box_size() const noexcept;
+    [[nodiscard]] Rectangle relative_bounding_box() const noexcept { return bounding_box(); }
+    [[nodiscard]] Rectangle absolute_bounding_box() const noexcept;
 
 
     template <typename T>

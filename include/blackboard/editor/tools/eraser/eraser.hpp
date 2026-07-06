@@ -39,6 +39,7 @@ public:
 
 
     [[nodiscard]] Vector2 position() const noexcept override;
+    [[nodiscard]] Rectangle bounding_box() const noexcept override { return body.bounding_box(); }
 
 
 private:

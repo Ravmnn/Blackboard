@@ -1,5 +1,6 @@
 #pragma once
 
+#include <blackboard/bounds.hpp>
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/stroke/trail.hpp>
@@ -13,7 +14,7 @@ namespace bb::editor
 
 
 
-class Bubble : public Updateable, public Drawable
+class Bubble : public Updateable, public Drawable, public Bounds
 {
 protected:
     static constexpr float StretchSpeedFactor = 1.0 / 3.0;
@@ -48,6 +49,10 @@ public:
 
     [[nodiscard]] Vector2 position() const noexcept { return position_; }
     [[nodiscard]] Vector2 velocity() const noexcept { return position_ - last_position_; }
+
+    [[nodiscard]] Rectangle bounding_box() const noexcept override {
+        return { position().x - thickness, position().y - thickness, thickness * 2, thickness * 2 };
+    }
 
 
 protected:

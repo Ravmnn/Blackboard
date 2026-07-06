@@ -1,6 +1,5 @@
 #pragma once
 
-#include "raylib.h"
 #include <blackboard/editor/tools/tool.hpp>
 #include <blackboard/editor/tools/selection/body.hpp>
 
@@ -35,6 +34,7 @@ public:
 
 
     [[nodiscard]] Vector2 position() const noexcept override;
+    [[nodiscard]] Rectangle bounding_box() const noexcept override { return body.bounding_box(); }
 
     [[nodiscard]] const Vector2& start_position() const noexcept { return start_position_; }
     [[nodiscard]] const Vector2& end_position() const noexcept { return end_position_; }

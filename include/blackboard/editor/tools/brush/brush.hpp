@@ -54,6 +54,7 @@ public:
 
 
     [[nodiscard]] Vector2 position() const noexcept override;
+    [[nodiscard]] Rectangle bounding_box() const noexcept override { return body.bounding_box(); }
     [[nodiscard]] const Color& color() const noexcept { return color_; }
 
     [[nodiscard]] const Stroke& stroke() const noexcept { return stroke_; }

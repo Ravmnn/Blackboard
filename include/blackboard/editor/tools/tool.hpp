@@ -5,6 +5,7 @@
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/activatable.hpp>
+#include <blackboard/bounds.hpp>
 
 
 
@@ -18,7 +19,7 @@ namespace bb::editor
 class Editor;
 
 
-class Tool : public Updateable, public Drawable, public Activatable
+class Tool : public Updateable, public Drawable, public Activatable, public Bounds
 {
 protected:
     bool was_active_ = false;

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "blackboard/animation/interpolation.hpp"
-#include "blackboard/animation/spring.hpp"
-#include <raylib.h>
-
+#include <blackboard/bounds.hpp>
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
+#include <blackboard/math/rect.hpp>
+#include <blackboard/animation/interpolation.hpp>
+#include <blackboard/animation/spring.hpp>
 
 
 
@@ -19,7 +19,7 @@ namespace bb::editor
 class Selection;
 
 
-class SelectionBody : public Updateable, public Drawable
+class SelectionBody : public Updateable, public Drawable, public Bounds
 {
 private:
     animation::ExponentialInterpolation<Vector2> rectangle_position_;
@@ -41,6 +41,11 @@ public:
 
     void update() noexcept override;
     void draw() noexcept override;
+
+
+    [[nodiscard]] Rectangle bounding_box() const noexcept override {
+        return { rectangle_position_.current.x, rectangle_position_.current.y, rectangle_size_.current.x, rectangle_size_.current.y };
+    }
 
 
 private:
