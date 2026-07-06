@@ -17,7 +17,8 @@ class Bubble : public Updateable, public Drawable
 {
 protected:
     static constexpr float StretchSpeedFactor = 1.0 / 3.0;
-    static constexpr uint32_t EllipseResolution = 64;
+    static constexpr uint32_t EllipseResolution = 32;
+    static constexpr uint32_t EllipseOutlineResolution = 16;
 
 
     float last_rotation_ = 0;

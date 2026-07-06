@@ -136,5 +136,5 @@ void Bubble::draw_ellipse_inner() noexcept
 
 void Bubble::draw_ellipse_outline() noexcept
 {
-    Draw::stretched_ellipse_outline(position_, thickness, stretch, outline_thickness, outline_color, EllipseResolution);
+    Draw::stretched_ellipse_outline(position_, thickness, stretch, outline_thickness, outline_color, EllipseOutlineResolution);
 }
