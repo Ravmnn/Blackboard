@@ -6,6 +6,7 @@
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
+#include <blackboard/editor/vanish.hpp>
 
 
 
@@ -28,8 +29,10 @@ private:
 
     bool draw_statistics_ = false;
 
-
     StrokeMeshRenderer default_stroke_mesh_renderer_;
+
+    Tool* last_tool_ = nullptr;
+    std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
 
 
 public:
@@ -42,6 +45,7 @@ public:
 
 
     Event<> environment_changed;
+    Event<> tool_changed;
 
     EditorDrawingEnvironment draw_environment;
     EditorSelectionEnvironment selection_environment;
@@ -60,7 +64,7 @@ public:
     void update() noexcept override;
 
 
-    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override { return {}; }
+    [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
 
     [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
 
@@ -74,11 +78,18 @@ private:
     void update_focus() noexcept;
     void update_keybindings() noexcept;
     void update_canvas_background() noexcept;
+    void update_tool_changed_event() noexcept;
+    void update_vanish_animations() noexcept;
 
     void draw_self() noexcept override;
     void draw_to_canvas() noexcept;
+    void draw_vanish_animations() noexcept;
     void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
+
+
+    void on_environment_changed() noexcept;
+    void on_tool_changed() noexcept;
 };
 
 

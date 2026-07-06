@@ -30,7 +30,7 @@ public:
     [[nodiscard]] const Texture& texture() const noexcept { return texture_; }
 
 
-    [[nodiscard]] Rectangle relative_bounding_box() const noexcept override {
+    [[nodiscard]] Rectangle bounding_box() const noexcept override {
         return { relative_position.current.x, relative_position.current.y, size.x, size.y };
     }
 

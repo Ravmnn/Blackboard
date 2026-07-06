@@ -29,7 +29,12 @@ Editor::Editor(Context& ui_context) noexcept :
 {
     clip = false;
 
+
     set_current_environment(draw_environment);
+
+    environment_changed.subscribe([this]() noexcept { on_environment_changed(); }, "editor::Editor::environment_changed_event_callback");
+    tool_changed.subscribe([this]() noexcept { on_tool_changed(); }, "editor::Editor::tool_changed_event_callback");
+
 
     this->ui_context = &ui_context;
     this->ui_context->add_component(*this);
@@ -64,10 +69,15 @@ void Editor::update() noexcept
 
     Clickable::update();
 
+
     current_environment->update();
     mouse_late_mode_indicator.update();
 
+    update_tool_changed_event();
+    update_vanish_animations();
+
     canvas.update();
+
 
     Component::update();
 }
@@ -102,6 +112,25 @@ void Editor::update_canvas_background() noexcept
 }
 
 
+void Editor::update_tool_changed_event() noexcept
+{
+    if (current_environment->current_tool != last_tool_)
+        tool_changed.trigger();
+
+    last_tool_ = current_environment->current_tool;
+}
+
+
+void Editor::update_vanish_animations() noexcept
+{
+    std::erase_if(vanish_animations_, [](const auto& vanish) noexcept { return vanish->is_transparent(); });
+
+    for (auto& vanish : vanish_animations_)
+        if (vanish)
+            vanish->update();
+}
+
+
 
 
 void Editor::draw_self() noexcept
@@ -119,10 +148,19 @@ void Editor::draw_to_canvas() noexcept
         canvas.draw_strokes();
 
         current_environment->draw();
-
         mouse_late_mode_indicator.draw();
+
+        draw_vanish_animations();
     canvas.camera.disable();
     canvas.canvas_renderer.end_render();
+}
+
+
+void Editor::draw_vanish_animations() noexcept
+{
+    for (auto& vanish : vanish_animations_)
+        if (vanish)
+            vanish->draw();
 }
 
 
@@ -152,4 +190,21 @@ void Editor::set_current_environment(EditorEnvironment& environment) noexcept
     current_environment->enable();
 
     environment_changed.trigger();
+}
+
+
+
+
+void Editor::on_environment_changed() noexcept
+{
+
+}
+
+
+void Editor::on_tool_changed() noexcept
+{
+    if (!last_tool_)
+        return;
+
+    vanish_animations_.push_back(std::make_unique<Vanish<Tool>>(*last_tool_));
 }
