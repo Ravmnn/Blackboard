@@ -60,15 +60,15 @@ public:
 
 
 
-    static void stretched_ellipse(const Vector2& position, const float radius, const float stretch, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
+    static void stretched_ellipse(const Vector2& center, const float radius, const float stretch, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
-        ellipse(position, radius + stretch, radius, color, resolution);
+        ellipse(center, radius + stretch, radius, color, resolution);
     }
 
 
-    static void stretched_ellipse_outline(const Vector2& position, const float radius, const float stretch, const float thickness, const Color& color = WHITE, const uint32_t resolution = 16) noexcept
+    static void stretched_ellipse_outline(const Vector2& center, const float radius, const float stretch, const float thickness, const Color& color = WHITE, const uint32_t resolution = 16) noexcept
     {
-        ellipse_outline(position, radius + stretch, radius, thickness, color, resolution);
+        ellipse_outline(center, radius + stretch, radius, thickness, color, resolution);
     }
 
 
