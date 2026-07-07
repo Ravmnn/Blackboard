@@ -7,7 +7,8 @@
 
 
 using bb::editor::Eraser,
-    bb::editor::StrokeMesh;
+    bb::editor::StrokeMesh,
+    bb::math::Segment;
 
 
 
@@ -29,8 +30,6 @@ void Eraser::update() noexcept
     if (got_inactive_)
         remove_strokes_from_remove_queue();
 
-    iteration_amount_test_ = get_iteration_amount();
-
     body.update();
     last_position_ = position();
 }
@@ -38,23 +37,17 @@ void Eraser::update() noexcept
 
 void Eraser::update_strokes_to_remove() noexcept
 {
-    const Vector2 position = this->position();
-    const auto final_iteration_amount = get_iteration_amount();
+    const Segment segment = { last_position_, this->position() };
 
-    for (size_t i = 0; i < final_iteration_amount; i++)
-    {
-        const Vector2 point = Vector2Lerp(last_position_, position, (float)i / (float)iteration_amount);
-
-        if (StrokeMesh* const stroke = get_canvas_stroke_at_point(point))
-            add_stroke_to_remove_queue(*stroke);
-    }
+    if (StrokeMesh* const stroke = get_canvas_stroke_intersecting_segment(segment))
+        add_stroke_to_remove_queue(*stroke);
 }
 
 
-StrokeMesh* Eraser::get_canvas_stroke_at_point(const Vector2& point) noexcept
+StrokeMesh* Eraser::get_canvas_stroke_intersecting_segment(const Segment& segment) noexcept
 {
     for (auto& stroke : editor.canvas.stroke_meshes)
-        if (StrokeMeshCollider::stroke_contains_point(*stroke, point)) // TODO: use segment-segment intersection instead of point collision
+        if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke, segment))
             return stroke.get();
 
     return nullptr;

@@ -6,6 +6,9 @@
 
 
 
+namespace bb::math { struct Segment; }
+
+
 namespace bb::editor
 {
 
@@ -22,11 +25,6 @@ private:
 
 public:
     friend class EraserBody;
-
-
-    size_t iteration_amount = 8;
-    size_t iteration_amount_test_ = 1;
-    bool dynamic_iteration_amount = true;
 
     EraserBody body;
 
@@ -45,12 +43,8 @@ public:
 private:
     [[nodiscard]] float distance_delta() const noexcept { return Vector2Length(position() - last_position_); }
 
-    [[nodiscard]] size_t get_iteration_amount() const noexcept {
-        return dynamic_iteration_amount ? std::max((size_t)((float)iteration_amount * distance_delta() / 50), iteration_amount) : iteration_amount;
-    }
-
     void update_strokes_to_remove() noexcept;
-    StrokeMesh* get_canvas_stroke_at_point(const Vector2& point) noexcept;
+    StrokeMesh* get_canvas_stroke_intersecting_segment(const math::Segment& segment) noexcept;
 
     void add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept;
 

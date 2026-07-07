@@ -1,5 +1,7 @@
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 
+#include <raymath.h>
+
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
