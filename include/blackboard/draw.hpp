@@ -1,13 +1,10 @@
 #pragma once
 
 #include <cstdint>
-#include <cstddef>
-#include <cmath>
 
 #include <vector>
 
 #include <blackboard/math/rect.hpp>
-#include <blackboard/rendering/stencil.hpp>
 
 #include <raymath.h>
 

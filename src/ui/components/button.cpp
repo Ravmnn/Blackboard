@@ -1,7 +1,5 @@
 #include <blackboard/ui/components/button.hpp>
 
-#include <algorithm>
-
 #include <blackboard/ui/context.hpp>
 
 

@@ -2,14 +2,19 @@
 
 #include <cassert>
 
-#include <rlgl.h>
-
+#include <blackboard/math/collisions.hpp>
+#include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
 
 
 
 
-using bb::editor::StrokeRenderer;
+using bb::editor::StrokeRenderer,
+    bb::math::Collisions,
+    bb::editor::StrokeMeshNode;
 
 
 
@@ -83,6 +88,14 @@ void StrokeRenderer::draw_cap_if_intense_curve(const StrokeMesh& mesh, const siz
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
 
     draw_cap(current, final_direction, current_node.thickness() * 0.5f, current_node.color);
+}
+
+
+
+
+bool StrokeRenderer::mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept
+{
+    return Collisions::point_inside_rectangle(node.position(), camera_bounds);
 }
 
 

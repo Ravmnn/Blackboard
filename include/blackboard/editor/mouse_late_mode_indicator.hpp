@@ -1,11 +1,19 @@
 #pragma once
 
 #include <blackboard/drawable.hpp>
-#include <blackboard/mouse_button_set.hpp>
+#include <blackboard/stopwatch.hpp>
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
 
 
+
+
+namespace bb
+{
+    class MouseButtonEvent;
+    class MouseButtonSet;
+    class MousePositionProvider;
+}
 
 
 namespace bb::editor

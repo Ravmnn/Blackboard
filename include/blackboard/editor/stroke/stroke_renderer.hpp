@@ -1,17 +1,28 @@
 #pragma once
 
-#include <blackboard/math/collisions.hpp>
-#include <blackboard/editor/canvas_camera.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
+#include <cstddef>
 
 
+
+
+
+struct Vector2;
+struct Rectangle;
+struct Color;
 
 
 namespace bb::editor
 {
 
 
+
+
+class StrokeMeshRenderer;
+class CanvasCamera;
+class StrokeMeshGenerator;
+class Stroke;
+class StrokeMesh;
+class StrokeMeshNode;
 
 
 class StrokeRenderer
@@ -49,10 +60,7 @@ private:
     void draw_edges_with_caps(const StrokeMesh& mesh) noexcept;
     void draw_cap_if_intense_curve(const StrokeMesh& mesh, size_t i) noexcept;
 
-    [[nodiscard]] static bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept
-    {
-        return math::Collisions::point_inside_rectangle(node.position(), camera_bounds);
-    }
+    [[nodiscard]] static bool mesh_node_is_in_camera_bounds(const StrokeMeshNode& node, const Rectangle& camera_bounds) noexcept;
 
     void draw_extreme_caps(const StrokeMesh& mesh) noexcept;
     void draw_cap(const Vector2& center, const Vector2& direction, float radius, const Color& color) const noexcept;

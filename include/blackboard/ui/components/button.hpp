@@ -1,6 +1,5 @@
 #pragma once
 
-#include "blackboard/mouse_button_event.hpp"
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/components/rounded_rectangle.hpp>

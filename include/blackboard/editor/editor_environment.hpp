@@ -2,8 +2,9 @@
 
 #include <vector>
 
+
+#include <blackboard/drawable.hpp>
 #include <blackboard/mouse_button_event.hpp>
-#include <blackboard/editor/tools/tool.hpp>
 
 
 
@@ -12,6 +13,10 @@ namespace bb::editor
 {
 
 
+
+
+class Tool;
+class Editor;
 
 
 class EditorEnvironment : public Updateable, public Drawable, public Activatable

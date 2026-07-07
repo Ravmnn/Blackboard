@@ -1,8 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
-#include <blackboard/updateable.hpp>
 #include <blackboard/activatable.hpp>
 
 #include <blackboard/rendering/effects/effect_property.hpp>
@@ -16,7 +13,7 @@ namespace bb::rendering
 
 
 
-class Effect : public Activatable, public Updateable
+class Effect : public Updateable, public Activatable
 {
 private:
     Shader shader_;

@@ -5,8 +5,6 @@
 
 
 
-
-
 namespace bb::rendering
 {
 

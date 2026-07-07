@@ -1,5 +1,7 @@
 #include <blackboard/editor/editor_environment.hpp>
 
+#include <cassert>
+
 #include <blackboard/editor/editor.hpp>
 
 

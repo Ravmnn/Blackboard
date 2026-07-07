@@ -2,15 +2,13 @@
 
 #include <memory>
 #include <vector>
-#include <functional>
 #include <concepts>
 
-#include <blackboard/animation/spring.hpp>
-#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/drawable.hpp>
-#include <blackboard/vector.hpp>
-#include <blackboard/activatable.hpp>
 #include <blackboard/bounds.hpp>
+#include <blackboard/activatable.hpp>
+#include <blackboard/animation/interpolation.hpp>
+#include <blackboard/animation/spring.hpp>
 
 
 

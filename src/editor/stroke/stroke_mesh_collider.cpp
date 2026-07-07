@@ -1,6 +1,7 @@
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 
 #include <blackboard/math/segment.hpp>
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
 

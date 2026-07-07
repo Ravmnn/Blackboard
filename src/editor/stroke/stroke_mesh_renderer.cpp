@@ -2,6 +2,8 @@
 
 #include <rlgl.h>
 
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
+
 
 
 

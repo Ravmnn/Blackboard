@@ -1,6 +1,8 @@
 #pragma once
 
-#include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <vector>
+
+#include <raylib.h>
 
 
 
@@ -9,6 +11,9 @@ namespace bb::editor
 {
 
 
+
+
+class StrokeMesh;
 
 
 class StrokeMeshCollider

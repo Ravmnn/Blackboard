@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
 #include <blackboard/activatable.hpp>

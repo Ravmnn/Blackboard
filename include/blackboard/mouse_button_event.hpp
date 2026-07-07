@@ -1,9 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <chrono>
-
-#include <blackboard/event.hpp>
 #include <blackboard/activatable.hpp>
 #include <blackboard/stopwatch.hpp>
 #include <blackboard/mouse_position_provider.hpp>

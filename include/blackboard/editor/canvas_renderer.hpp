@@ -1,10 +1,8 @@
 #pragma once
 
-#include <blackboard/initializable.hpp>
 #include <blackboard/updateable.hpp>
-#include <blackboard/drawable.hpp>
+#include <blackboard/initializable.hpp>
 #include <blackboard/rendering/texture_renderer.hpp>
-#include <blackboard/editor/stroke/stroke_renderer.hpp>
 
 
 
@@ -15,7 +13,10 @@ namespace bb::editor
 
 
 
-class CanvasRenderer : public Updateable, public rendering::Renderer, public Initializable
+class Canvas;
+
+
+class CanvasRenderer : public Updateable, public Initializable, public rendering::Renderer
 {
 private:
     rendering::TextureRenderer super_sampled_texture_;

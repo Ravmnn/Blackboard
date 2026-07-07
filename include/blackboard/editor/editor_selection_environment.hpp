@@ -1,8 +1,8 @@
 #pragma once
 
-#include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 #include <blackboard/editor/effects/negative.hpp>
 #include <blackboard/editor/editor_environment.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 #include <blackboard/editor/tools/selection/selection.hpp>
 
 

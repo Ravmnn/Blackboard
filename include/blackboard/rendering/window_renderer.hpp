@@ -1,8 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
-
 #include <blackboard/rendering/texture_renderer.hpp>
 
 

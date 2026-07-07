@@ -1,7 +1,5 @@
 #include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
 
-#include <cstdint>
-
 
 
 

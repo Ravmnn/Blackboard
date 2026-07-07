@@ -2,8 +2,8 @@
 
 #include <blackboard/editor/stroke/stroke.hpp>
 #include <blackboard/editor/lazy_cursor.hpp>
-#include <blackboard/editor/tools/brush/body.hpp>
 #include <blackboard/editor/tools/tool.hpp>
+#include <blackboard/editor/tools/brush/body.hpp>
 
 
 

@@ -1,12 +1,8 @@
 #pragma once
 
-#include <concepts>
-
 #include <blackboard/drawable.hpp>
 #include <blackboard/bounds.hpp>
-#include <blackboard/activatable.hpp>
 #include <blackboard/animation/interpolation.hpp>
-
 #include <blackboard/rendering/texture_renderer.hpp>
 
 

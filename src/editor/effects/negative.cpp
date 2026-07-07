@@ -1,5 +1,7 @@
 #include <blackboard/editor/effects/negative.hpp>
 
+#include <blackboard/editor/effects/native_shaders.hpp>
+
 
 
 

@@ -1,11 +1,9 @@
 #pragma once
 
-#include <blackboard/bounds.hpp>
 #include <blackboard/updateable.hpp>
 #include <blackboard/drawable.hpp>
-#include <blackboard/math/rect.hpp>
+#include <blackboard/bounds.hpp>
 #include <blackboard/animation/interpolation.hpp>
-#include <blackboard/animation/spring.hpp>
 
 
 

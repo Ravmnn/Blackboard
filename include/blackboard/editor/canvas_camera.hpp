@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 #include <blackboard/updateable.hpp>
 #include <blackboard/activatable.hpp>
 #include <blackboard/animation/interpolation.hpp>
@@ -18,7 +16,7 @@ namespace bb::editor
 class Canvas;
 
 
-class CanvasCamera : public Activatable, public Updateable
+class CanvasCamera : public Updateable, public Activatable
 {
 private:
     Camera2D camera_;

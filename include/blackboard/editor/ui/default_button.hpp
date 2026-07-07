@@ -28,11 +28,11 @@ public:
 
 
 protected:
-    void on_entered() noexcept override { set_color(hovered_color); }
-    void on_leaved() noexcept override { set_color(base_color); }
+    void on_entered() noexcept override { color = hovered_color; }
+    void on_leaved() noexcept override { color = base_color; }
 
-    void on_press() noexcept override { set_color(pressed_color); }
-    void on_release() noexcept override { set_color(base_color); }
+    void on_press(const MouseButtonEvent& button) noexcept override { Button::on_press(button); color = pressed_color; }
+    void on_release(const MouseButtonEvent& /* unused */) noexcept override { color = base_color; }
 
 
     static std::tuple<Color, Color, Color> get_colors_keyframes_from_base_color(const Color& base_color) noexcept;

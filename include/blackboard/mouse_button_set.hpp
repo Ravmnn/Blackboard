@@ -1,7 +1,6 @@
 #pragma once
 
 #include <map>
-#include <memory>
 
 #include <blackboard/mouse_button_event.hpp>
 

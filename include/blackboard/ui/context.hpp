@@ -1,9 +1,7 @@
 #pragma once
 
-#include <functional>
-
-#include <blackboard/ui/components/component.hpp>
 #include <blackboard/ui/focusable.hpp>
+#include <blackboard/ui/components/component.hpp>
 
 
 

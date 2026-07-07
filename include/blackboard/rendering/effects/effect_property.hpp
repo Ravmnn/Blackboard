@@ -14,7 +14,7 @@ namespace bb::rendering
 
 
 template <typename T>
-class EffectProperty : Updateable
+class EffectProperty : public Updateable
 {
 private:
     const int id_;

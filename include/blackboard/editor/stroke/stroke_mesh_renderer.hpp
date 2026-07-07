@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <raylib.h>
 
 
 
@@ -11,6 +11,10 @@ namespace bb::editor
 {
 
 
+
+
+class StrokeMeshQuad;
+class StrokeMeshCapSegment;
 
 
 class StrokeMeshRenderer

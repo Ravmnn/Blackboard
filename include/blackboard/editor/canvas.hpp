@@ -1,9 +1,13 @@
 #pragma once
 
-#include <blackboard/editor/palette.hpp>
-#include <blackboard/editor/canvas_camera.hpp>
+#include <memory>
+
 #include <blackboard/mouse_position_provider.hpp>
+#include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/canvas_renderer.hpp>
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
+#include <blackboard/editor/stroke/stroke_renderer.hpp>
 
 
 

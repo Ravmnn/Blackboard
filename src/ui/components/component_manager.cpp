@@ -1,7 +1,5 @@
 #include <blackboard/ui/components/component_manager.hpp>
 
-#include <blackboard/rendering/renderer.hpp>
-
 
 
 

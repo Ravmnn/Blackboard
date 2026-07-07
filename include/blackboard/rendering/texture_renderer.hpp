@@ -1,9 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <raylib.h>
-#include <rlgl.h>
-
 #include <blackboard/rendering/renderer.hpp>
 #include <blackboard/rendering/scoped_render_texture.hpp>
 

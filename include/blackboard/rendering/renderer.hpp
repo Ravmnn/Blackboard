@@ -2,7 +2,6 @@
 
 #include <raylib.h>
 
-
 #include <blackboard/activatable.hpp>
 #include <blackboard/rendering/stencil.hpp>
 

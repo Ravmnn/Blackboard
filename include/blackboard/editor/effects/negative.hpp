@@ -1,7 +1,6 @@
 #pragma once
 
 #include <blackboard/rendering/effects/effect.hpp>
-#include <blackboard/editor/effects/native_shaders.hpp>
 
 
 

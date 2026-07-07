@@ -1,7 +1,5 @@
 #include <blackboard/editor/ui/color_menu.hpp>
 
-#include <blackboard/ui/components/rounded_rectangle.hpp>
-#include <blackboard/ui/components/button.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu_button.hpp>
 

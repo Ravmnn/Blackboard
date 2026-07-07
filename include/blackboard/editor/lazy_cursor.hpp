@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include <raylib.h>
 #include <raymath.h>
 
 #include <blackboard/updateable.hpp>
@@ -20,7 +19,7 @@ namespace bb::editor
 class Brush;
 
 
-class LazyCursor : public Initializable, public Updateable
+class LazyCursor : public Updateable, public Initializable
 {
 private:
     Vector2 last_position_ = {};

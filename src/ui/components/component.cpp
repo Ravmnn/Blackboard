@@ -1,6 +1,5 @@
 #include <blackboard/ui/components/component.hpp>
 
-#include <blackboard/ui/context.hpp>
 #include <blackboard/ui/components/component_stencil.hpp>
 
 

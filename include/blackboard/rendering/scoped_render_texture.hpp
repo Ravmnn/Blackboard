@@ -7,8 +7,6 @@
 
 
 
-
-
 namespace bb::rendering
 {
 
