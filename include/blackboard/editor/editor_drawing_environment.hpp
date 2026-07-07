@@ -13,7 +13,7 @@ namespace bb::editor
 
 
 
-class EditorDrawingEnvironment : public EditorEnvironment
+class EditorDrawingEnvironment final : public EditorEnvironment
 {
 public:
     Brush brush;
@@ -26,8 +26,21 @@ public:
     void alternate_brush_and_eraser() noexcept;
 
 
-protected:
+private:
+    void enter_selection_mode(bool enable_selection = true) noexcept;
+
+
     void on_enabled() noexcept override;
+
+
+    void on_left_button_press() noexcept override;
+    void on_left_button_release() noexcept override;
+
+    void on_right_button_click() noexcept override;
+    void on_right_button_late_click() noexcept override;
+    void on_right_button_drag_start() noexcept override;
+
+    void on_middle_button_click() noexcept override;
 };
 
 

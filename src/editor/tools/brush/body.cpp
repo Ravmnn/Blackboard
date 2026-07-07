@@ -14,7 +14,7 @@ using bb::editor::BrushBody;
 BrushBody::BrushBody(Brush& brush) noexcept : Bubble(brush.thickness),
     brush(brush)
 {
-    brush.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::BrushBody::editor_environment_changed_event_callback");
+    brush.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::BrushBody::editor_environment_changed_callback");
 }
 
 

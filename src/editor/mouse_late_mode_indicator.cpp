@@ -19,10 +19,10 @@ MouseLateModeIndicator::MouseLateModeIndicator(const MousePositionProvider& mous
     mouse_provider(mouse_provider),
     buttons(buttons)
 {
-    buttons.press.subscribe([this](const MouseButtonEvent& button) { on_button_press(button); }, "editor::MouseLateModeIndicator::press_event_callback");
-    buttons.release.subscribe([this](const MouseButtonEvent& button) { on_button_release(button); }, "editor::MouseLateModeIndicator::release_event_callback");
-    buttons.late_release.subscribe([this](const MouseButtonEvent& button) { on_button_release(button); }, "editor::MouseLateModeIndicator::late_release_event_callback");
-    buttons.drag_start.subscribe([this](const MouseButtonEvent& button) { on_button_drag_start(button); }, "editor::MouseLateModeIndicator::drag_start_event_callback");
+    buttons.press.subscribe([this](const MouseButtonEvent& button) { on_button_press(button); }, "editor::MouseLateModeIndicator::press_callback");
+    buttons.release.subscribe([this](const MouseButtonEvent& button) { on_button_release(button); }, "editor::MouseLateModeIndicator::release_callback");
+    buttons.late_release.subscribe([this](const MouseButtonEvent& button) { on_button_release(button); }, "editor::MouseLateModeIndicator::late_release_callback");
+    buttons.drag_start.subscribe([this](const MouseButtonEvent& button) { on_button_drag_start(button); }, "editor::MouseLateModeIndicator::drag_start_callback");
 }
 
 
@@ -96,7 +96,7 @@ Color MouseLateModeIndicator::get_ring_color() const noexcept
 
 void MouseLateModeIndicator::draw() noexcept
 {
-    Draw::circle_outline(mouse_provider.mouse_position(), ring_radius_, 2, get_ring_color(), 90);
+    Draw::circle_outline(mouse_provider.mouse_position(), ring_radius_, 1, get_ring_color(), 90);
 }
 
 

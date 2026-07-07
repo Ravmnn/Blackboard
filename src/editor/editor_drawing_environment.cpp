@@ -2,6 +2,7 @@
 
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
+#include <chrono>
 
 
 
@@ -22,19 +23,8 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
     current_tool = &brush;
 
 
-    left_button.press.subscribe([&](const auto&) noexcept { current_tool->enable(); });
-    left_button.release.subscribe([&](const auto&) noexcept { current_tool->disable(); });
-
     right_button.min_drag_distance = 75;
-    right_button.click.subscribe([&](const auto&) noexcept { alternate_brush_and_eraser(); });
-    right_button.drag_start.subscribe([&](const auto&) noexcept {
-        editor.set_current_environment(editor.selection_environment);
-        editor.selection_environment.current_tool->enable();
-    });
-
-    middle_button.click.subscribe([&](const auto&) noexcept { editor.color_menu->toggle(GetMousePosition()); });
-
-
+    right_button.time_to_enter_late_mode = std::chrono::milliseconds(150);
     right_button.enable_late_mode = true;
     right_button.exclusive_late_mode = true;
 }
@@ -50,9 +40,65 @@ void EditorDrawingEnvironment::alternate_brush_and_eraser() noexcept
 
 
 
+void EditorDrawingEnvironment::enter_selection_mode(const bool enable_selection) noexcept
+{
+    editor.set_current_environment(editor.selection_environment);
+
+    if (enable_selection)
+        editor.selection_environment.current_tool->enable();
+}
+
+
+
+
 void EditorDrawingEnvironment::on_enabled() noexcept
 {
     EditorEnvironment::on_enabled();
 
     editor.dynamic_background_color = true;
+}
+
+
+
+
+void EditorDrawingEnvironment::on_left_button_press() noexcept
+{
+    current_tool->enable();
+}
+
+
+void EditorDrawingEnvironment::on_left_button_release() noexcept
+{
+    current_tool->disable();
+}
+
+
+
+
+void EditorDrawingEnvironment::on_right_button_click() noexcept
+{
+    editor.get_stroke_under_mouse() ? enter_selection_mode(false) : alternate_brush_and_eraser();
+}
+
+
+void EditorDrawingEnvironment::on_right_button_late_click() noexcept
+{
+    const StrokeMesh* const stroke = editor.get_stroke_under_mouse();
+
+    if (stroke)
+        editor.palette.set_current_color(stroke->front().color);
+}
+
+
+void EditorDrawingEnvironment::on_right_button_drag_start() noexcept
+{
+    enter_selection_mode();
+}
+
+
+
+
+void EditorDrawingEnvironment::on_middle_button_click() noexcept
+{
+    editor.color_menu->toggle(GetMousePosition());
 }

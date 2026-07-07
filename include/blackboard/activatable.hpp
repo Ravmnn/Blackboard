@@ -24,8 +24,8 @@ public:
 
     Activatable() noexcept
     {
-        enabled.subscribe([this]() { on_enabled(); }, "bb::Activatable::enabled_event_callback");
-        disabled.subscribe([this]() { on_disabled(); }, "bb::Activatable::disabled_event_callback");
+        enabled.subscribe([this]() { on_enabled(); }, "bb::Activatable::enabled_callback");
+        disabled.subscribe([this]() { on_disabled(); }, "bb::Activatable::disabled_callback");
     }
 
     virtual ~Activatable() = default;

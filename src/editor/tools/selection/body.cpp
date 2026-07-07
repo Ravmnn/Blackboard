@@ -21,7 +21,7 @@ SelectionBody::SelectionBody(Selection& selection) noexcept :
 
     selection(selection)
 {
-    selection.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::SelectionBody::editor_environment_changed_event_callback");
+    selection.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::SelectionBody::editor_environment_changed_callback");
 }
 
 

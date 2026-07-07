@@ -34,8 +34,8 @@ private:
     animation::Spring<float> ring_radius_;
     animation::ExponentialInterpolation<float> ring_transparency_;
 
-    float entering_late_mode_radius_factor_ = 1.05;
-    float entered_late_mode_radius_factor = 1.2;
+    float entering_late_mode_radius_factor_ = 1.0;
+    float entered_late_mode_radius_factor = 1.1;
 
     float entering_late_mode_final_alpha_ = 0;
     float entered_late_mode_final_alpha_ = 255;

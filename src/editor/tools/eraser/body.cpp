@@ -19,7 +19,7 @@ EraserBody::EraserBody(Eraser& eraser) noexcept : Bubble(BaseThickness),
     sync_trail_color = false;
 
 
-    eraser.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::EraserBody::editor_environment_changed_event_callback");
+    eraser.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::EraserBody::editor_environment_changed_callback");
 }
 
 

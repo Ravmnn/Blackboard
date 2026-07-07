@@ -14,7 +14,7 @@ namespace bb::editor
 
 
 
-class EditorSelectionEnvironment : public EditorEnvironment
+class EditorSelectionEnvironment final : public EditorEnvironment
 {
 private:
     StrokeMeshOutlineRenderer selection_outline_stroke_mesh_renderer_;

@@ -34,6 +34,7 @@ private:
     StrokeMeshRenderer default_stroke_mesh_renderer_;
 
     Tool* last_tool_ = nullptr;
+
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
 
 

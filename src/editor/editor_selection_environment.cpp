@@ -10,6 +10,7 @@ using bb::editor::EditorSelectionEnvironment;
 
 
 
+// TODO: cool background for selection mode
 EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
     selection(editor)
 {

@@ -35,8 +35,8 @@ Editor::Editor(Context& ui_context) noexcept :
 
     set_current_environment(draw_environment);
 
-    environment_changed.subscribe([this]() noexcept { on_environment_changed(); }, "editor::Editor::environment_changed_event_callback");
-    tool_changed.subscribe([this]() noexcept { on_tool_changed(); }, "editor::Editor::tool_changed_event_callback");
+    environment_changed.subscribe([this]() noexcept { on_environment_changed(); }, "editor::Editor::environment_changed_callback");
+    tool_changed.subscribe([this]() noexcept { on_tool_changed(); }, "editor::Editor::tool_changed_callback");
 
 
     this->ui_context = &ui_context;
@@ -231,5 +231,8 @@ void Editor::on_tool_changed() noexcept
     if (!last_tool_)
         return;
 
-    vanish_animations_.push_back(std::make_unique<Vanish<Tool>>(*last_tool_));
+    constexpr float ScaleSpeed = 3;
+    constexpr float TransparencySpeed = 3;
+
+    vanish_animations_.push_back(std::make_unique<Vanish<Tool>>(*last_tool_, ScaleSpeed, TransparencySpeed));
 }

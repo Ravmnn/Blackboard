@@ -22,6 +22,42 @@ EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
     left_button.clickable = &editor;
     right_button.clickable = &editor;
     middle_button.clickable = &editor;
+
+    left_button.press.subscribe([this](auto&) { on_left_button_press(); }, "editor::Environment::left_button_press_callback");
+    left_button.release.subscribe([this](auto&) { on_left_button_release(); }, "editor::Environment::left_button_release_callback");
+    left_button.click.subscribe([this](auto&) { on_left_button_click(); }, "editor::Environment::left_button_click_callback");
+    left_button.drag_start.subscribe([this](auto&) { on_left_button_drag_start(); }, "editor::Environment::left_button_drag_start_callback");
+    left_button.drag_end.subscribe([this](auto&) { on_left_button_drag_end(); }, "editor::Environment::left_button_drag_end_callback");
+
+    left_button.late_press.subscribe([this](auto&) { on_left_button_late_press(); }, "editor::Environment::left_button_late_press_callback");
+    left_button.late_release.subscribe([this](auto&) { on_left_button_late_release(); }, "editor::Environment::left_button_late_release_callback");
+    left_button.late_click.subscribe([this](auto&) { on_left_button_late_click(); }, "editor::Environment::left_button_late_click_callback");
+    left_button.late_drag_start.subscribe([this](auto&) { on_left_button_late_drag_start(); }, "editor::Environment::left_button_late_drag_start_callback");
+    left_button.late_drag_end.subscribe([this](auto&) { on_left_button_late_drag_end(); }, "editor::Environment::left_button_late_drag_end_callback");
+
+    right_button.press.subscribe([this](auto&) { on_right_button_press(); }, "editor::Environment::right_button_press_callback");
+    right_button.release.subscribe([this](auto&) { on_right_button_release(); }, "editor::Environment::right_button_release_callback");
+    right_button.click.subscribe([this](auto&) { on_right_button_click(); }, "editor::Environment::right_button_click_callback");
+    right_button.drag_start.subscribe([this](auto&) { on_right_button_drag_start(); }, "editor::Environment::right_button_drag_start_callback");
+    right_button.drag_end.subscribe([this](auto&) { on_right_button_drag_end(); }, "editor::Environment::right_button_drag_end_callback");
+
+    right_button.late_press.subscribe([this](auto&) { on_right_button_late_press(); }, "editor::Environment::right_button_late_press_callback");
+    right_button.late_release.subscribe([this](auto&) { on_right_button_late_release(); }, "editor::Environment::right_button_late_release_callback");
+    right_button.late_click.subscribe([this](auto&) { on_right_button_late_click(); }, "editor::Environment::right_button_late_click_callback");
+    right_button.late_drag_start.subscribe([this](auto&) { on_right_button_late_drag_start(); }, "editor::Environment::right_button_late_drag_start_callback");
+    right_button.late_drag_end.subscribe([this](auto&) { on_right_button_late_drag_end(); }, "editor::Environment::right_button_late_drag_end_callback");
+
+    middle_button.press.subscribe([this](auto&) { on_middle_button_press(); }, "editor::Environment::middle_button_press_callback");
+    middle_button.release.subscribe([this](auto&) { on_middle_button_release(); }, "editor::Environment::middle_button_release_callback");
+    middle_button.click.subscribe([this](auto&) { on_middle_button_click(); }, "editor::Environment::middle_button_click_callback");
+    middle_button.drag_start.subscribe([this](auto&) { on_middle_button_drag_start(); }, "editor::Environment::middle_button_drag_start_callback");
+    middle_button.drag_end.subscribe([this](auto&) { on_middle_button_drag_end(); }, "editor::Environment::middle_button_drag_end_callback");
+
+    middle_button.late_press.subscribe([this](auto&) { on_middle_button_late_press(); }, "editor::Environment::middle_button_late_press_callback");
+    middle_button.late_release.subscribe([this](auto&) { on_middle_button_late_release(); }, "editor::Environment::middle_button_late_release_callback");
+    middle_button.late_click.subscribe([this](auto&) { on_middle_button_late_click(); }, "editor::Environment::middle_button_late_click_callback");
+    middle_button.late_drag_start.subscribe([this](auto&) { on_middle_button_late_drag_start(); }, "editor::Environment::middle_button_late_drag_start_callback");
+    middle_button.late_drag_end.subscribe([this](auto&) { on_middle_button_late_drag_end(); }, "editor::Environment::middle_button_late_drag_end_callback");
 }
 
 
