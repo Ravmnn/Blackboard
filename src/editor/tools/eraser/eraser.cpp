@@ -39,19 +39,27 @@ void Eraser::update_strokes_to_remove() noexcept
 {
     const Segment segment = { last_position_, this->position() };
 
-    if (StrokeMesh* const stroke = get_canvas_stroke_intersecting_segment(segment))
+    if (StrokeMesh* const stroke = editor.get_stroke_intersecting_segment(segment))
         add_stroke_to_remove_queue(*stroke);
 }
 
 
-StrokeMesh* Eraser::get_canvas_stroke_intersecting_segment(const Segment& segment) noexcept
-{
-    for (auto& stroke : editor.canvas.stroke_meshes)
-        if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke, segment))
-            return stroke.get();
 
-    return nullptr;
+
+void Eraser::draw() noexcept
+{
+    body.draw();
 }
+
+
+
+
+Vector2 Eraser::position() const noexcept
+{
+    return editor.canvas.mouse_position();
+}
+
+
 
 
 void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
@@ -77,20 +85,4 @@ void Eraser::remove_stroke(const StrokeMesh& stroke) noexcept
     std::erase_if(editor.canvas.stroke_meshes, [&](const std::unique_ptr<StrokeMesh>& stroke_mesh) {
         return stroke_mesh.get() == &stroke;
     });
-}
-
-
-
-
-void Eraser::draw() noexcept
-{
-    body.draw();
-}
-
-
-
-
-Vector2 Eraser::position() const noexcept
-{
-    return editor.canvas.mouse_position();
 }

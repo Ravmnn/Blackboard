@@ -2,13 +2,17 @@
 
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 
 
 
 
 using bb::editor::Editor,
+    bb::math::Segment,
     bb::ui::Component,
-    bb::ui::Context;
+    bb::ui::Context,
+    bb::editor::StrokeMesh,
+    bb::editor::StrokeMeshCollider;
 
 
 
@@ -189,6 +193,28 @@ void Editor::set_current_environment(EditorEnvironment& environment) noexcept
     current_environment->enable();
 
     environment_changed.trigger();
+}
+
+
+
+
+StrokeMesh* Editor::get_stroke_under_point(const Vector2& point) noexcept
+{
+    for (auto& stroke : canvas.stroke_meshes)
+        if (StrokeMeshCollider::stroke_contains_point(*stroke, point))
+            return stroke.get();
+
+    return nullptr;
+}
+
+
+StrokeMesh* Editor::get_stroke_intersecting_segment(const Segment& segment) noexcept
+{
+    for (auto& stroke : canvas.stroke_meshes)
+        if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke, segment))
+            return stroke.get();
+
+    return nullptr;
 }
 
 

@@ -64,13 +64,17 @@ public:
 
 
     [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
-
-    [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
-
     [[nodiscard]] const StrokeMeshRenderer& default_stroke_mesh_renderer() const noexcept { return default_stroke_mesh_renderer_; }
 
 
+    [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
+
     void set_current_environment(EditorEnvironment& environment) noexcept;
+
+
+    StrokeMesh* get_stroke_under_point(const Vector2& point) noexcept;
+    StrokeMesh* get_stroke_intersecting_segment(const math::Segment& segment) noexcept;
+    StrokeMesh* get_stroke_under_mouse() noexcept { return get_stroke_under_point(canvas.mouse_position()); }
 
 
 private:

@@ -44,10 +44,8 @@ private:
     [[nodiscard]] float distance_delta() const noexcept { return Vector2Length(position() - last_position_); }
 
     void update_strokes_to_remove() noexcept;
-    StrokeMesh* get_canvas_stroke_intersecting_segment(const math::Segment& segment) noexcept;
 
     void add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept;
-
     void remove_strokes_from_remove_queue() noexcept;
     void remove_stroke(const StrokeMesh& stroke) noexcept;
 };
