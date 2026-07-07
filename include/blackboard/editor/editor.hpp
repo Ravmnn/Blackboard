@@ -36,9 +36,6 @@ private:
 
 
 public:
-    // TODO: vanish animation when switching tool (similar to FL)
-
-
     Canvas canvas;
     Palette palette;
     bool dynamic_background_color = false;

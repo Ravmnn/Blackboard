@@ -18,6 +18,7 @@ inline static const char* const NegativeStrokeSelection = R"(
 
 
 uniform vec4 u_default_color;
+uniform float u_grayness_threshold;
 
 
 in vec4 fragColor;
@@ -38,7 +39,7 @@ void main()
 {
     out_color = 1.0 - fragColor;
 
-    if (grayness(fragColor.rgb) >= 0.65)
+    if (grayness(fragColor.rgb) >= u_grayness_threshold)
         out_color = u_default_color;
 
     out_color.a = 1.0;

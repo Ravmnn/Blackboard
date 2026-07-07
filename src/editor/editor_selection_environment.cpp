@@ -37,6 +37,7 @@ void EditorSelectionEnvironment::update() noexcept
 {
     EditorEnvironment::update();
 
+    negative_effect_.grayness_threshold = use_negative_colors ? 0.65 : 0;
     negative_effect_.update();
 }
 

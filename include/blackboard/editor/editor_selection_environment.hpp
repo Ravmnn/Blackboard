@@ -27,6 +27,7 @@ private:
 
 public:
     Selection selection;
+    bool use_negative_colors = true;
 
 
     explicit EditorSelectionEnvironment(Editor& editor) noexcept;
