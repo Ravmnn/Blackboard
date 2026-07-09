@@ -10,7 +10,7 @@ using bb::editor::Selection;
 
 
 
-Selection::Selection(Editor& editor) noexcept : Tool(editor),
+Selection::Selection(EditorEnvironment& environment) noexcept : Tool(environment),
     body(*this)
 {}
 
@@ -37,7 +37,7 @@ void Selection::draw() noexcept
 
 Vector2 Selection::position() const noexcept
 {
-    return editor.canvas.mouse_position();
+    return editor().canvas.mouse_position();
 }
 
 

@@ -12,23 +12,23 @@ using bb::editor::EditorSelectionEnvironment;
 
 // TODO: cool background for selection mode
 EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
-    selection(editor)
+    selection(*this)
 {
     tools_.push_back(&selection);
 
-    current_tool = &selection;
+    set_current_tool(selection);
 
 
     negative_effect_.default_color = RED;
 
 
     left_button.min_drag_distance = 5;
-    left_button.drag_start.subscribe([this](auto&) noexcept { current_tool->enable(); });
-    left_button.drag_end.subscribe([this](const auto&) noexcept { current_tool->disable(); });
+    left_button.drag_start.subscribe([this](auto&) noexcept { current_tool()->enable(); });
+    left_button.drag_end.subscribe([this](const auto&) noexcept { current_tool()->disable(); });
 
     left_button.click.subscribe([&](const auto&) noexcept { editor.set_current_environment(editor.draw_environment); });
 
-    right_button.release.subscribe([this](const auto&) noexcept { current_tool->disable(); });
+    right_button.release.subscribe([this](const auto&) noexcept { current_tool()->disable(); });
 }
 
 

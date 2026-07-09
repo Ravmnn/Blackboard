@@ -36,7 +36,7 @@ private:
     void update_color() noexcept override;
 
 
-    void on_editor_environment_changed() noexcept;
+    void on_brush_changed_in() noexcept;
 };
 
 

@@ -65,7 +65,7 @@ EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
 
 void EditorEnvironment::update() noexcept
 {
-    assert(current_tool);
+    assert(current_tool_);
 
     for (auto& tool : tools_)
         tool->update();
@@ -76,7 +76,22 @@ void EditorEnvironment::update() noexcept
 
 void EditorEnvironment::draw() noexcept
 {
-    current_tool->draw();
+    current_tool_->draw();
+}
+
+
+
+
+void EditorEnvironment::set_current_tool(Tool& tool) noexcept
+{
+    if (current_tool_ == &tool)
+        return;
+
+    if (current_tool_)
+        current_tool_->changed_out.trigger();
+
+    current_tool_ = &tool;
+    current_tool_->changed_in.trigger();
 }
 
 
@@ -84,9 +99,18 @@ void EditorEnvironment::draw() noexcept
 
 void EditorEnvironment::on_enabled() noexcept
 {
+    current_tool()->changed_in.trigger();
+
+
     editor.add_mouse_button_event_or_assign(left_button);
     editor.add_mouse_button_event_or_assign(right_button);
     editor.add_mouse_button_event_or_assign(middle_button);
 
     editor.reset_buttons_state();
+}
+
+
+void EditorEnvironment::on_disabled() noexcept
+{
+    current_tool()->changed_out.trigger();
 }

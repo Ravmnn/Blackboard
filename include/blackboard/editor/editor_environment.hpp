@@ -24,6 +24,8 @@ class EditorEnvironment : public Updateable, public Drawable, public Activatable
 protected:
     std::vector<Tool*> tools_;
 
+    Tool* current_tool_ = nullptr;
+
 
 public:
     Editor& editor;
@@ -32,14 +34,17 @@ public:
     MouseButtonEvent right_button;
     MouseButtonEvent middle_button;
 
-    Tool* current_tool = nullptr;
-
 
     explicit EditorEnvironment(Editor& editor) noexcept;
 
 
     void update() noexcept override;
     void draw() noexcept override;
+
+
+    Tool* current_tool() noexcept { return current_tool_; }
+
+    void set_current_tool(Tool& tool) noexcept;
 
 
 protected:
@@ -83,6 +88,7 @@ protected:
 
 
     void on_enabled() noexcept override;
+    void on_disabled() noexcept override;
 };
 
 

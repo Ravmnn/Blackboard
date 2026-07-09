@@ -46,7 +46,7 @@ public:
     friend class BrushBody;
 
 
-    Brush(Editor& editor, float thickness) noexcept;
+    Brush(EditorEnvironment& environment, float thickness) noexcept;
 
 
     void update() noexcept override;

@@ -29,7 +29,7 @@ public:
     EraserBody body;
 
 
-    explicit Eraser(Editor& editor) noexcept;
+    explicit Eraser(EditorEnvironment& environment) noexcept;
 
 
     void update() noexcept override;

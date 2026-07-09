@@ -2,7 +2,6 @@
 
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
-#include <chrono>
 
 
 
@@ -14,13 +13,13 @@ using bb::editor::EditorDrawingEnvironment;
 
 // TODO: LMB selecting replaces selection. RMB selecting appends selection
 EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
-    brush(editor, 14),
-    eraser(editor)
+    brush(*this, 14),
+    eraser(*this)
 {
     tools_.push_back(&brush);
     tools_.push_back(&eraser);
 
-    current_tool = &brush;
+    set_current_tool(brush);
 
 
     right_button.min_drag_distance = 75;
@@ -34,7 +33,7 @@ EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : Ed
 
 void EditorDrawingEnvironment::alternate_brush_and_eraser() noexcept
 {
-    current_tool = current_tool == &brush ? (Tool*)&eraser : (Tool*)&brush;
+    set_current_tool(current_tool() == &brush ? (Tool&)eraser : (Tool&)brush);
 }
 
 
@@ -44,8 +43,11 @@ void EditorDrawingEnvironment::enter_selection_mode(const bool enable_selection)
 {
     editor.set_current_environment(editor.selection_environment);
 
-    if (enable_selection)
-        editor.selection_environment.current_tool->enable();
+    if (!enable_selection)
+        return;
+
+    editor.selection_environment.set_current_tool(editor.selection_environment.selection);
+    editor.selection_environment.current_tool()->enable();
 }
 
 
@@ -63,13 +65,13 @@ void EditorDrawingEnvironment::on_enabled() noexcept
 
 void EditorDrawingEnvironment::on_left_button_press() noexcept
 {
-    current_tool->enable();
+    current_tool_->enable();
 }
 
 
 void EditorDrawingEnvironment::on_left_button_release() noexcept
 {
-    current_tool->disable();
+    current_tool_->disable();
 }
 
 

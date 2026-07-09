@@ -1,6 +1,6 @@
 #include <blackboard/editor/tools/brush/body.hpp>
 
-#include <blackboard/editor/editor.hpp>
+#include <blackboard/editor/editor_environment.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 
 
@@ -14,7 +14,7 @@ using bb::editor::BrushBody;
 BrushBody::BrushBody(Brush& brush) noexcept : Bubble(brush.thickness),
     brush(brush)
 {
-    brush.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::BrushBody::editor_environment_changed_callback");
+    brush.changed_in.subscribe([this]() noexcept { on_brush_changed_in(); }, "editor::BrushBody::brush_changed_in_callback");
 }
 
 
@@ -60,7 +60,7 @@ void BrushBody::update_color() noexcept
 
 
 
-void BrushBody::on_editor_environment_changed() noexcept
+void BrushBody::on_brush_changed_in() noexcept
 {
     last_position_ = position_ = brush.position();
     last_rotation_ = 0;

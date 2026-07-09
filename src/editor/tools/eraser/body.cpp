@@ -18,8 +18,7 @@ EraserBody::EraserBody(Eraser& eraser) noexcept : Bubble(BaseThickness),
     trail.decay = 5;
     sync_trail_color = false;
 
-
-    eraser.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::EraserBody::editor_environment_changed_callback");
+    eraser.changed_in.subscribe([this]() noexcept { on_eraser_changed_in(); }, "editor::EraserBody::eraser_changed_in_callback");
 }
 
 
@@ -39,7 +38,7 @@ void EraserBody::update() noexcept
 
 void EraserBody::update_trail() noexcept
 {
-    trail.color = eraser.editor.palette.current_color();
+    trail.color = eraser.environment.editor.palette.current_color();
     trail.color.a = 150;
 
     Bubble::update_trail();
@@ -48,7 +47,7 @@ void EraserBody::update_trail() noexcept
 
 void EraserBody::update_color() noexcept
 {
-    Color color = eraser.editor.palette.current_color();
+    Color color = eraser.environment.editor.palette.current_color();
     color.a = 215;
     outline_color = color;
 
@@ -61,7 +60,7 @@ void EraserBody::update_color() noexcept
 
 
 
-void EraserBody::on_editor_environment_changed() noexcept
+void EraserBody::on_eraser_changed_in() noexcept
 {
     last_position_ = position_ = eraser.position();
     last_rotation_ = 0;

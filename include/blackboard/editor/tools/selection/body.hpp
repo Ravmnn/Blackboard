@@ -53,7 +53,7 @@ private:
     void update_animations() noexcept;
 
 
-    void on_editor_environment_changed() noexcept;
+    void on_selection_changed_in() noexcept;
 };
 
 

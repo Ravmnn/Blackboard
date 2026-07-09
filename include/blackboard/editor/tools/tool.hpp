@@ -15,6 +15,7 @@ namespace bb::editor
 
 
 class Editor;
+class EditorEnvironment;
 
 
 class Tool : public Updateable, public Drawable, public Activatable, public Bounds
@@ -26,14 +27,21 @@ protected:
 
 
 public:
-    Editor& editor;
+    Event<> changed_in;
+    Event<> changed_out;
 
 
-    explicit Tool(Editor& editor) noexcept : editor(editor) {}
+    EditorEnvironment& environment;
+
+
+    explicit Tool(EditorEnvironment& environment) noexcept;
 
 
     void update() noexcept override;
 
+
+    Editor& editor() noexcept;
+    [[nodiscard]] const Editor& editor() const noexcept;
 
     [[nodiscard]] virtual Vector2 position() const noexcept = 0;
 
@@ -44,6 +52,10 @@ public:
 
 protected:
     void update_active_state() noexcept;
+
+
+    virtual void on_changed_in() {}
+    virtual void on_changed_out() {}
 };
 
 

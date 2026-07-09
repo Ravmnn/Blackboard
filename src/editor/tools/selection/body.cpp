@@ -21,7 +21,7 @@ SelectionBody::SelectionBody(Selection& selection) noexcept :
 
     selection(selection)
 {
-    selection.editor.environment_changed.subscribe([this]() noexcept { on_editor_environment_changed(); }, "editor::SelectionBody::editor_environment_changed_callback");
+    selection.changed_in.subscribe([this]() noexcept { on_selection_changed_in(); }, "editor::SelectionBody::selection_changed_in_callback");
 }
 
 
@@ -80,7 +80,7 @@ void SelectionBody::draw() noexcept
 
 
 
-void SelectionBody::on_editor_environment_changed() noexcept
+void SelectionBody::on_selection_changed_in() noexcept
 {
     set_rectangle_idle();
     rectangle_position_.set_value_immediately(rectangle_position_.target);

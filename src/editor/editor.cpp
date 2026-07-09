@@ -117,10 +117,10 @@ void Editor::update_canvas_background() noexcept
 
 void Editor::update_tool_changed_event() noexcept
 {
-    if (current_environment->current_tool != last_tool_)
+    if (current_environment->current_tool() != last_tool_)
         tool_changed.trigger();
 
-    last_tool_ = current_environment->current_tool;
+    last_tool_ = current_environment->current_tool();
 }
 
 

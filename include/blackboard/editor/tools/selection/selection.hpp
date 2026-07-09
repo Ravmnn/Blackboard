@@ -26,7 +26,7 @@ public:
     SelectionBody body;
 
 
-    Selection(Editor& editor) noexcept;
+    Selection(EditorEnvironment& environment) noexcept;
 
 
     void update() noexcept override;
