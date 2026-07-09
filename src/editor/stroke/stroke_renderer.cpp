@@ -21,18 +21,41 @@ using bb::editor::StrokeRenderer,
 
 StrokeRenderer::StrokeRenderer(const StrokeMeshRenderer& mesh_renderer, const StrokeMeshGenerator* sampler, const CanvasCamera* camera) noexcept :
     mesh_renderer_(&mesh_renderer),
-    sampler(sampler),
+    mesh_generator(sampler),
     camera(camera)
 {}
 
 
 
 
+void StrokeRenderer::draw_stroke_meshes(const std::vector<std::unique_ptr<StrokeMesh>>& meshes) noexcept
+{
+    for (const auto& mesh : meshes)
+        draw_stroke_mesh(*mesh);
+}
+
+
+void StrokeRenderer::draw_stroke_meshes(const std::vector<StrokeMesh*>& meshes) noexcept
+{
+    for (const auto& mesh : meshes)
+        draw_stroke_mesh(*mesh);
+}
+
+
+void StrokeRenderer::draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) noexcept
+{
+    for (const auto& mesh : meshes)
+        draw_stroke_mesh(mesh);
+}
+
+
+
+
 void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
 {
-    assert(sampler);
+    assert(mesh_generator);
 
-    auto mesh = sampler->generate_mesh(stroke);
+    auto mesh = mesh_generator->generate_mesh(stroke);
 
     if (mesh)
         draw_stroke_mesh(*mesh);

@@ -23,12 +23,6 @@ EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept 
 
 
     left_button.min_drag_distance = 5;
-    left_button.drag_start.subscribe([this](auto&) noexcept { current_tool()->enable(); });
-    left_button.drag_end.subscribe([this](const auto&) noexcept { current_tool()->disable(); });
-
-    left_button.click.subscribe([&](const auto&) noexcept { editor.set_current_environment(editor.draw_environment); });
-
-    right_button.release.subscribe([this](const auto&) noexcept { current_tool()->disable(); });
 }
 
 
@@ -62,7 +56,10 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
 
     negative_effect_.enable();
     editor.canvas.stroke_renderer.set_mesh_renderer(selection_outline_stroke_mesh_renderer_);
-    editor.canvas.draw_strokes();
+
+    editor.canvas.stroke_renderer.draw_stroke_meshes(in_selection_strokes_);
+    editor.canvas.stroke_renderer.draw_stroke_meshes(selected_strokes);
+
     editor.canvas.stroke_renderer.set_mesh_renderer(editor.default_stroke_mesh_renderer());
     negative_effect_.disable();
 }
@@ -75,4 +72,64 @@ void EditorSelectionEnvironment::on_enabled() noexcept
     EditorEnvironment::on_enabled();
 
     editor.dynamic_background_color = false;
+}
+
+
+void EditorSelectionEnvironment::on_disabled() noexcept
+{
+    EditorEnvironment::on_disabled();
+
+    selected_strokes.clear();
+}
+
+
+
+
+void EditorSelectionEnvironment::on_left_button_click() noexcept
+{
+    editor.set_current_environment(editor.draw_environment);
+}
+
+
+void EditorSelectionEnvironment::on_left_button_drag_start() noexcept
+{
+    selected_strokes.clear();
+    current_tool()->enable();
+}
+
+
+void EditorSelectionEnvironment::on_left_button_drag_end() noexcept
+{
+    current_tool()->disable();
+    add_in_selection_strokes_to_selection();
+}
+
+
+void EditorSelectionEnvironment::add_in_selection_strokes_to_selection() noexcept
+{
+    for (const auto& in_selection_stroke : in_selection_strokes_)
+        if (!std::ranges::contains(selected_strokes, in_selection_stroke))
+            selected_strokes.push_back(in_selection_stroke);
+
+    in_selection_strokes_.clear();
+}
+
+
+
+
+void EditorSelectionEnvironment::on_right_button_release() noexcept
+{
+    on_left_button_drag_end();
+}
+
+
+void EditorSelectionEnvironment::on_right_button_drag_start() noexcept
+{
+    current_tool()->enable();
+}
+
+
+void EditorSelectionEnvironment::on_right_button_drag_end() noexcept
+{
+    on_left_button_drag_end();
 }

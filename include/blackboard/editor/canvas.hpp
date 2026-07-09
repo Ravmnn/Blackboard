@@ -24,6 +24,7 @@ public:
     CanvasRenderer canvas_renderer;
     CanvasCamera camera;
 
+    // TODO: move stroke rendering to editor
     std::vector<std::unique_ptr<StrokeMesh>> stroke_meshes;
 
     StrokeMeshGenerator stroke_mesh_generator;
@@ -36,7 +37,6 @@ public:
 
 
     void update() noexcept override;
-    void draw_strokes() noexcept;
 
 
     [[nodiscard]] const Camera2D& raylib_camera() const noexcept { return camera.camera(); }

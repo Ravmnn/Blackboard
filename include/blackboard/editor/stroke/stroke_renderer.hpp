@@ -2,6 +2,8 @@
 
 #include <cstddef>
 
+#include <memory>
+#include <vector>
 
 
 
@@ -40,12 +42,16 @@ public:
     bool should_debug_draw_edges = false;
     bool should_debug_draw_caps = false;
 
-    const StrokeMeshGenerator* sampler;
+    const StrokeMeshGenerator* mesh_generator;
     const CanvasCamera* camera;
 
 
     StrokeRenderer(const StrokeMeshRenderer& mesh_renderer, const StrokeMeshGenerator* sampler, const CanvasCamera* camera = nullptr) noexcept;
 
+
+    void draw_stroke_meshes(const std::vector<std::unique_ptr<StrokeMesh>>& meshes) noexcept;
+    void draw_stroke_meshes(const std::vector<StrokeMesh*>& meshes) noexcept;
+    void draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) noexcept;
 
     void draw_stroke(const Stroke& stroke) noexcept;
     void draw_stroke_mesh(const StrokeMesh& mesh) noexcept;

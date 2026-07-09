@@ -148,7 +148,7 @@ void Editor::draw_to_canvas() noexcept
 {
     canvas.canvas_renderer.begin_render();
     canvas.camera.enable();
-        canvas.draw_strokes();
+        canvas.stroke_renderer.draw_stroke_meshes(canvas.stroke_meshes);
 
         current_environment->draw();
         mouse_late_mode_indicator.draw();

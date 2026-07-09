@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 
 #include <blackboard/editor/editor.hpp>
@@ -67,7 +68,8 @@ void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
     for (auto& mesh_node : stroke)
         mesh_node.color.a = 150;
 
-    strokes_to_remove_.push_back(&stroke);
+    if (!std::ranges::contains(strokes_to_remove_, &stroke))
+        strokes_to_remove_.push_back(&stroke);
 }
 
 

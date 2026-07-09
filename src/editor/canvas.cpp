@@ -37,19 +37,13 @@ void Canvas::update() noexcept
 
 
 
-void Canvas::draw_strokes() noexcept
-{
-    for (const auto& mesh : stroke_meshes)
-        stroke_renderer.draw_stroke_mesh(*mesh);
-}
-
-
-
-
 void Canvas::add_stroke(const Stroke& stroke) noexcept
 {
     if (stroke.points.empty())
         return;
 
-    stroke_meshes.push_back(stroke_mesh_generator.generate_mesh(stroke));
+    auto mesh = stroke_mesh_generator.generate_mesh(stroke);
+
+    if (mesh && !mesh->empty())
+        stroke_meshes.push_back(std::move(mesh));
 }
