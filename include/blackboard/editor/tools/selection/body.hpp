@@ -24,6 +24,9 @@ private:
     animation::ExponentialInterpolation<Vector2> rectangle_position_;
     animation::ExponentialInterpolation<Vector2> rectangle_size_;
 
+    animation::ExponentialInterpolation<float> effect_spacing_animation_;
+
+
     Color rectangle_color_ = ColorAlpha(RED, 0.3);
     Color rectangle_outline_color_ = ColorAlpha(RED, 0.7);
 
