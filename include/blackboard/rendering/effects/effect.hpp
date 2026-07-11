@@ -21,6 +21,8 @@ private:
 
 public:
     rendering::EffectProperty<Vector2> resolution;
+    rendering::EffectProperty<float> time;
+
     bool use_window_resolution = true;
 
 

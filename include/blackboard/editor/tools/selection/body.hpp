@@ -4,6 +4,7 @@
 #include <blackboard/drawable.hpp>
 #include <blackboard/bounds.hpp>
 #include <blackboard/animation/interpolation.hpp>
+#include <blackboard/editor/effects/selection.hpp>
 
 
 
@@ -32,6 +33,7 @@ private:
 
 public:
     Selection& selection;
+    SelectionEffect selection_effect;
 
 
     explicit SelectionBody(Selection& selection) noexcept;
@@ -51,6 +53,7 @@ private:
     void set_rectangle_idle() noexcept;
 
     void update_animations() noexcept;
+    void update_effects() noexcept;
 
 
     void on_selection_changed_in() noexcept;

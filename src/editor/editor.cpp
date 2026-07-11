@@ -151,9 +151,9 @@ void Editor::draw_self() noexcept
 
 void Editor::draw_to_canvas() noexcept
 {
-    // canvas.camera.enable();
-    // background.draw();
-    // canvas.camera.disable();
+    canvas.camera.enable();
+    background.draw();
+    canvas.camera.disable();
 
     canvas.begin_render();
     canvas.camera.enable();

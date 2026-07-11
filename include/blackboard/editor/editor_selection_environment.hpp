@@ -2,7 +2,7 @@
 
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
-#include <blackboard/editor/effects/negative.hpp>
+#include <blackboard/editor/effects/selection.hpp>
 #include <blackboard/editor/editor_environment.hpp>
 #include <blackboard/editor/tools/selection/selection.hpp>
 
@@ -25,10 +25,7 @@ private:
 
     StrokeMeshOutlineRenderer selection_outline_stroke_mesh_renderer_;
 
-    static constexpr float SelectionOutlineBaseThickness = 12;
-
-
-    NegativeEffect negative_effect_;
+    static constexpr float SelectionOutlineBaseThickness = 8;
 
 
 public:
@@ -38,7 +35,9 @@ public:
     std::vector<StrokeMesh*> selected_strokes;
 
     Selection selection;
-    bool use_negative_colors = true;
+    SelectionEffect selection_effect;
+
+    //bool use_negative_colors = true;
 
 
     explicit EditorSelectionEnvironment(Editor& editor) noexcept;

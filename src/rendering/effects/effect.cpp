@@ -17,7 +17,8 @@ Effect::Effect(const char* fragment_shader) : Effect(LoadShaderFromMemory(nullpt
 Effect::Effect(const Shader& shader) :
     shader_(shader),
 
-    resolution(shader_, "u_resolution", {})
+    resolution(shader_, "u_resolution", {}),
+    time(shader_, "u_time", {})
 {}
 
 
@@ -28,7 +29,10 @@ void Effect::update() noexcept
     if (use_window_resolution)
         resolution = WindowRenderer::screen_resolution();
 
+    time = (float)GetTime();
+
     resolution.update();
+    time.update();
 }
 
 

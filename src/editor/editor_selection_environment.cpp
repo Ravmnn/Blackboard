@@ -10,16 +10,12 @@ using bb::editor::EditorSelectionEnvironment;
 
 
 
-// TODO: cool background for selection mode
 EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
     selection(*this)
 {
     tools_.push_back(&selection);
 
     set_current_tool(selection);
-
-
-    negative_effect_.default_color = RED;
 
 
     left_button.min_drag_distance = 5;
@@ -32,8 +28,8 @@ void EditorSelectionEnvironment::update() noexcept
 {
     EditorEnvironment::update();
 
-    negative_effect_.grayness_threshold = use_negative_colors ? 0.65 : 0;
-    negative_effect_.update();
+    //selection_effect_.grayness_threshold = use_negative_colors ? 0.65 : 0;
+    selection_effect.update();
 }
 
 
@@ -41,7 +37,9 @@ void EditorSelectionEnvironment::update() noexcept
 
 void EditorSelectionEnvironment::draw() noexcept
 {
+    BeginBlendMode(BLEND_MULTIPLIED);
     draw_selected_strokes();
+    EndBlendMode();
 
     EditorEnvironment::draw();
 }
@@ -54,14 +52,14 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
 
     selection_outline_stroke_mesh_renderer_.outline_thickness = SelectionOutlineBaseThickness / editor.canvas.raylib_camera().zoom;
 
-    negative_effect_.enable();
+    selection_effect.enable();
     editor.canvas.stroke_renderer.set_mesh_renderer(selection_outline_stroke_mesh_renderer_);
 
     editor.canvas.stroke_renderer.draw_stroke_meshes(in_selection_strokes_);
     editor.canvas.stroke_renderer.draw_stroke_meshes(selected_strokes);
 
     editor.canvas.stroke_renderer.set_mesh_renderer(editor.default_stroke_mesh_renderer());
-    negative_effect_.disable();
+    selection_effect.disable();
 }
 
 

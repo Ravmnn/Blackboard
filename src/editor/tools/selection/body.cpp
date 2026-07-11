@@ -35,6 +35,7 @@ void SelectionBody::update() noexcept
         set_rectangle_idle();
 
     update_animations();
+    update_effects();
 }
 
 
@@ -42,6 +43,12 @@ void SelectionBody::update_animations() noexcept
 {
     rectangle_position_.update();
     rectangle_size_.update();
+}
+
+
+void SelectionBody::update_effects() noexcept
+{
+    selection_effect.update();
 }
 
 
@@ -73,7 +80,10 @@ void SelectionBody::draw() noexcept
 
     const Rectangle rectangle = Rect::from_two_points(rectangle_position_, rectangle_position_ + rectangle_size_);
 
+    selection_effect.enable();
     Draw::rounded_rectangle(rectangle, Radius, rectangle_color_);
+    selection_effect.disable();
+
     Draw::rounded_rectangle_outline(rectangle, Radius, 2, rectangle_outline_color_);
 }
 

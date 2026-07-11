@@ -17,31 +17,34 @@ inline static const char* const NegativeStrokeSelection = R"(
 #version 330
 
 
-uniform vec4 u_default_color;
-uniform float u_grayness_threshold;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+uniform float u_spacing;
+uniform float u_speed;
+uniform float u_thickness;
+uniform float u_smoothness;
+uniform vec4 u_color;
+uniform vec4 u_background_color;
 
 
-in vec4 fragColor;
 out vec4 out_color;
-
-
-float grayness(vec3 color)
-{
-    float maxv = max(color.r, max(color.g, color.b));
-    float minv = min(color.r, min(color.g, color.b));
-
-    return 1.0 - (maxv - minv);
-}
 
 
 void main()
 {
-    out_color = 1.0 - fragColor;
+    vec2 uv = gl_FragCoord.xy;
 
-    if (grayness(fragColor.rgb) >= u_grayness_threshold)
-        out_color = u_default_color;
+    float line = (uv.x - uv.y) + u_time * u_speed;
+    float pattern = mod(line, u_spacing);
+    pattern = min(pattern, u_spacing - pattern);
+    float normalized_dist = smoothstep(u_thickness - u_smoothness, u_thickness, pattern);
 
-    out_color.a = 1.0;
+    float color_factor = mix(0.0, 1.0, 1 - normalized_dist);
+
+    vec4 final_color = mix(u_background_color, u_color, color_factor);
+
+    out_color = final_color;
 }
 )";
 
