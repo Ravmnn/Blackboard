@@ -12,7 +12,8 @@ using bb::editor::Editor,
     bb::ui::Component,
     bb::ui::Context,
     bb::editor::StrokeMesh,
-    bb::editor::StrokeMeshCollider;
+    bb::editor::StrokeMeshCollider,
+    bb::rendering::TextureRenderer;
 
 
 
@@ -21,8 +22,9 @@ Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
     Clickable(canvas),
 
-    canvas(default_stroke_mesh_renderer_),
+    background(*this),
 
+    canvas(default_stroke_mesh_renderer_),
     palette(DefaultPaletteColor),
 
     draw_environment(*this),
@@ -68,11 +70,12 @@ void Editor::update() noexcept
 {
     update_focus();
     update_keybindings();
-    update_canvas_background();
+    update_background();
 
     Clickable::update();
 
 
+    background.update();
     current_environment->update();
     mouse_late_mode_indicator.update();
 
@@ -104,14 +107,13 @@ void Editor::update_keybindings() noexcept
 }
 
 
-void Editor::update_canvas_background() noexcept
+void Editor::update_background() noexcept
 {
+    // TODO: make dot pattern background work
     if (dynamic_background_color)
-        canvas.background_color = palette.background_color_from_current();
+        background.effect.background_color = palette.background_color_from_current();
     else
-        canvas.background_color = DefaultBackgroundColor;
-
-    canvas.background_color.update();
+        background.effect.background_color = DefaultBackgroundColor;
 }
 
 
@@ -146,7 +148,11 @@ void Editor::draw_self() noexcept
 
 void Editor::draw_to_canvas() noexcept
 {
-    canvas.canvas_renderer.begin_render();
+    canvas.camera.enable();
+    background.draw();
+    canvas.camera.disable();
+
+    canvas.begin_render();
     canvas.camera.enable();
         canvas.stroke_renderer.draw_stroke_meshes(canvas.stroke_meshes);
 
@@ -155,7 +161,7 @@ void Editor::draw_to_canvas() noexcept
 
         draw_vanish_animations();
     canvas.camera.disable();
-    canvas.canvas_renderer.end_render();
+    canvas.end_render();
 }
 
 
@@ -169,7 +175,7 @@ void Editor::draw_vanish_animations() noexcept
 
 void Editor::draw_canvas_content() noexcept
 {
-    canvas.canvas_renderer.draw_contents_texture();
+    TextureRenderer::draw_y_inverted_texture(canvas.contents().texture);
 }
 
 

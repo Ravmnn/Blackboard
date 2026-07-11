@@ -6,6 +6,7 @@
 #include <blackboard/editor/vanish.hpp>
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
 #include <blackboard/editor/mouse_late_mode_indicator.hpp>
@@ -39,6 +40,8 @@ private:
 
 
 public:
+    EditorBackground background;
+
     Canvas canvas;
     Palette palette;
     bool dynamic_background_color = false;
@@ -81,7 +84,7 @@ public:
 private:
     void update_focus() noexcept;
     void update_keybindings() noexcept;
-    void update_canvas_background() noexcept;
+    void update_background() noexcept;
     void update_tool_changed_event() noexcept;
     void update_vanish_animations() noexcept;
 

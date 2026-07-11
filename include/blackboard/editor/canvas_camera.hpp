@@ -22,6 +22,8 @@ private:
     Camera2D camera_;
     Camera2D target_camera_;
 
+    Vector2 mouse_delta_after_zoom_;
+
     animation::ExponentialInterpolation<Vector2> movement_interpolation_;
     animation::ExponentialInterpolation<float> zoom_interpolation_;
 
@@ -48,6 +50,7 @@ public:
 
     [[nodiscard]] const Camera2D& camera() const noexcept { return camera_; }
     [[nodiscard]] const Camera2D& target_camera() const noexcept { return target_camera_; }
+    [[nodiscard]] const Vector2& mouse_delta_after_zoom() const noexcept { return mouse_delta_after_zoom_; }
 
 
     [[nodiscard]] Rectangle get_world_bounds() const noexcept;

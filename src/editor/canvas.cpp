@@ -1,21 +1,24 @@
 #include <blackboard/editor/canvas.hpp>
 
-
-
-
-using bb::editor::Canvas;
+#include <blackboard/rendering/window_renderer.hpp>
 
 
 
 
-Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept :
-    canvas_renderer(*this),
-    camera(*this, 0.2, 25, 0.13),
+using bb::editor::Canvas,
+    bb::rendering::WindowRenderer,
+    bb::rendering::TextureRenderer;
+
+
+
+
+Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept : TextureRenderer(true),
+    camera(*this, 0.2, 5, 0.13),
 
     stroke_mesh_generator(6),
     stroke_renderer(mesh_renderer, &stroke_mesh_generator, &camera),
 
-    background_color(BLACK, 0.6)
+    background_color(BLANK)
 {
     stroke_renderer.should_debug_draw_points = false;
     stroke_renderer.should_debug_draw_edges = false;
@@ -28,10 +31,31 @@ Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept :
 
 
 
+void Canvas::initialize() noexcept
+{
+    resize_texture_renderer();
+
+    Initializable::initialize();
+}
+
+
+
+
+
 void Canvas::update() noexcept
 {
+    initialize_if_uninitialized();
+
+    if (IsWindowResized())
+        resize_texture_renderer();
+
     camera.update();
-    canvas_renderer.update();
+}
+
+
+void Canvas::resize_texture_renderer() noexcept
+{
+    resize(WindowRenderer::screen_resolution());
 }
 
 

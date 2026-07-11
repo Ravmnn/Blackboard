@@ -25,7 +25,7 @@ CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const flo
     target_camera_ = Camera2D{
         .target = {},
         .rotation = 0,
-        .zoom = CanvasRenderer::SuperSamplingFactor
+        .zoom = 1
     };
 
     camera_ = target_camera_;
@@ -47,7 +47,7 @@ void CanvasCamera::update() noexcept
 void CanvasCamera::update_dragging() noexcept
 {
     if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
-        target_camera_.target += GetMouseDelta() * CanvasRenderer::SuperSamplingFactor / target_camera_.zoom * -1;
+        target_camera_.target += GetMouseDelta() / target_camera_.zoom * -1;
 }
 
 
@@ -61,8 +61,8 @@ void CanvasCamera::update_zoom() noexcept
     target_camera_.zoom = Clamp(target_camera_.zoom, min_zoom, max_zoom);
 
     const Vector2 mouse_world_after = canvas.mouse_position();
-    target_camera_.target.x += mouse_world.x - mouse_world_after.x;
-    target_camera_.target.y += mouse_world.y - mouse_world_after.y;
+    mouse_delta_after_zoom_ = mouse_world - mouse_world_after;
+    target_camera_.target += mouse_delta_after_zoom_;
 }
 
 
@@ -77,7 +77,7 @@ void CanvasCamera::update_interpolation() noexcept
 
 Rectangle CanvasCamera::get_world_bounds() const noexcept
 {
-    const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() } * CanvasRenderer::SuperSamplingFactor;
+    const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() };
 
     const Vector2 topLeft = GetScreenToWorld2D({ 0, 0 }, camera_) - bounds_expansion;
     const Vector2 bottomRight = GetScreenToWorld2D(screen_size, camera_) + bounds_expansion * 2;
