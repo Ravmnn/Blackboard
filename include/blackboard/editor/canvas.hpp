@@ -30,8 +30,6 @@ public:
     StrokeMeshGenerator stroke_mesh_generator;
     StrokeRenderer stroke_renderer;
 
-    Color background_color;
-
 
     Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept;
 
@@ -48,6 +46,7 @@ public:
 
 
     [[nodiscard]] Vector2 map_point(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, camera.target_camera()); }
+    [[nodiscard]] Vector2 map_point_using_interpolated_camera(const Vector2& point) const noexcept { return GetScreenToWorld2D(point, camera.camera()); }
 
 
     void add_stroke(const Stroke& stroke) noexcept;

@@ -1,25 +1,31 @@
 #include <blackboard/editor/editor_background.hpp>
 
+#include <blackboard/animation/interpolate.hpp>
+#include <blackboard/math/rect.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
 
 
 using bb::editor::EditorBackground,
-    bb::rendering::TextureRenderer;
+    bb::rendering::TextureRenderer,
+    bb::animation::Interpolate,
+    bb::math::Rect;
 
 
 
 
-EditorBackground::EditorBackground(const Editor& editor) noexcept :
-    editor(editor)
+EditorBackground::EditorBackground(const Editor& editor, const float zoom_visibility_interval_min, const float zoom_visibility_interval_max) noexcept :
+    editor(editor),
+
+    zoom_visibility_interval_min(zoom_visibility_interval_min),
+    zoom_visibility_interval_max(zoom_visibility_interval_max)
 {
-    effect.spacing = 50;
-    effect.radius = 1;
-    effect.alpha_factor = 0.15;
+    effect.spacing = 40;
+    effect.radius = 0.85;
 
-    effect.alt_spacing = 100;
-    effect.alt_radius = 1.2;
+    effect.alt_spacing = 80;
+    effect.alt_radius = 1.0;
     effect.alt_alpha_factor = 0.25;
 
     effect.soft_outline_thickness = 0.1;
@@ -30,6 +36,9 @@ EditorBackground::EditorBackground(const Editor& editor) noexcept :
 
 void EditorBackground::update() noexcept
 {
+    effect.alt_alpha_factor = get_alpha_factor();
+    effect.alpha_factor = effect.alt_alpha_factor * alpha_factor_ratio_;
+
     update_effect();
 }
 
@@ -41,11 +50,22 @@ void EditorBackground::update_effect() noexcept
 }
 
 
+float EditorBackground::get_alpha_factor() const noexcept
+{
+    const float t = Interpolate::inverse(zoom_visibility_interval_max, zoom_visibility_interval_min, editor.canvas.raylib_camera().zoom);
+    return max_alpha_factor * std::clamp(t, 0.0f, 1.0f);
+}
+
+
 
 
 void EditorBackground::draw() noexcept
 {
+    const Vector2 start = editor.canvas.map_point_using_interpolated_camera({ 0, 0 });
+    const Vector2 end = editor.canvas.map_point_using_interpolated_camera(editor.canvas.resolution());
+    const Rectangle rect = Rect::from_two_points(start, end);
+
     effect.enable();
-    DrawRectangleV({ -8000, -8000 }, { 16000, 16000 }, WHITE);
+    DrawRectangleRec(rect, WHITE);
     effect.disable();
 }

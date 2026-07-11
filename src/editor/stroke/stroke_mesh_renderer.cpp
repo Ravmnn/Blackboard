@@ -19,6 +19,7 @@ StrokeMeshRenderer::StrokeMeshRenderer() noexcept :
 
 
 
+// TODO: replace rendering brush rendering system by the Mesh based. Maybe create class Object, containing that logic?
 void StrokeMeshRenderer::render(const StrokeMeshQuad& quad) const noexcept
 {
     const Color color = overwrite_color.value_or(quad.color());

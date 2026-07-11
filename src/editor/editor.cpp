@@ -1,3 +1,4 @@
+#include "raylib.h"
 #include <blackboard/editor/editor.hpp>
 
 #include <blackboard/ui/context.hpp>
@@ -22,7 +23,7 @@ Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
     Clickable(canvas),
 
-    background(*this),
+    background(*this, 1, 0.35),
 
     canvas(default_stroke_mesh_renderer_),
     palette(DefaultPaletteColor),
@@ -33,6 +34,9 @@ Editor::Editor(Context& ui_context) noexcept :
     mouse_late_mode_indicator(canvas, *this)
 {
     clip = false;
+
+
+    background.max_alpha_factor = 0.40;
 
 
     set_current_environment(draw_environment);
@@ -109,7 +113,6 @@ void Editor::update_keybindings() noexcept
 
 void Editor::update_background() noexcept
 {
-    // TODO: make dot pattern background work
     if (dynamic_background_color)
         background.effect.background_color = palette.background_color_from_current();
     else
@@ -148,9 +151,9 @@ void Editor::draw_self() noexcept
 
 void Editor::draw_to_canvas() noexcept
 {
-    canvas.camera.enable();
-    background.draw();
-    canvas.camera.disable();
+    // canvas.camera.enable();
+    // background.draw();
+    // canvas.camera.disable();
 
     canvas.begin_render();
     canvas.camera.enable();

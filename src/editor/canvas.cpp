@@ -16,9 +16,7 @@ Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept : TextureRender
     camera(*this, 0.2, 5, 0.13),
 
     stroke_mesh_generator(6),
-    stroke_renderer(mesh_renderer, &stroke_mesh_generator, &camera),
-
-    background_color(BLANK)
+    stroke_renderer(mesh_renderer, &stroke_mesh_generator, &camera)
 {
     stroke_renderer.should_debug_draw_points = false;
     stroke_renderer.should_debug_draw_edges = false;
@@ -26,6 +24,9 @@ Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept : TextureRender
     stroke_renderer.should_debug_draw_caps = false;
 
     camera.bounds_expansion = { 100, 100 };
+
+
+    clear_color = BLANK;
 }
 
 

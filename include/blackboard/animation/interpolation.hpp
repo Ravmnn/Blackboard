@@ -27,7 +27,7 @@ public:
         speed(speed), smoothing(smoothing) {}
 
 
-    void update() noexcept override { this->current = Interpolate::expolerp(this->current, this->target, smoothing, speed); }
+    void update() noexcept override { this->current = Interpolate::exponential(this->current, this->target, smoothing, speed); }
 };
 
 

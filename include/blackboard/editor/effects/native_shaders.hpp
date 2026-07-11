@@ -21,7 +21,7 @@ uniform vec4 u_default_color;
 uniform float u_grayness_threshold;
 
 
-in vec4 color;
+in vec4 fragColor;
 out vec4 out_color;
 
 
@@ -36,14 +36,18 @@ float grayness(vec3 color)
 
 void main()
 {
-    out_color = 1.0 - color;
+    out_color = 1.0 - fragColor;
 
-    if (grayness(color.rgb) >= u_grayness_threshold)
+    if (grayness(fragColor.rgb) >= u_grayness_threshold)
         out_color = u_default_color;
 
     out_color.a = 1.0;
 }
 )";
+
+
+
+
 
 
 

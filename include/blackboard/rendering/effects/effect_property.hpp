@@ -32,6 +32,7 @@ public:
 
 
     T operator=(const T& value) noexcept { return this->value = value; }
+    operator T() const noexcept { return value; }
 
 
     void update() noexcept override { update_shader_value(); }
