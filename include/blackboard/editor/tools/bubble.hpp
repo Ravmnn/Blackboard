@@ -30,7 +30,7 @@ protected:
 public:
     Vector2 target;
 
-    animation::Spring<float> thickness;
+    animation::Spring<float> half_thickness;
     animation::Spring<float> stretch;
     animation::ExponentialInterpolation<float> outline_thickness;
     animation::ExponentialInterpolation<Color> color;
@@ -51,7 +51,7 @@ public:
     [[nodiscard]] Vector2 velocity() const noexcept { return position_ - last_position_; }
 
     [[nodiscard]] Rectangle bounding_box() const noexcept override {
-        return { position().x - thickness, position().y - thickness, thickness * 2, thickness * 2 };
+        return { position().x - half_thickness, position().y - half_thickness, half_thickness * 2, half_thickness * 2 };
     }
 
 
@@ -60,6 +60,8 @@ protected:
     virtual void update_thickness() noexcept;
     virtual void update_stretch() noexcept;
     virtual void update_color() noexcept;
+
+    [[nodiscard]] StrokePoint create_stroke_point() const noexcept;
 
     void draw_trail() noexcept;
     void draw_body() noexcept;

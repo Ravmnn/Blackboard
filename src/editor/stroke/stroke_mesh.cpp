@@ -8,7 +8,7 @@
 
 
 using bb::editor::StrokeMesh,
-    bb::editor::StrokeSplineSegment,
+    bb::editor::StrokePointInterpolation,
     bb::editor::StrokeSample,
     bb::editor::StrokeEdge,
     bb::editor::StrokeMeshNode,
@@ -18,33 +18,33 @@ using bb::editor::StrokeMesh,
 
 
 
-StrokeSplineSegment::StrokeSplineSegment(const std::vector<StrokePoint>& points, const int i) noexcept :
-    current_thickness_(points[i].thickness),
-    next_thickness_(points[i + 1].thickness),
-
-    last(points[i - 1].position),
-    current(points[i].position),
-    next(points[i + 1].position),
-    after_next(points[i + 2].position)
+StrokePointInterpolation::StrokePointInterpolation(const std::vector<StrokePoint>& points, const int i) noexcept :
+    last_point(points[i - 1]),
+    origin_point(points[i]),
+    next_point(points[i + 1]),
+    after_next_point(points[i + 2])
 {}
 
 
 
 
-StrokeSample::StrokeSample(const StrokeSplineSegment& segment, const int index, const int max_index) noexcept :
-    segment(segment),
+StrokeSample::StrokeSample(const StrokePointInterpolation& segment, const int index, const int max_index) noexcept :
+    interpolation(segment),
     index(index),
     max_index(max_index),
-    position(segment.point(t())),
+    position(segment.position(t())),
     thickness(segment.thickness(t())),
+    outline_thickness(segment.outline_thickness(t())),
+    color(segment.color(t())),
+    outline_color(segment.outline_color(t())),
     curvature(calculate_curvature())
 {}
 
 
 float StrokeSample::calculate_curvature() const noexcept
 {
-    const Vector2 previous = segment.point((float)(index - 1) / (float)max_index);
-    const Vector2 next = segment.point((float)(index + 1) / (float)max_index);
+    const Vector2 previous = interpolation.position((float)(index - 1) / (float)max_index);
+    const Vector2 next = interpolation.position((float)(index + 1) / (float)max_index);
 
     return calculate_curvature(previous, position, next);
 }
@@ -78,10 +78,9 @@ StrokeEdge::StrokeEdge(const Vector2& top, const Vector2& bottom) noexcept :
 
 
 
-StrokeMeshNode::StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge, const Color& color) noexcept :
+StrokeMeshNode::StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge) noexcept :
     sample(sample),
-    edge(edge),
-    color(color)
+    edge(edge)
 {}
 
 
@@ -108,12 +107,12 @@ StrokeMeshCapSegment::StrokeMeshCapSegment(const Vector2& center, const Vector2&
 void StrokeMesh::set_color(const Color& color) noexcept
 {
     for (auto& node : *this)
-        node.color = color;
+        node.sample.color = color;
 }
 
 
 void StrokeMesh::set_alpha(const uint8_t alpha) noexcept
 {
     for (auto& node : *this)
-        node.color.a = alpha;
+        node.sample.color.a = alpha;
 }

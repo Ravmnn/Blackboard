@@ -5,13 +5,14 @@
 
 
 
-using bb::editor::Brush;
+using bb::editor::Brush,
+    bb::editor::StrokePoint;
 
 
 
 
 Brush::Brush(EditorEnvironment& environment, const float thickness) noexcept : Tool(environment),
-    stroke_({}, BLACK),
+    stroke_({}),
     color_(environment.editor.palette.current_color()),
     thickness(thickness),
     cursor(2),
@@ -36,7 +37,6 @@ void Brush::update() noexcept
     body.update();
 
     current_thickness_ = thickness_from_speed();
-    stroke_.color = color_;
     add_stroke_point();
 }
 
@@ -61,7 +61,7 @@ void Brush::add_stroke_point() noexcept
     if (!active() || cursor.is_too_slow())
         return;
 
-    stroke_.points.emplace_back(cursor.position(), current_thickness_);
+    stroke_.points.push_back(create_stroke_point());
     modify_previous_points_thickness(current_thickness_);
 }
 
@@ -72,7 +72,16 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 
     for (int i = (int)stroke_.points.size() - 1; i > minimum_index && i >= 0; i--)
         stroke_.points[i].thickness = thickness;
+}
 
+
+StrokePoint Brush::create_stroke_point() const noexcept
+{
+    return StrokePoint{
+        .position = cursor.position(),
+        .thickness = current_thickness_,
+        .color = color_
+    };
 }
 
 

@@ -24,7 +24,7 @@ std::unique_ptr<StrokeMesh> StrokeMeshGenerator::generate_mesh(const Stroke& str
     const std::vector<StrokeSample> samples = create_samples(new_points);
     const std::vector<StrokeEdge> edges = create_edges(samples);
 
-    return create_mesh(samples, edges, stroke.color);
+    return create_mesh(samples, edges);
 }
 
 
@@ -52,7 +52,7 @@ std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<
     for (size_t i = 1; i < size; i++)
     {
         const unsigned int samples_amount = (adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment);
-        add_samples_from_segment(samples, StrokeSplineSegment(points, (int)i), samples_amount, i);
+        add_samples_from_segment(samples, StrokePointInterpolation(points, (int)i), samples_amount, i);
     }
 
     return samples;
@@ -78,7 +78,7 @@ float StrokeMeshGenerator::calculate_average_curvature(const std::vector<StrokeP
 }
 
 
-void StrokeMeshGenerator::add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokeSplineSegment& segment,
+void StrokeMeshGenerator::add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokePointInterpolation& segment,
     const unsigned int samples_amount, const size_t i) noexcept
 {
     const int start = (i == 1) ? 0 : 1;
@@ -135,13 +135,13 @@ Vector2 StrokeMeshGenerator::get_direction_from_samples(const std::vector<Stroke
 
 
 
-std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges, const Color& color) noexcept
+std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<StrokeSample>& samples, const std::vector<StrokeEdge>& edges) noexcept
 {
     auto* mesh = new StrokeMesh;
     mesh->reserve(samples.size());
 
     for (size_t i = 0; i < samples.size(); i++)
-        mesh->emplace_back(samples[i], edges[i], color);
+        mesh->emplace_back(samples[i], edges[i]);
 
     return std::unique_ptr<StrokeMesh>(mesh);
 }

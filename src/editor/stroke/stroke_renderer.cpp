@@ -93,7 +93,7 @@ void StrokeRenderer::draw_cap_if_intense_curve(const StrokeMesh& mesh, const siz
     const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
 
-    draw_cap(current, final_direction, current_node.thickness() * 0.5f, current_node.color);
+    draw_cap(current, final_direction, current_node.thickness() * 0.5f, current_node.color());
 }
 
 
@@ -116,11 +116,11 @@ void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 
     const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2) / 2;
     const Vector2 direction_start = Vector2Normalize(mesh[0].position() - mesh[1].position());
-    draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color);
+    draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color());
 
     const float end_thickness_average = (mesh[samples_count - 1].thickness() / 2 + mesh[samples_count - 2].thickness() / 2) / 2;
     const Vector2 direction_end = Vector2Normalize(mesh[samples_count - 1].position() - mesh[samples_count - 2].position());
-    draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color);
+    draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color());
 }
 
 
@@ -168,7 +168,7 @@ void StrokeRenderer::draw_debug_visualization(const StrokeMesh& mesh) const noex
 void StrokeRenderer::debug_draw_points(const StrokeMesh& mesh) noexcept
 {
     for (const auto& node : mesh)
-        DrawCircleV(node.sample.origin().position, DebugCircleRadius, RED);
+        DrawCircleV(node.sample.interpolation.origin_point, DebugCircleRadius, RED);
 }
 
 

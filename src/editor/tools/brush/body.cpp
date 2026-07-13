@@ -44,7 +44,7 @@ void BrushBody::update_thickness() noexcept
     if (!brush.active())
         target_thickness = brush.thickness + IdleThicknessVariation;
 
-    thickness = target_thickness;
+    half_thickness = target_thickness;
 
     Bubble::update_thickness();
 }

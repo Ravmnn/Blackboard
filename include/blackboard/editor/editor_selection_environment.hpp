@@ -17,7 +17,6 @@ namespace bb::editor
 
 // TODO: make outline thickness a field of StrokeMesh instead of StrokeMeshRenderer; add an optional override_thickness though in renderer
 // TODO: add support for multiple StrokeMeshRenderer usage at the same time inside StrokeRenderer
-// TODO: in-selection strokes should have something slightly different from selected strokes in visual
 class EditorSelectionEnvironment final : public EditorEnvironment
 {
 private:

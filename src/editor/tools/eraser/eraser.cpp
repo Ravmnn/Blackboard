@@ -66,7 +66,7 @@ Vector2 Eraser::position() const noexcept
 void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
 {
     for (auto& mesh_node : stroke)
-        mesh_node.color.a = 150;
+        mesh_node.color().a = 150;
 
     if (!std::ranges::contains(strokes_to_remove_, &stroke))
         strokes_to_remove_.push_back(&stroke);

@@ -11,7 +11,6 @@ using bb::editor::EditorDrawingEnvironment;
 
 
 
-// TODO: LMB selecting replaces selection. RMB selecting appends selection
 EditorDrawingEnvironment::EditorDrawingEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
     brush(*this, 14),
     eraser(*this)
@@ -88,7 +87,7 @@ void EditorDrawingEnvironment::on_right_button_late_click() noexcept
     const StrokeMesh* const stroke = editor.get_stroke_under_mouse();
 
     if (stroke)
-        editor.palette.set_current_color(stroke->front().color);
+        editor.palette.set_current_color(stroke->front().color());
 }
 
 

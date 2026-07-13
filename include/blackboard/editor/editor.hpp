@@ -33,8 +33,6 @@ private:
 
     bool draw_statistics_ = false;
 
-    StrokeMeshRenderer default_stroke_mesh_renderer_;
-
     Tool* last_tool_ = nullptr;
 
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
@@ -71,7 +69,6 @@ public:
 
 
     [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
-    [[nodiscard]] const StrokeMeshRenderer& default_stroke_mesh_renderer() const noexcept { return default_stroke_mesh_renderer_; }
 
 
     [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }

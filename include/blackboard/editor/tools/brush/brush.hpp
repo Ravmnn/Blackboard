@@ -67,10 +67,10 @@ public:
 private:
     void update_cursor() noexcept;
     void update_canvas_actions() noexcept;
-    void update_active_state() noexcept;
 
     void add_stroke_point() noexcept;
     void modify_previous_points_thickness(float thickness) noexcept;
+    [[nodiscard]] StrokePoint create_stroke_point() const noexcept;
 
     [[nodiscard]] float thickness_from_speed() const noexcept { return std::lerp(max_thickness(), min_thickness(), cursor.smooth_speed_fraction()); }
     [[nodiscard]] float current_thickness() const noexcept { return current_thickness_; }

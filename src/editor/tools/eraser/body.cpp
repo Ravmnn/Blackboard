@@ -34,8 +34,8 @@ void EraserBody::update() noexcept
 
 void EraserBody::update_trail() noexcept
 {
-    trail.color = eraser.environment.editor.palette.current_color();
-    trail.color.a = 150;
+    trail.set_color(eraser.environment.editor.palette.current_color());
+    trail.set_alpha(150);
 
     Bubble::update_trail();
 }
@@ -43,10 +43,10 @@ void EraserBody::update_trail() noexcept
 
 void EraserBody::update_thickness() noexcept
 {
-    thickness = BaseThickness;
+    half_thickness = BaseThickness;
 
     if (!eraser.active())
-        thickness = BaseThickness + IdleThicknessVariation;
+        half_thickness = BaseThickness + IdleThicknessVariation;
 
     Bubble::update_thickness();
 }

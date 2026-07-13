@@ -1,4 +1,3 @@
-#include "raylib.h"
 #include <blackboard/editor/editor.hpp>
 
 #include <blackboard/ui/context.hpp>
@@ -85,6 +84,7 @@ void Editor::update() noexcept
     update_tool_changed_event();
     update_vanish_animations();
 
+    stroke_manager.renderer.view_area = canvas.camera.bounding_box();
     canvas.update();
 
 

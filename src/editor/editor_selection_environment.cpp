@@ -58,7 +58,7 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
     editor.stroke_manager.renderer.draw_stroke_meshes(in_selection_strokes_);
     editor.stroke_manager.renderer.draw_stroke_meshes(selected_strokes);
 
-    editor.stroke_manager.renderer.set_mesh_renderer(editor.default_stroke_mesh_renderer());
+    editor.stroke_manager.renderer.set_mesh_renderer(editor.stroke_manager.default_mesh_renderer);
     selection_effect.disable();
 }
 

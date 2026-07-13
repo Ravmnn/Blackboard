@@ -9,13 +9,14 @@
 
 
 using bb::editor::Bubble,
+    bb::editor::StrokePoint,
     bb::rendering::Stencil;
 
 
 
 
 Bubble::Bubble(const float thickness) noexcept :
-    thickness(thickness, 0.15, 40),
+    half_thickness(thickness, 0.15, 40),
     stretch(0, 0.01, 30),
     outline_thickness(2, 5),
 
@@ -44,17 +45,14 @@ void Bubble::update() noexcept
 
 void Bubble::update_trail() noexcept
 {
-    if (sync_trail_color)
-        trail.color = color;
-
-    trail.origin = StrokePoint(position_, thickness * 2);
+    trail.origin = create_stroke_point();
     trail.update();
 }
 
 
 void Bubble::update_thickness() noexcept
 {
-    thickness.update();
+    half_thickness.update();
 }
 
 
@@ -72,6 +70,19 @@ void Bubble::update_color() noexcept
 {
     color.update();
     outline_color.update();
+}
+
+
+
+
+StrokePoint Bubble::create_stroke_point() const noexcept
+{
+    return StrokePoint{
+        .position = position_,
+        .thickness = half_thickness * 2,
+        .color = color,
+        .outline_thickness = 0
+    };
 }
 
 
@@ -130,11 +141,11 @@ void Bubble::draw_ellipse() noexcept
 
 void Bubble::draw_ellipse_inner() noexcept
 {
-    Draw::stretched_ellipse(position_, thickness, stretch, color, EllipseResolution);
+    Draw::stretched_ellipse(position_, half_thickness, stretch, color, EllipseResolution);
 }
 
 
 void Bubble::draw_ellipse_outline() noexcept
 {
-    Draw::stretched_ellipse_outline(position_, thickness, stretch, outline_thickness, outline_color, EllipseOutlineResolution);
+    Draw::stretched_ellipse_outline(position_, half_thickness, stretch, outline_thickness, outline_color, EllipseOutlineResolution);
 }

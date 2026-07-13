@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include <blackboard/animation/interpolate.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
 
 
@@ -13,24 +14,36 @@ namespace bb::editor
 
 
 
-class StrokeSplineSegment
+class StrokePointInterpolation
 {
-private:
-    float current_thickness_, next_thickness_;
-
-
 public:
-    Vector2 last, current, next, after_next;
+    StrokePoint last_point, origin_point, next_point, after_next_point;
 
 
-    StrokeSplineSegment() = default;
-    StrokeSplineSegment(const std::vector<StrokePoint>& points, int i) noexcept;
+    StrokePointInterpolation() = default;
+    StrokePointInterpolation(const std::vector<StrokePoint>& points, int i) noexcept;
 
 
-    [[nodiscard]] StrokePoint stroke_point() const noexcept { return {current, current_thickness_}; }
+    [[nodiscard]] Vector2 position(const float t) const noexcept {
+        return GetSplinePointCatmullRom(last_point.position, origin_point.position, next_point.position, after_next_point.position, t);
+    }
 
-    [[nodiscard]] Vector2 point(const float t) const noexcept { return GetSplinePointCatmullRom(last, current, next, after_next, t); }
-    [[nodiscard]] float thickness(const float t) const noexcept { return current_thickness_ + (next_thickness_ - current_thickness_) * t; }
+    [[nodiscard]] float thickness(const float t) const noexcept {
+        return animation::Interpolate::linear(origin_point.thickness, next_point.thickness, t);
+    }
+
+    [[nodiscard]] float outline_thickness(const float t) const noexcept {
+        return animation::Interpolate::linear(origin_point.outline_thickness, next_point.outline_thickness, t);
+    }
+
+    [[nodiscard]] Color color(const float t) const noexcept {
+        return animation::Interpolate::linear(origin_point.color, next_point.color, t);
+    }
+
+    [[nodiscard]] Color outline_color(const float t) const noexcept {
+        return animation::Interpolate::linear(origin_point.outline_color, next_point.outline_color, t);
+    }
+
     [[nodiscard]] float half_thickness(const float t) const noexcept { return thickness(t) / 2; }
 };
 
@@ -40,21 +53,24 @@ public:
 class StrokeSample
 {
 public:
-    StrokeSplineSegment segment;
+    StrokePointInterpolation interpolation;
     int index;
     int max_index;
 
     Vector2 position;
     float thickness;
+    float outline_thickness; // TODO: make work
+    Color color;
+    Color outline_color; // TODO: make work
+
     float curvature;
 
 
     StrokeSample() = default;
-    StrokeSample(const StrokeSplineSegment& segment, int index, int max_index) noexcept;
+    StrokeSample(const StrokePointInterpolation& segment, int index, int max_index) noexcept;
 
 
     [[nodiscard]] float t() const noexcept { return (float)index / (float)max_index; }
-    [[nodiscard]] StrokePoint origin() const noexcept { return segment.stroke_point(); }
 
     [[nodiscard]] float half_thickness() const noexcept { return thickness / 2; }
 
@@ -89,18 +105,27 @@ public:
     StrokeSample sample;
     StrokeEdge edge;
 
-    Color color;
-
 
     StrokeMeshNode() = default;
-    StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge, const Color& color) noexcept;
+    StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge) noexcept;
 
+
+    [[nodiscard]] const StrokePointInterpolation& interpolation() const noexcept { return sample.interpolation; }
 
     [[nodiscard]] float curvature() const noexcept { return sample.curvature; }
     [[nodiscard]] const Vector2& normal() const noexcept { return edge.normal; }
 
+    [[nodiscard]] Vector2& position() noexcept { return sample.position; }
+    [[nodiscard]] float& thickness() noexcept { return sample.thickness; }
+    [[nodiscard]] float& outline_thickness() noexcept { return sample.outline_thickness; }
+    [[nodiscard]] Color& color() noexcept { return sample.color; }
+    [[nodiscard]] Color& outline_color() noexcept { return sample.outline_color; }
+
     [[nodiscard]] const Vector2& position() const noexcept { return sample.position; }
-    [[nodiscard]] float thickness() const noexcept { return sample.thickness; }
+    [[nodiscard]] const float& thickness() const noexcept { return sample.thickness; }
+    [[nodiscard]] const float& outline_thickness() const noexcept { return sample.outline_thickness; }
+    [[nodiscard]] const Color& color() const noexcept { return sample.color; }
+    [[nodiscard]] const Color& outline_color() const noexcept { return sample.outline_color; }
     [[nodiscard]] float half_thickness() const noexcept { return sample.half_thickness(); }
 };
 
@@ -120,7 +145,8 @@ public:
     [[nodiscard]] const Vector2& next_top() const noexcept { return second.edge.top; }
     [[nodiscard]] const Vector2& next_bottom() const noexcept { return second.edge.bottom; }
 
-    [[nodiscard]] const Color& color() const noexcept { return first.color; }
+    [[nodiscard]] const Color& color() const noexcept { return first.color(); }
+    [[nodiscard]] const Color& outline_color() const noexcept { return first.outline_color(); }
 };
 
 
