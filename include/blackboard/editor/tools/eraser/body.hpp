@@ -33,6 +33,7 @@ public:
 
 private:
     void update_trail() noexcept override;
+    void update_thickness() noexcept override;
     void update_color() noexcept override;
 
 

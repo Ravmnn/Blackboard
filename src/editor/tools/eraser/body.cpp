@@ -27,10 +27,6 @@ EraserBody::EraserBody(Eraser& eraser) noexcept : Bubble(BaseThickness),
 void EraserBody::update() noexcept
 {
     target = eraser.position();
-    thickness = BaseThickness;
-
-    if (eraser.active())
-        thickness = BaseThickness - IdleThicknessVariation;
 
     Bubble::update();
 }
@@ -45,13 +41,24 @@ void EraserBody::update_trail() noexcept
 }
 
 
+void EraserBody::update_thickness() noexcept
+{
+    thickness = BaseThickness;
+
+    if (!eraser.active())
+        thickness = BaseThickness + IdleThicknessVariation;
+
+    Bubble::update_thickness();
+}
+
+
 void EraserBody::update_color() noexcept
 {
     Color color = eraser.environment.editor.palette.current_color();
     color.a = 215;
     outline_color = color;
 
-    color.a = 70;
+    color.a = 140;
     this->color = color;
 
     Bubble::update_color();

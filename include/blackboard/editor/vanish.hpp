@@ -89,15 +89,21 @@ private:
 
     void draw_object_to_texture() noexcept
     {
-        camera_.target = object.box_position() + object.box_size() / 2;
-        camera_.offset = texture_.resolution() / 2;
-        camera_.zoom = resolution_factor;
+        initialize_camera();
 
         texture_.begin_render();
         BeginMode2D(camera_);
         object.draw();
         EndMode2D();
         texture_.end_render();
+    }
+
+
+    void initialize_camera() noexcept
+    {
+        camera_.target = object.box_position() + object.box_size() / 2;
+        camera_.offset = texture_.resolution() / 2;
+        camera_.zoom = resolution_factor;
     }
 };
 
