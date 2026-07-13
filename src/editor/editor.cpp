@@ -25,7 +25,6 @@ Editor::Editor(Context& ui_context) noexcept :
 
     background(*this, 1, 0.35),
 
-    canvas(default_stroke_mesh_renderer_),
     palette(DefaultPaletteColor),
 
     draw_environment(*this),
@@ -104,10 +103,10 @@ void Editor::update_keybindings() noexcept
 {
     if (IsKeyPressed(KEY_ONE)) draw_statistics_ = !draw_statistics_;
 
-    if (IsKeyPressed(KEY_TWO)) canvas.stroke_renderer.should_debug_draw_points = !canvas.stroke_renderer.should_debug_draw_points;
-    if (IsKeyPressed(KEY_THREE)) canvas.stroke_renderer.should_debug_draw_samples = !canvas.stroke_renderer.should_debug_draw_samples;
-    if (IsKeyPressed(KEY_FOUR)) canvas.stroke_renderer.should_debug_draw_edges = !canvas.stroke_renderer.should_debug_draw_edges;
-    if (IsKeyPressed(KEY_FIVE)) canvas.stroke_renderer.should_debug_draw_caps = !canvas.stroke_renderer.should_debug_draw_caps;
+    if (IsKeyPressed(KEY_TWO)) stroke_manager.renderer.should_debug_draw_points = !stroke_manager.renderer.should_debug_draw_points;
+    if (IsKeyPressed(KEY_THREE)) stroke_manager.renderer.should_debug_draw_samples = !stroke_manager.renderer.should_debug_draw_samples;
+    if (IsKeyPressed(KEY_FOUR)) stroke_manager.renderer.should_debug_draw_edges = !stroke_manager.renderer.should_debug_draw_edges;
+    if (IsKeyPressed(KEY_FIVE)) stroke_manager.renderer.should_debug_draw_caps = !stroke_manager.renderer.should_debug_draw_caps;
 }
 
 
@@ -157,8 +156,7 @@ void Editor::draw_to_canvas() noexcept
 
     canvas.begin_render();
     canvas.camera.enable();
-        canvas.stroke_renderer.draw_stroke_meshes(canvas.stroke_meshes);
-
+        stroke_manager.draw();
         current_environment->draw();
         mouse_late_mode_indicator.draw();
 
@@ -170,9 +168,13 @@ void Editor::draw_to_canvas() noexcept
 
 void Editor::draw_vanish_animations() noexcept
 {
+    //BeginBlendMode(BLEND_ADDITIVE);
+
     for (auto& vanish : vanish_animations_)
         if (vanish)
             vanish->draw();
+
+    //EndBlendMode();
 }
 
 
@@ -209,7 +211,7 @@ void Editor::set_current_environment(EditorEnvironment& environment) noexcept
 
 StrokeMesh* Editor::get_stroke_under_point(const Vector2& point) noexcept
 {
-    for (auto& stroke : canvas.stroke_meshes)
+    for (auto& stroke : stroke_manager.meshes)
         if (StrokeMeshCollider::stroke_contains_point(*stroke, point))
             return stroke.get();
 
@@ -219,7 +221,7 @@ StrokeMesh* Editor::get_stroke_under_point(const Vector2& point) noexcept
 
 StrokeMesh* Editor::get_stroke_intersecting_segment(const Segment& segment) noexcept
 {
-    for (auto& stroke : canvas.stroke_meshes)
+    for (auto& stroke : stroke_manager.meshes)
         if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke, segment))
             return stroke.get();
 
@@ -240,8 +242,8 @@ void Editor::on_tool_changed() noexcept
     if (!last_tool_)
         return;
 
-    constexpr float ScaleSpeed = 3;
-    constexpr float TransparencySpeed = 3;
+    constexpr float ScaleSpeed = 2.5;
+    constexpr float TransparencySpeed = 1.75;
 
     vanish_animations_.push_back(std::make_unique<Vanish<Tool>>(*last_tool_, ScaleSpeed, TransparencySpeed));
 }

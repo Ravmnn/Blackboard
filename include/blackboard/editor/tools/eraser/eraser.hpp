@@ -47,7 +47,6 @@ private:
 
     void add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept;
     void remove_strokes_from_remove_queue() noexcept;
-    void remove_stroke(const StrokeMesh& stroke) noexcept;
 };
 
 

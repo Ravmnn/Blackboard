@@ -12,19 +12,10 @@ using bb::editor::Canvas,
 
 
 
-Canvas::Canvas(const StrokeMeshRenderer& mesh_renderer) noexcept : TextureRenderer(true),
-    camera(*this, 0.2, 5, 0.13),
-
-    stroke_mesh_generator(6),
-    stroke_renderer(mesh_renderer, &stroke_mesh_generator, &camera)
+Canvas::Canvas() noexcept : TextureRenderer(true),
+    camera(*this, 0.2, 5, 0.13)
 {
-    stroke_renderer.should_debug_draw_points = false;
-    stroke_renderer.should_debug_draw_edges = false;
-    stroke_renderer.should_debug_draw_samples = false;
-    stroke_renderer.should_debug_draw_caps = false;
-
     camera.bounds_expansion = { 100, 100 };
-
 
     clear_color = BLANK;
 }
@@ -57,18 +48,4 @@ void Canvas::update() noexcept
 void Canvas::resize_texture_renderer() noexcept
 {
     resize(WindowRenderer::screen_resolution());
-}
-
-
-
-
-void Canvas::add_stroke(const Stroke& stroke) noexcept
-{
-    if (stroke.points.empty())
-        return;
-
-    auto mesh = stroke_mesh_generator.generate_mesh(stroke);
-
-    if (mesh && !mesh->empty())
-        stroke_meshes.push_back(std::move(mesh));
 }

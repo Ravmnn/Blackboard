@@ -52,7 +52,7 @@ void Brush::update_cursor() noexcept
 void Brush::update_canvas_actions() noexcept
 {
     if (got_inactive_)
-        editor().canvas.add_stroke(stroke_);
+        editor().stroke_manager.add_stroke(stroke_);
 }
 
 
@@ -81,7 +81,7 @@ void Brush::modify_previous_points_thickness(const float thickness) noexcept
 void Brush::draw() noexcept
 {
     if (!draw_finished())
-        editor().canvas.stroke_renderer.draw_stroke(stroke());
+        editor().stroke_manager.draw_stroke(stroke_);
 
     body.draw();
 }

@@ -76,15 +76,7 @@ void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
 void Eraser::remove_strokes_from_remove_queue() noexcept
 {
     for (auto& stroke : strokes_to_remove_)
-        remove_stroke(*stroke);
+        editor().stroke_manager.remove_mesh(*stroke);
 
     strokes_to_remove_.clear();
-}
-
-
-void Eraser::remove_stroke(const StrokeMesh& stroke) noexcept
-{
-    std::erase_if(editor().canvas.stroke_meshes, [&](const std::unique_ptr<StrokeMesh>& stroke_mesh) {
-        return stroke_mesh.get() == &stroke;
-    });
 }

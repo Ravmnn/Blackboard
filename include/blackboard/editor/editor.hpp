@@ -6,10 +6,11 @@
 #include <blackboard/editor/vanish.hpp>
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/mouse_late_mode_indicator.hpp>
 #include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
-#include <blackboard/editor/mouse_late_mode_indicator.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_manager.hpp>
 
 
 
@@ -45,6 +46,8 @@ public:
     Canvas canvas;
     Palette palette;
     bool dynamic_background_color = false;
+
+    StrokeMeshManager stroke_manager;
 
 
     Event<> environment_changed;
