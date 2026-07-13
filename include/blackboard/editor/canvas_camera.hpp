@@ -2,6 +2,7 @@
 
 #include <blackboard/updateable.hpp>
 #include <blackboard/activatable.hpp>
+#include <blackboard/bounds.hpp>
 #include <blackboard/animation/interpolation.hpp>
 
 
@@ -16,7 +17,7 @@ namespace bb::editor
 class Canvas;
 
 
-class CanvasCamera : public Updateable, public Activatable
+class CanvasCamera : public Updateable, public Activatable, public Bounds
 {
 private:
     Camera2D camera_;
@@ -53,7 +54,7 @@ public:
     [[nodiscard]] const Vector2& mouse_delta_after_zoom() const noexcept { return mouse_delta_after_zoom_; }
 
 
-    [[nodiscard]] Rectangle get_world_bounds() const noexcept;
+    [[nodiscard]] Rectangle bounding_box() const noexcept override;
 
 
 private:

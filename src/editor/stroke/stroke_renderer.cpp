@@ -3,10 +3,8 @@
 #include <cassert>
 
 #include <blackboard/math/collisions.hpp>
-#include <blackboard/editor/canvas_camera.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
 
 
@@ -19,10 +17,8 @@ using bb::editor::StrokeRenderer,
 
 
 
-StrokeRenderer::StrokeRenderer(const StrokeMeshRenderer& mesh_renderer, const StrokeMeshGenerator* sampler, const CanvasCamera* camera) noexcept :
-    mesh_renderer_(&mesh_renderer),
-    mesh_generator(sampler),
-    camera(camera)
+StrokeRenderer::StrokeRenderer(const StrokeMeshRenderer& mesh_renderer) noexcept :
+    mesh_renderer_(&mesh_renderer)
 {}
 
 
@@ -49,19 +45,6 @@ void StrokeRenderer::draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) n
 }
 
 
-
-
-void StrokeRenderer::draw_stroke(const Stroke& stroke) noexcept
-{
-    assert(mesh_generator);
-
-    auto mesh = mesh_generator->generate_mesh(stroke);
-
-    if (mesh)
-        draw_stroke_mesh(*mesh);
-}
-
-
 void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
     assert(mesh_renderer_);
@@ -78,11 +61,11 @@ void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 
 void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
 {
-    const Rectangle camera_bounds = camera ? camera->get_world_bounds() : Rectangle{};
+    const Rectangle view_area = this->view_area ? *this->view_area : Rectangle{};
 
     for (int i = 0; i < (int)mesh.size() - 1; i++)
     {
-        if (camera && !mesh_node_is_in_camera_bounds(mesh[i], camera_bounds))
+        if (this->view_area && !mesh_node_is_in_camera_bounds(mesh[i], view_area))
             continue;
 
         mesh_renderer_->render(StrokeMeshQuad(mesh[i], mesh[i + 1]));

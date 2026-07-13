@@ -4,6 +4,9 @@
 
 #include <memory>
 #include <vector>
+#include <optional>
+
+#include <raylib.h>
 
 
 
@@ -42,18 +45,16 @@ public:
     bool should_debug_draw_edges = false;
     bool should_debug_draw_caps = false;
 
-    const StrokeMeshGenerator* mesh_generator;
-    const CanvasCamera* camera;
+    std::optional<Rectangle> view_area;
 
 
-    StrokeRenderer(const StrokeMeshRenderer& mesh_renderer, const StrokeMeshGenerator* sampler, const CanvasCamera* camera = nullptr) noexcept;
+    StrokeRenderer(const StrokeMeshRenderer& mesh_renderer) noexcept;
 
 
     void draw_stroke_meshes(const std::vector<std::unique_ptr<StrokeMesh>>& meshes) noexcept;
     void draw_stroke_meshes(const std::vector<StrokeMesh*>& meshes) noexcept;
     void draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) noexcept;
 
-    void draw_stroke(const Stroke& stroke) noexcept;
     void draw_stroke_mesh(const StrokeMesh& mesh) noexcept;
 
     [[nodiscard]] const StrokeMeshRenderer& mesh_renderer() const noexcept { return *mesh_renderer_; }

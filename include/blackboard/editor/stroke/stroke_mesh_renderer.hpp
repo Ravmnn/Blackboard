@@ -25,6 +25,7 @@ public:
 
 
     StrokeMeshRenderer() noexcept;
+    virtual ~StrokeMeshRenderer() = default;
 
 
     virtual void render(const StrokeMeshQuad& quad) const noexcept;

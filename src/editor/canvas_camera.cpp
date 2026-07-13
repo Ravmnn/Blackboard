@@ -75,7 +75,7 @@ void CanvasCamera::update_interpolation() noexcept
 
 
 
-Rectangle CanvasCamera::get_world_bounds() const noexcept
+Rectangle CanvasCamera::bounding_box() const noexcept
 {
     const Vector2 screen_size = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() };
 
