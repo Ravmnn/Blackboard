@@ -34,8 +34,8 @@ StrokeSample::StrokeSample(const StrokePointInterpolation& segment, const int in
     max_index(max_index),
     position(segment.position(t())),
     thickness(segment.thickness(t())),
-    outline_thickness(segment.outline_thickness(t())),
     color(segment.color(t())),
+    outline_thickness(segment.outline_thickness(t())),
     outline_color(segment.outline_color(t())),
     curvature(calculate_curvature())
 {}
@@ -73,32 +73,6 @@ StrokeEdge::StrokeEdge(const Vector2& top, const Vector2& bottom) noexcept :
     top(top),
     bottom(bottom),
     normal(Vector2Normalize(top - bottom / 2))
-{}
-
-
-
-
-StrokeMeshNode::StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge) noexcept :
-    sample(sample),
-    edge(edge)
-{}
-
-
-
-
-StrokeMeshQuad::StrokeMeshQuad(const StrokeMeshNode& first, const StrokeMeshNode& second) noexcept :
-    first(first),
-    second(second)
-{}
-
-
-
-
-StrokeMeshCapSegment::StrokeMeshCapSegment(const Vector2& center, const Vector2& begin, const Vector2& end, const Color& color) noexcept :
-    center(center),
-    begin(begin),
-    end(end),
-    color(color)
 {}
 
 

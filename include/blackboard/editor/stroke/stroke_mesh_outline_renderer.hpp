@@ -14,7 +14,8 @@ namespace bb::editor
 class StrokeMeshOutlineRenderer : public StrokeMeshRenderer
 {
 public:
-    float outline_thickness = 1.0f;
+    std::optional<Color> overwrite_outline_color;
+    std::optional<float> overwrite_outline_thickness;
 
 
     void render(const StrokeMeshQuad& quad) const noexcept override;

@@ -59,9 +59,9 @@ public:
 
     Vector2 position;
     float thickness;
-    float outline_thickness; // TODO: make work
     Color color;
-    Color outline_color; // TODO: make work
+    float outline_thickness = 0;
+    Color outline_color = WHITE;
 
     float curvature;
 
@@ -106,10 +106,6 @@ public:
     StrokeEdge edge;
 
 
-    StrokeMeshNode() = default;
-    StrokeMeshNode(const StrokeSample& sample, const StrokeEdge& edge) noexcept;
-
-
     [[nodiscard]] const StrokePointInterpolation& interpolation() const noexcept { return sample.interpolation; }
 
     [[nodiscard]] float curvature() const noexcept { return sample.curvature; }
@@ -137,9 +133,6 @@ public:
     StrokeMeshNode second;
 
 
-    StrokeMeshQuad(const StrokeMeshNode& first, const StrokeMeshNode& second) noexcept;
-
-
     [[nodiscard]] const Vector2& top() const noexcept { return first.edge.top; }
     [[nodiscard]] const Vector2& bottom() const noexcept { return first.edge.bottom; }
     [[nodiscard]] const Vector2& next_top() const noexcept { return second.edge.top; }
@@ -147,6 +140,7 @@ public:
 
     [[nodiscard]] const Color& color() const noexcept { return first.color(); }
     [[nodiscard]] const Color& outline_color() const noexcept { return first.outline_color(); }
+    [[nodiscard]] float outline_thickness() const noexcept { return first.outline_thickness(); }
 };
 
 
@@ -156,10 +150,11 @@ public:
     Vector2 center;
     Vector2 begin;
     Vector2 end;
+
     Color color;
 
-
-    StrokeMeshCapSegment(const Vector2& center, const Vector2& begin, const Vector2& end, const Color& color) noexcept;
+    float outline_thickness = 0;
+    Color outline_color = WHITE;
 };
 
 

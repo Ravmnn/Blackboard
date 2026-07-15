@@ -19,7 +19,6 @@ namespace bb::editor
 class Trail : public Stroke, public Updateable, public Drawable
 {
 private:
-    StrokeMeshRenderer mesh_renderer_;
     StrokeRenderer trail_renderer_;
     StrokeMeshGenerator trail_mesh_generator_;
 

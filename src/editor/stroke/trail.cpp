@@ -13,7 +13,6 @@ using bb::editor::Trail;
 
 
 Trail::Trail(const StrokePoint& origin, const float decay) noexcept : Stroke({}),
-    trail_renderer_(mesh_renderer_),
     trail_mesh_generator_(4),
     origin(origin),
     decay(decay)

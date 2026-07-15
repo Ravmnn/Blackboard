@@ -10,8 +10,7 @@ using bb::editor::StrokeMeshManager,
 
 
 StrokeMeshManager::StrokeMeshManager() noexcept :
-    generator(6),
-    renderer(default_mesh_renderer)
+    generator(6)
 {}
 
 

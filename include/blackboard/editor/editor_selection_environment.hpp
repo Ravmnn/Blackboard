@@ -22,8 +22,6 @@ class EditorSelectionEnvironment final : public EditorEnvironment
 private:
     std::vector<StrokeMesh*> in_selection_strokes_;
 
-    StrokeMeshOutlineRenderer selection_outline_stroke_mesh_renderer_;
-
     static constexpr float SelectionOutlineBaseThickness = 8;
 
 

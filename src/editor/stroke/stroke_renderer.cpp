@@ -5,7 +5,6 @@
 #include <blackboard/math/collisions.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
 
 
 
@@ -17,9 +16,16 @@ using bb::editor::StrokeRenderer,
 
 
 
-StrokeRenderer::StrokeRenderer(const StrokeMeshRenderer& mesh_renderer) noexcept :
-    mesh_renderer_(&mesh_renderer)
-{}
+StrokeRenderer::StrokeRenderer(std::unique_ptr<StrokeMeshRenderer>&& mesh_renderer, std::unique_ptr<StrokeMeshOutlineRenderer>&& mesh_outline_renderer) noexcept :
+    mesh_renderer(std::move(mesh_renderer)),
+    mesh_outline_renderer(std::move(mesh_outline_renderer))
+{
+    if (!this->mesh_renderer)
+        this->mesh_renderer = std::make_unique<StrokeMeshRenderer>();
+
+    if (!this->mesh_outline_renderer)
+        this->mesh_outline_renderer = std::make_unique<StrokeMeshOutlineRenderer>();
+}
 
 
 
@@ -47,7 +53,8 @@ void StrokeRenderer::draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) n
 
 void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
-    assert(mesh_renderer_);
+    assert(mesh_renderer);
+    assert(mesh_outline_renderer);
 
     if (mesh.empty())
         return;
@@ -68,7 +75,7 @@ void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
         if (this->view_area && !mesh_node_is_in_camera_bounds(mesh[i], view_area))
             continue;
 
-        mesh_renderer_->render(StrokeMeshQuad(mesh[i], mesh[i + 1]));
+        draw_mesh_element(StrokeMeshQuad(mesh[i], mesh[i + 1]));
         draw_cap_if_intense_curve(mesh, i);
     }
 }
@@ -93,7 +100,7 @@ void StrokeRenderer::draw_cap_if_intense_curve(const StrokeMesh& mesh, const siz
     const Vector2 dir2 = Vector2Normalize(Vector2Subtract(current, next));
     const Vector2 final_direction = Vector2Normalize(dir1 + dir2) * -1;
 
-    draw_cap(current, final_direction, current_node.thickness() * 0.5f, current_node.color());
+    draw_cap(current, final_direction, current_node.half_thickness(), current_node.color(), current_node.outline_thickness(), current_node.outline_color());
 }
 
 
@@ -114,18 +121,19 @@ void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 
     const size_t samples_count = mesh.size();
 
+    // TODO: clear this shit
     const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2) / 2;
     const Vector2 direction_start = Vector2Normalize(mesh[0].position() - mesh[1].position());
-    draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color());
+    draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color(), mesh[0].outline_thickness(), mesh[0].outline_color());
 
     const float end_thickness_average = (mesh[samples_count - 1].thickness() / 2 + mesh[samples_count - 2].thickness() / 2) / 2;
     const Vector2 direction_end = Vector2Normalize(mesh[samples_count - 1].position() - mesh[samples_count - 2].position());
-    draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color());
+    draw_cap(mesh[samples_count - 1].position(), direction_end * -1, end_thickness_average, mesh[samples_count - 1].color(), mesh[samples_count - 1].outline_thickness(), mesh[samples_count - 1].outline_color());
 }
 
 
 
-void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color) const noexcept
+void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, const float radius, const Color& color, const float outline_thickness, const Color& outline_color) const noexcept
 {
     constexpr int CapResolution = 32;
 
@@ -145,7 +153,14 @@ void StrokeRenderer::draw_cap(const Vector2& center, const Vector2& direction, c
         const Vector2 begin = center + v1 * radius;
         const Vector2 end = center + v0 * radius;
 
-        mesh_renderer_->render(StrokeMeshCapSegment(center, begin, end, true_color));
+        draw_mesh_element(StrokeMeshCapSegment{
+            .center = center,
+            .begin = begin,
+            .end = end,
+            .color = true_color,
+            .outline_thickness = outline_thickness,
+            .outline_color = outline_color
+        });
     }
 }
 

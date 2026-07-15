@@ -21,7 +21,6 @@ public:
     std::vector<std::unique_ptr<StrokeMesh>> meshes;
 
     StrokeMeshGenerator generator;
-    StrokeMeshRenderer default_mesh_renderer;
     StrokeRenderer renderer;
 
 

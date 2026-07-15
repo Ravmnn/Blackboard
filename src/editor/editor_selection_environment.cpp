@@ -50,15 +50,16 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
     if (editor.stroke_manager.meshes.size() == 0)
         return;
 
-    selection_outline_stroke_mesh_renderer_.outline_thickness = SelectionOutlineBaseThickness / editor.canvas.raylib_camera().zoom;
+    const auto last_overwrite_thickness = editor.stroke_manager.renderer.mesh_outline_renderer->overwrite_outline_thickness;
 
+    // TODO: mesh renderers should accept an effect
     selection_effect.enable();
-    editor.stroke_manager.renderer.set_mesh_renderer(selection_outline_stroke_mesh_renderer_);
+    editor.stroke_manager.renderer.mesh_outline_renderer->overwrite_outline_thickness = SelectionOutlineBaseThickness;
 
     editor.stroke_manager.renderer.draw_stroke_meshes(in_selection_strokes_);
     editor.stroke_manager.renderer.draw_stroke_meshes(selected_strokes);
 
-    editor.stroke_manager.renderer.set_mesh_renderer(editor.stroke_manager.default_mesh_renderer);
+    editor.stroke_manager.renderer.mesh_outline_renderer->overwrite_outline_thickness = last_overwrite_thickness;
     selection_effect.disable();
 }
 
