@@ -75,7 +75,7 @@ void StrokeRenderer::draw_edges_with_caps(const StrokeMesh& mesh) noexcept
         if (this->view_area && !mesh_node_is_in_camera_bounds(mesh[i], view_area))
             continue;
 
-        draw_mesh_element(StrokeMeshQuad(mesh[i], mesh[i + 1]));
+        draw_mesh_element(StrokeMeshQuad{ .first = mesh[i], .second = mesh[i + 1] });
         draw_cap_if_intense_curve(mesh, i);
     }
 }
