@@ -1,7 +1,5 @@
 #pragma once
 
-#include "blackboard/editor/stroke/stroke_mesh.hpp"
-#include "blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp"
 #include <concepts>
 #include <cstddef>
 
@@ -9,6 +7,7 @@
 #include <vector>
 
 #include <blackboard/editor/stroke/stroke_mesh_renderer.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 
 
 
@@ -37,6 +36,10 @@ private:
     static constexpr float DebugCircleRadius = 1;
 
 
+    std::unique_ptr<StrokeMeshRenderer> default_mesh_renderer_;
+    std::unique_ptr<StrokeMeshOutlineRenderer> default_mesh_outline_renderer_;
+
+
 public:
     bool should_debug_draw_points = false;
     bool should_debug_draw_samples = false;
@@ -46,13 +49,13 @@ public:
     std::optional<Rectangle> view_area;
 
 
-    std::unique_ptr<StrokeMeshRenderer> mesh_renderer;
-    std::unique_ptr<StrokeMeshOutlineRenderer> mesh_outline_renderer;
+    StrokeMeshRenderer* mesh_renderer;
+    StrokeMeshOutlineRenderer* mesh_outline_renderer;
 
-    std::vector<std::unique_ptr<StrokeMeshRenderer>> extra_renderers;
+    std::vector<StrokeMeshRenderer*> extra_renderers;
 
 
-    StrokeRenderer(std::unique_ptr<StrokeMeshRenderer>&& mesh_renderer = nullptr, std::unique_ptr<StrokeMeshOutlineRenderer>&& mesh_outline_renderer = nullptr) noexcept;
+    StrokeRenderer(StrokeMeshRenderer* mesh_renderer = nullptr, StrokeMeshOutlineRenderer* mesh_outline_renderer = nullptr) noexcept;
 
 
     void draw_stroke_meshes(const std::vector<std::unique_ptr<StrokeMesh>>& meshes) noexcept;
@@ -76,8 +79,11 @@ private:
     template <typename T> requires std::derived_from<T, StrokeMeshQuad> || std::derived_from<T, StrokeMeshCapSegment>
     void draw_mesh_element(const T& element) const noexcept
     {
-        mesh_renderer->render(element);
-        mesh_outline_renderer->render(element);
+        if (mesh_renderer)
+            mesh_renderer->render(element);
+
+        if (mesh_outline_renderer)
+            mesh_outline_renderer->render(element);
 
         for (const auto& extra_renderer : extra_renderers)
             if (extra_renderer)

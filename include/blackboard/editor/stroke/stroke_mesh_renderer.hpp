@@ -4,6 +4,8 @@
 
 #include <raylib.h>
 
+#include <blackboard/rendering/effects/effect.hpp>
+
 
 
 

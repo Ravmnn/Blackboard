@@ -16,15 +16,15 @@ using bb::editor::StrokeRenderer,
 
 
 
-StrokeRenderer::StrokeRenderer(std::unique_ptr<StrokeMeshRenderer>&& mesh_renderer, std::unique_ptr<StrokeMeshOutlineRenderer>&& mesh_outline_renderer) noexcept :
-    mesh_renderer(std::move(mesh_renderer)),
-    mesh_outline_renderer(std::move(mesh_outline_renderer))
+StrokeRenderer::StrokeRenderer(StrokeMeshRenderer* mesh_renderer, StrokeMeshOutlineRenderer* mesh_outline_renderer) noexcept :
+    mesh_renderer(mesh_renderer),
+    mesh_outline_renderer(mesh_outline_renderer)
 {
     if (!this->mesh_renderer)
-        this->mesh_renderer = std::make_unique<StrokeMeshRenderer>();
+        this->mesh_renderer = (default_mesh_renderer_ = std::make_unique<StrokeMeshRenderer>()).get();
 
     if (!this->mesh_outline_renderer)
-        this->mesh_outline_renderer = std::make_unique<StrokeMeshOutlineRenderer>();
+        this->mesh_outline_renderer = (default_mesh_outline_renderer_ = std::make_unique<StrokeMeshOutlineRenderer>()).get();
 }
 
 
@@ -53,8 +53,8 @@ void StrokeRenderer::draw_stroke_meshes(const std::vector<StrokeMesh>& meshes) n
 
 void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
-    assert(mesh_renderer);
-    assert(mesh_outline_renderer);
+    if (!mesh_renderer && !mesh_outline_renderer)
+        return;
 
     if (mesh.empty())
         return;
