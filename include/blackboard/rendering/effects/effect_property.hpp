@@ -56,7 +56,6 @@ template<> inline int EffectProperty<Vector2>::type() const noexcept { return SH
 template<> inline int EffectProperty<Vector3>::type() const noexcept { return SHADER_UNIFORM_VEC3; }
 template<> inline int EffectProperty<Vector4>::type() const noexcept { return SHADER_UNIFORM_VEC4; }
 template<> inline int EffectProperty<Color>::type() const noexcept { return SHADER_UNIFORM_VEC4; }
-template<> inline int EffectProperty<Texture>::type() const noexcept { return SHADER_UNIFORM_SAMPLER2D; }
 
 
 template<typename T> inline void EffectProperty<T>::update_shader_value() const noexcept
@@ -71,9 +70,16 @@ template<> inline void EffectProperty<Color>::update_shader_value() const noexce
     SetShaderValue(shader, id_, &normalized, type());
 }
 
+
 template<> inline void EffectProperty<Texture>::update_shader_value() const noexcept
 {
     SetShaderValueTexture(shader, id_, value);
+}
+
+
+template<> inline void EffectProperty<Matrix>::update_shader_value() const noexcept
+{
+    SetShaderValueMatrix(shader, id_, value);
 }
 
 

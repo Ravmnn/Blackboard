@@ -1,5 +1,6 @@
 #pragma once
 
+#include <blackboard/editor/effects/stroke.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/ui/components/component.hpp>
@@ -32,10 +33,13 @@ private:
 
 
     bool draw_statistics_ = false;
+    bool wire_mode_ = false;
 
     Tool* last_tool_ = nullptr;
 
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
+
+    StrokeEffect stroke_effect_;
 
 
 public:

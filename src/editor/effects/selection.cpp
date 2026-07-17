@@ -10,7 +10,7 @@ using bb::editor::SelectionEffect;
 
 
 
-SelectionEffect::SelectionEffect() noexcept : rendering::Effect(Shaders::NegativeStrokeSelection),
+SelectionEffect::SelectionEffect() noexcept : rendering::Effect(Shaders::StrokeSelectionFragment),
     spacing(shader(), "u_spacing", 20),
     speed(shader(), "u_speed", 20),
     thickness(shader(), "u_thickness", 4),

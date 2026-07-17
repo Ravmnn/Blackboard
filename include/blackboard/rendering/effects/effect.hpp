@@ -25,6 +25,8 @@ public:
 
     bool use_window_resolution = true;
 
+    bool use_raylib_batch_system = true;
+
 
     explicit Effect(const char* fragment_shader);
     explicit Effect(const Shader& shader);

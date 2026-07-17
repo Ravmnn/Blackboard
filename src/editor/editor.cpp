@@ -1,8 +1,11 @@
 #include <blackboard/editor/editor.hpp>
 
+#include <rlgl.h>
+
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 
 
 
@@ -35,6 +38,8 @@ Editor::Editor(Context& ui_context) noexcept :
 
 
     background.max_alpha_factor = 0.40;
+
+    stroke_effect_.smoothness = 0.3;
 
 
     set_current_environment(draw_environment);
@@ -88,6 +93,16 @@ void Editor::update() noexcept
     canvas.update();
 
 
+    const Matrix view = GetCameraMatrix2D(canvas.raylib_camera());
+    const Matrix ortho =  MatrixOrtho(0, GetScreenWidth(), GetScreenHeight(), 0, -1, 1);
+    const Matrix mvp = MatrixMultiply(view, ortho);
+
+    stroke_effect_.mvp = mvp;
+    stroke_effect_.camera_zoom = canvas.raylib_camera().zoom;
+
+    stroke_effect_.update();
+
+
     Component::update();
 }
 
@@ -106,7 +121,7 @@ void Editor::update_keybindings() noexcept
     if (IsKeyPressed(KEY_TWO)) stroke_manager.renderer.should_debug_draw_points = !stroke_manager.renderer.should_debug_draw_points;
     if (IsKeyPressed(KEY_THREE)) stroke_manager.renderer.should_debug_draw_samples = !stroke_manager.renderer.should_debug_draw_samples;
     if (IsKeyPressed(KEY_FOUR)) stroke_manager.renderer.should_debug_draw_edges = !stroke_manager.renderer.should_debug_draw_edges;
-    if (IsKeyPressed(KEY_FIVE)) stroke_manager.renderer.should_debug_draw_caps = !stroke_manager.renderer.should_debug_draw_caps;
+    if (IsKeyPressed(KEY_FIVE)) wire_mode_ = !wire_mode_;
 }
 
 
@@ -154,9 +169,30 @@ void Editor::draw_to_canvas() noexcept
     background.draw();
     canvas.camera.disable();
 
+    // TODO: cleanup
+    // TODO: make StrokeMeshRender to use the shader or just remove it
+    // TODO: support caps
+
     canvas.begin_render();
     canvas.camera.enable();
-        stroke_manager.draw();
+        if (wire_mode_)
+            rlEnableWireMode();
+
+        for (const auto& mesh : stroke_manager.meshes)
+        {
+            StrokeMeshGL mesh_gl = StrokeMeshGL::from_stroke(*mesh);
+            mesh_gl.load_gl_data();
+
+            stroke_effect_.enable();
+            mesh_gl.draw();
+            stroke_effect_.disable();
+
+            mesh_gl.unload_gl_data();
+        }
+
+        rlDisableWireMode();
+
+
         current_environment->draw();
         mouse_late_mode_indicator.draw();
 
@@ -168,13 +204,9 @@ void Editor::draw_to_canvas() noexcept
 
 void Editor::draw_vanish_animations() noexcept
 {
-    //BeginBlendMode(BLEND_ADDITIVE);
-
     for (auto& vanish : vanish_animations_)
         if (vanish)
             vanish->draw();
-
-    //EndBlendMode();
 }
 
 

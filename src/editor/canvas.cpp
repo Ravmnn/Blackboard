@@ -13,7 +13,7 @@ using bb::editor::Canvas,
 
 
 Canvas::Canvas() noexcept : TextureRenderer(true),
-    camera(*this, 0.2, 5, 0.13)
+    camera(*this, 0.2, 8, 0.13)
 {
     camera.bounds_expansion = { 100, 100 };
 

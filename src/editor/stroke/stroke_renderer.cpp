@@ -1,10 +1,9 @@
 #include <blackboard/editor/stroke/stroke_renderer.hpp>
 
-#include <cassert>
-
 #include <blackboard/math/collisions.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 
 
 
@@ -59,8 +58,8 @@ void StrokeRenderer::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
     if (mesh.empty())
         return;
 
-    draw_edges_with_caps(mesh);
-    draw_extreme_caps(mesh);
+    //draw_edges_with_caps(mesh);
+    //draw_extreme_caps(mesh);
 
     draw_debug_visualization(mesh);
 }
@@ -121,7 +120,6 @@ void StrokeRenderer::draw_extreme_caps(const StrokeMesh& mesh) noexcept
 
     const size_t samples_count = mesh.size();
 
-    // TODO: clear this shit
     const float start_thickness_average = (mesh[0].thickness() / 2 + mesh[1].thickness() / 2) / 2;
     const Vector2 direction_start = Vector2Normalize(mesh[0].position() - mesh[1].position());
     draw_cap(mesh[0].position(), direction_start * -1, start_thickness_average, mesh[0].color(), mesh[0].outline_thickness(), mesh[0].outline_color());

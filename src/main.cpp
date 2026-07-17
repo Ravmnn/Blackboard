@@ -2,6 +2,8 @@
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 
+#include <rlgl.h>
+
 
 
 
@@ -20,6 +22,8 @@ int main(int /*unused*/, char** /*unused*/)
     int monitor = GetCurrentMonitor();
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
+
+    rlDisableBackfaceCulling();
 
     {
         WindowRenderer window_renderer;

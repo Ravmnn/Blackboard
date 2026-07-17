@@ -1,5 +1,7 @@
 #include <blackboard/rendering/effects/effect.hpp>
 
+#include <rlgl.h>
+
 #include <blackboard/rendering/window_renderer.hpp>
 
 
@@ -41,12 +43,20 @@ void Effect::update() noexcept
 void Effect::enable() noexcept
 {
     Activatable::enable();
-    BeginShaderMode(shader_);
+
+    if (use_raylib_batch_system)
+        BeginShaderMode(shader_);
+    else
+        rlEnableShader(shader_.id);
 }
 
 
 void Effect::disable() noexcept
 {
     Activatable::disable();
-    EndShaderMode();
+
+    if (use_raylib_batch_system)
+        EndShaderMode();
+    else
+        rlDisableShader();
 }
