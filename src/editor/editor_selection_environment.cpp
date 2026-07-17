@@ -11,8 +11,13 @@ using bb::editor::EditorSelectionEnvironment;
 
 
 EditorSelectionEnvironment::EditorSelectionEnvironment(Editor& editor) noexcept : EditorEnvironment(editor),
+    renderer_rl_(nullptr, &selection_mesh_outline_renderer_),
+
     selection(*this)
 {
+    selection_effect.background_color = ColorAlpha(RED, 0.65);
+
+
     tools_.push_back(&selection);
 
     set_current_tool(selection);
@@ -36,10 +41,7 @@ void EditorSelectionEnvironment::update() noexcept
 
 void EditorSelectionEnvironment::draw() noexcept
 {
-    BeginBlendMode(BLEND_MULTIPLIED);
     draw_selected_strokes();
-    EndBlendMode();
-
     EditorEnvironment::draw();
 }
 
@@ -49,21 +51,21 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
     if (editor.stroke_manager.meshes.size() == 0)
         return;
 
-    selection_mesh_renderer_.overwrite_outline_thickness = SelectionOutlineBaseThickness / editor.canvas.raylib_camera().zoom;
+    constexpr float SelectionOutlineBaseThickness = 4;
 
-    auto* const last_mesh_renderer = editor.stroke_manager.renderer.mesh_renderer;
-    auto* const last_mesh_outline_renderer = editor.stroke_manager.renderer.mesh_outline_renderer;
+    selection_mesh_outline_renderer_.overwrite_outline_thickness = SelectionOutlineBaseThickness / editor.canvas.raylib_camera().zoom;
 
-    editor.stroke_manager.renderer.mesh_renderer = nullptr;
-    editor.stroke_manager.renderer.mesh_outline_renderer = &selection_mesh_renderer_;
+
+    auto* const last_renderer = editor.stroke_manager.renderer;
+
+    editor.stroke_manager.renderer = &renderer_rl_;
 
     selection_effect.enable();
-    editor.stroke_manager.renderer.draw_stroke_meshes(in_selection_strokes_);
-    editor.stroke_manager.renderer.draw_stroke_meshes(selected_strokes);
+    editor.stroke_manager.renderer->draw_stroke_meshes(in_selection_strokes_);
+    editor.stroke_manager.renderer->draw_stroke_meshes(selected_strokes);
     selection_effect.disable();
 
-    editor.stroke_manager.renderer.mesh_outline_renderer = last_mesh_outline_renderer;
-    editor.stroke_manager.renderer.mesh_renderer = last_mesh_renderer;
+    editor.stroke_manager.renderer = last_renderer;
 }
 
 

@@ -29,6 +29,8 @@ Editor::Editor(Context& ui_context) noexcept :
 
     palette(DefaultPaletteColor),
 
+    stroke_manager(stroke_renderer),
+
     draw_environment(*this),
     selection_environment(*this),
 
@@ -39,7 +41,7 @@ Editor::Editor(Context& ui_context) noexcept :
 
     background.max_alpha_factor = 0.40;
 
-    stroke_effect_.smoothness = 0.3;
+    stroke_renderer.effect.smoothness = 0.3;
 
 
     set_current_environment(draw_environment);
@@ -82,25 +84,16 @@ void Editor::update() noexcept
     Clickable::update();
 
 
+    canvas.update();
     background.update();
     current_environment->update();
     mouse_late_mode_indicator.update();
 
     update_tool_changed_event();
     update_vanish_animations();
+    update_effects();
 
-    stroke_manager.renderer.view_area = canvas.camera.bounding_box();
-    canvas.update();
-
-
-    const Matrix view = GetCameraMatrix2D(canvas.raylib_camera());
-    const Matrix ortho =  MatrixOrtho(0, GetScreenWidth(), GetScreenHeight(), 0, -1, 1);
-    const Matrix mvp = MatrixMultiply(view, ortho);
-
-    stroke_effect_.mvp = mvp;
-    stroke_effect_.camera_zoom = canvas.raylib_camera().zoom;
-
-    stroke_effect_.update();
+    stroke_manager.renderer->view_area = canvas.camera.bounding_box();
 
 
     Component::update();
@@ -118,9 +111,10 @@ void Editor::update_keybindings() noexcept
 {
     if (IsKeyPressed(KEY_ONE)) draw_statistics_ = !draw_statistics_;
 
-    if (IsKeyPressed(KEY_TWO)) stroke_manager.renderer.should_debug_draw_points = !stroke_manager.renderer.should_debug_draw_points;
-    if (IsKeyPressed(KEY_THREE)) stroke_manager.renderer.should_debug_draw_samples = !stroke_manager.renderer.should_debug_draw_samples;
-    if (IsKeyPressed(KEY_FOUR)) stroke_manager.renderer.should_debug_draw_edges = !stroke_manager.renderer.should_debug_draw_edges;
+    // TODO: move everything related to debug to another class
+    //if (IsKeyPressed(KEY_TWO)) stroke_manager.renderer_rl.should_debug_draw_points = !stroke_manager.renderer_rl.should_debug_draw_points;
+    //if (IsKeyPressed(KEY_THREE)) stroke_manager.renderer_rl.should_debug_draw_samples = !stroke_manager.renderer_rl.should_debug_draw_samples;
+    //if (IsKeyPressed(KEY_FOUR)) stroke_manager.renderer_rl.should_debug_draw_edges = !stroke_manager.renderer_rl.should_debug_draw_edges;
     if (IsKeyPressed(KEY_FIVE)) wire_mode_ = !wire_mode_;
 }
 
@@ -153,6 +147,31 @@ void Editor::update_vanish_animations() noexcept
 }
 
 
+void Editor::update_effects() noexcept
+{
+    stroke_renderer.effect.mvp = calculate_stroke_effect_mvp();
+    stroke_renderer.effect.camera_zoom = canvas.raylib_camera().zoom;
+
+    stroke_renderer.effect.update();
+}
+
+
+
+
+Matrix Editor::calculate_stroke_effect_mvp() const noexcept
+{
+    const Matrix view = GetCameraMatrix2D(canvas.raylib_camera());
+    const Matrix ortho =  MatrixOrtho(0, GetScreenWidth(), GetScreenHeight(), 0, -1, 1);
+    const Matrix mvp = MatrixMultiply(view, ortho);
+
+    return mvp;
+}
+
+
+
+
+
+
 
 
 void Editor::draw_self() noexcept
@@ -170,7 +189,6 @@ void Editor::draw_to_canvas() noexcept
     canvas.camera.disable();
 
     // TODO: cleanup
-    // TODO: make StrokeMeshRender to use the shader or just remove it
     // TODO: support caps
 
     canvas.begin_render();
@@ -178,17 +196,7 @@ void Editor::draw_to_canvas() noexcept
         if (wire_mode_)
             rlEnableWireMode();
 
-        for (const auto& mesh : stroke_manager.meshes)
-        {
-            StrokeMeshGL mesh_gl = StrokeMeshGL::from_stroke(*mesh);
-            mesh_gl.load_gl_data();
-
-            stroke_effect_.enable();
-            mesh_gl.draw();
-            stroke_effect_.disable();
-
-            mesh_gl.unload_gl_data();
-        }
+        stroke_manager.draw();
 
         rlDisableWireMode();
 
@@ -277,5 +285,6 @@ void Editor::on_tool_changed() noexcept
     constexpr float ScaleSpeed = 2.5;
     constexpr float TransparencySpeed = 1.75;
 
-    vanish_animations_.push_back(std::make_unique<Vanish<Tool>>(*last_tool_, ScaleSpeed, TransparencySpeed));
+    auto vanish = std::make_unique<Vanish<Tool>>(*last_tool_, ScaleSpeed, TransparencySpeed);
+    vanish_animations_.push_back(std::move(vanish));
 }

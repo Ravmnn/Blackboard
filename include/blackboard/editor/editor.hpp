@@ -1,5 +1,6 @@
 #pragma once
 
+#include "blackboard/editor/stroke/stroke_renderer_gl.hpp"
 #include <blackboard/editor/effects/stroke.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/clickable.hpp>
@@ -39,8 +40,6 @@ private:
 
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
 
-    StrokeEffect stroke_effect_;
-
 
 public:
     EditorBackground background;
@@ -49,6 +48,7 @@ public:
     Palette palette;
     bool dynamic_background_color = false;
 
+    StrokeRendererGL stroke_renderer;
     StrokeMeshManager stroke_manager;
 
 
@@ -91,6 +91,10 @@ private:
     void update_background() noexcept;
     void update_tool_changed_event() noexcept;
     void update_vanish_animations() noexcept;
+    void update_effects() noexcept;
+
+    [[nodiscard]] Matrix calculate_stroke_effect_mvp() const noexcept;
+
 
     void draw_self() noexcept override;
     void draw_to_canvas() noexcept;

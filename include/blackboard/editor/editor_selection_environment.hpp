@@ -1,6 +1,7 @@
 #pragma once
 
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_renderer_rl.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_outline_renderer.hpp>
 #include <blackboard/editor/effects/selection.hpp>
 #include <blackboard/editor/editor_environment.hpp>
@@ -20,9 +21,8 @@ class EditorSelectionEnvironment final : public EditorEnvironment
 private:
     std::vector<StrokeMesh*> in_selection_strokes_;
 
-    StrokeMeshOutlineRenderer selection_mesh_renderer_;
-
-    static constexpr float SelectionOutlineBaseThickness = 8;
+    StrokeMeshOutlineRenderer selection_mesh_outline_renderer_;
+    StrokeRendererRL renderer_rl_;
 
 
 public:

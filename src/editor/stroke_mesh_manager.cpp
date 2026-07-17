@@ -1,5 +1,7 @@
 #include <blackboard/editor/stroke/stroke_mesh_manager.hpp>
 
+#include <cassert>
+
 
 
 
@@ -9,8 +11,9 @@ using bb::editor::StrokeMeshManager,
 
 
 
-StrokeMeshManager::StrokeMeshManager() noexcept :
-    generator(6)
+StrokeMeshManager::StrokeMeshManager(StrokeRenderer& renderer) noexcept :
+    generator(6),
+    renderer(&renderer)
 {}
 
 
@@ -18,16 +21,24 @@ StrokeMeshManager::StrokeMeshManager() noexcept :
 
 void StrokeMeshManager::draw() noexcept
 {
-    renderer.draw_stroke_meshes(meshes);
+    if (renderer)
+        renderer->draw_stroke_meshes(meshes);
 }
 
 
-void StrokeMeshManager::draw_stroke(const Stroke& stroke) noexcept
+void StrokeMeshManager::draw_stroke(const Stroke& stroke) const noexcept
 {
     const auto mesh = generator.generate_mesh(stroke);
 
     if (mesh)
-        renderer.draw_stroke_mesh(*mesh);
+        draw_stroke_mesh(*mesh);
+}
+
+
+void StrokeMeshManager::draw_stroke_mesh(const StrokeMesh& mesh) const noexcept
+{
+    if (renderer)
+        renderer->draw_stroke_mesh(mesh);
 }
 
 
