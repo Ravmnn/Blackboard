@@ -17,11 +17,13 @@ uniform mat4 u_mvp;
 
 layout(location = 0) in vec2 vertex_position;
 layout(location = 1) in vec4 vertex_color;
-layout(location = 2) in float vertex_border_distance;
+layout(location = 2) in float vertex_thickness;
+layout(location = 3) in float vertex_border_distance;
 
 
 out vec2 position;
 out vec4 color;
+out float thickness;
 out float border_distance;
 
 
@@ -31,6 +33,7 @@ void main()
 
     position = vertex_position;
     color = vertex_color;
+    thickness = vertex_thickness;
     border_distance = vertex_border_distance;
 }
 )";
@@ -44,10 +47,14 @@ const char* const Shaders::StrokeFragment = R"(
 
 uniform float u_camera_zoom;
 uniform float u_smoothness;
+uniform float u_smoothness_min;
+uniform float u_smoothness_max;
+uniform float u_smoothness_thickness_influence;
 
 
 in vec2 position;
 in vec4 color;
+in float thickness;
 in float border_distance;
 
 
@@ -56,8 +63,11 @@ out vec4 out_color;
 
 void main()
 {
-    // TODO: clamp smoothness so it doesn't explode when zoom out is too high
-    float fade = smoothstep(0.0, u_smoothness / u_camera_zoom, border_distance);
+    float thickness_influence = thickness / u_smoothness_thickness_influence;
+    float final_smoothness = (u_smoothness / u_camera_zoom) / thickness_influence;
+    final_smoothness = clamp(final_smoothness, u_smoothness_min, u_smoothness_max);
+
+    float fade = smoothstep(0.0, final_smoothness, border_distance);
 
     vec4 final_color = color;
     final_color.a = mix(0, color.a, fade);

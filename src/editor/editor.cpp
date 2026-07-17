@@ -41,7 +41,8 @@ Editor::Editor(Context& ui_context) noexcept :
 
     background.max_alpha_factor = 0.40;
 
-    stroke_renderer.effect.smoothness = 0.3;
+    stroke_renderer.effect.smoothness = 0.35;
+    stroke_renderer.effect.smoothness_thickness_influence = 25;
 
 
     set_current_environment(draw_environment);
@@ -190,6 +191,7 @@ void Editor::draw_to_canvas() noexcept
 
     // TODO: cleanup
     // TODO: support caps
+    // TODO: antialiasing to other stuff besides stroke
 
     canvas.begin_render();
     canvas.camera.enable();

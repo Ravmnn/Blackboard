@@ -36,11 +36,13 @@ void StrokeMeshGL::load_gl_data() noexcept
 
     rlSetVertexAttribute(0, 2, RL_FLOAT, false, sizeof(StrokeMeshGLVertex), 0);
     rlSetVertexAttribute(1, 4, RL_UNSIGNED_BYTE, true, sizeof(StrokeMeshGLVertex), offsetof(StrokeMeshGLVertex, color));
-    rlSetVertexAttribute(2, 1, RL_FLOAT, false, sizeof(StrokeMeshGLVertex), offsetof(StrokeMeshGLVertex, border_distance));
+    rlSetVertexAttribute(2, 1, RL_FLOAT, false, sizeof(StrokeMeshGLVertex), offsetof(StrokeMeshGLVertex, thickness));
+    rlSetVertexAttribute(3, 1, RL_FLOAT, false, sizeof(StrokeMeshGLVertex), offsetof(StrokeMeshGLVertex, border_distance));
 
     rlEnableVertexAttribute(0);
     rlEnableVertexAttribute(1);
     rlEnableVertexAttribute(2);
+    rlEnableVertexAttribute(3);
 
     rlDisableVertexArray();
 
@@ -80,19 +82,19 @@ StrokeMeshGL StrokeMeshGL::from_stroke(const StrokeMesh& mesh) noexcept
 
 void StrokeMeshGL::add_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& current, const StrokeMeshNode& next)
 {
-    vertices.push_back({ current.position(), current.color(), 1 });
-    vertices.push_back({ current.edge.top, current.color(), 0 });
-    vertices.push_back({ next.position(), current.color(), 1 });
+    vertices.push_back({ current.position(), current.color(), current.thickness(), 1 });
+    vertices.push_back({ current.edge.top, current.color(), current.thickness(), 0 });
+    vertices.push_back({ next.position(), current.color(), current.thickness(), 1 });
 
-    vertices.push_back({ next.position(), current.color(), 1 });
-    vertices.push_back({ next.edge.top, current.color(), 0 });
-    vertices.push_back({ current.edge.top, current.color(), 0 });
+    vertices.push_back({ next.position(), current.color(), current.thickness(), 1 });
+    vertices.push_back({ next.edge.top, current.color(), current.thickness(), 0 });
+    vertices.push_back({ current.edge.top, current.color(), current.thickness(), 0 });
 
-    vertices.push_back({ current.position(), current.color(), 1 });
-    vertices.push_back({ current.edge.bottom, current.color(), 0 });
-    vertices.push_back({ next.position(), current.color(), 1 });
+    vertices.push_back({ current.position(), current.color(), current.thickness(), 1 });
+    vertices.push_back({ current.edge.bottom, current.color(), current.thickness(), 0 });
+    vertices.push_back({ next.position(), current.color(), current.thickness(), 1 });
 
-    vertices.push_back({ next.position(), current.color(), 1 });
-    vertices.push_back({ current.edge.bottom, current.color(), 0 });
-    vertices.push_back({ next.edge.bottom, current.color(), 0 });
+    vertices.push_back({ next.position(), current.color(), current.thickness(), 1 });
+    vertices.push_back({ current.edge.bottom, current.color(), current.thickness(), 0 });
+    vertices.push_back({ next.edge.bottom, current.color(), current.thickness(), 0 });
 }

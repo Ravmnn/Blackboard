@@ -24,6 +24,8 @@ struct StrokeMeshGLVertex
 {
     Vector2 position;
     Color color;
+    float thickness;
+
     float border_distance;
 };
 
