@@ -1,7 +1,9 @@
 #pragma once
 
+#include <memory>
+
 #include <blackboard/rendering/renderer.hpp>
-#include <blackboard/rendering/scoped_render_texture.hpp>
+#include <blackboard/rendering/frame_buffer.hpp>
 
 
 
@@ -15,40 +17,23 @@ namespace bb::rendering
 class TextureRenderer : public Renderer
 {
 protected:
-    ScopedRenderTexture render_texture_;
-    unsigned int stencil_id_ = 0;
+    std::unique_ptr<FrameBuffer> frame_buffer_;
 
 
 public:
-    TextureRenderer(const bool use_depth_and_stencil = false) noexcept
-        : TextureRenderer(GetScreenWidth(), GetScreenHeight(), use_depth_and_stencil) {}
-
-    explicit TextureRenderer(const Vector2& size, const bool use_depth_and_stencil = false) noexcept
-        : TextureRenderer((uint32_t)size.x, (uint32_t)size.y, use_depth_and_stencil) {}
-
-    TextureRenderer(unsigned int width, unsigned int height, bool use_depth_and_stencil = false) noexcept;
-
-
-    ~TextureRenderer() override { unload_stencil(); }
+    TextureRenderer(uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
+    TextureRenderer(const Vector2& size, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
+    TextureRenderer(uint32_t width, uint32_t height, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
 
 
     void begin_render() noexcept override;
     void end_render() noexcept override;
 
-
-    void load_stencil() noexcept;
-    void unload_stencil() noexcept;
-
-
-    void generate_mipmaps() noexcept { GenTextureMipmaps(&render_texture_.texture()); }
-
     void resize(const Vector2& size) noexcept;
 
 
-    [[nodiscard]] RenderTexture contents() const noexcept override { return render_texture_; }
-    RenderTexture release_contents() noexcept { return render_texture_.release(); }
-
-    [[nodiscard]] bool has_stencil_and_depth_buffer() const noexcept { return stencil_id_ != 0; }
+    [[nodiscard]] const FrameBuffer& frame_buffer() const noexcept { return *frame_buffer_; }
+    [[nodiscard]] RenderTexture contents() const noexcept override { return frame_buffer_->to_render_texture(); }
 
 
     static void draw_y_inverted_texture(const Texture& texture) noexcept;

@@ -12,7 +12,8 @@ using bb::editor::Canvas,
 
 
 
-Canvas::Canvas() noexcept : TextureRenderer(true),
+// TODO: add global antialiasing samples for editor
+Canvas::Canvas() noexcept : TextureRenderer(1, true, true),
     camera(*this, 0.2, 8, 0.13)
 {
     camera.bounds_expansion = { 100, 100 };

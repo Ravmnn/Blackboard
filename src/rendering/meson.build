@@ -1,9 +1,7 @@
 subdir('effects')
 
 
-
-
-sources = files('window_renderer.cpp', 'texture_renderer.cpp', 'rlgl.cpp')
+sources = files('window_renderer.cpp', 'texture_renderer.cpp', 'rlgl.cpp', 'frame_buffer.cpp')
 
 rendering_lib = static_library('rendering', sources,
     dependencies: global_deps,

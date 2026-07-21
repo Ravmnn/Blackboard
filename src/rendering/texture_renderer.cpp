@@ -8,19 +8,26 @@ using bb::rendering::TextureRenderer;
 
 
 
-TextureRenderer::TextureRenderer(const unsigned int width, const unsigned int height, const bool use_depth_and_stencil) noexcept 
-    : render_texture_(LoadRenderTexture((int)width, (int)height))
-{
-    if (use_depth_and_stencil)
-        load_stencil();
-}
+TextureRenderer::TextureRenderer(const uint16_t msaa_samples, const bool use_depth, const bool use_stencil) noexcept
+    : frame_buffer_(std::make_unique<FrameBuffer>(msaa_samples, use_depth, use_stencil))
+{}
+
+
+TextureRenderer::TextureRenderer(const Vector2& size, const uint16_t msaa_samples, const bool use_depth, const bool use_stencil) noexcept
+    : frame_buffer_(std::make_unique<FrameBuffer>(size, msaa_samples, use_depth, use_stencil))
+{}
+
+
+TextureRenderer::TextureRenderer(const uint32_t width, const uint32_t height, const uint16_t msaa_samples, const bool use_depth, const bool use_stencil) noexcept
+    : frame_buffer_(std::make_unique<FrameBuffer>(width, height, msaa_samples, use_depth, use_stencil))
+{}
 
 
 
 
 void TextureRenderer::begin_render() noexcept
 {
-    BeginTextureMode(render_texture_);
+    frame_buffer_->enable();
 
     Renderer::begin_render();
 }
@@ -28,7 +35,7 @@ void TextureRenderer::begin_render() noexcept
 
 void TextureRenderer::end_render() noexcept
 {
-    EndTextureMode();
+    frame_buffer_->disable();
 
     Renderer::end_render();
 }
@@ -36,40 +43,9 @@ void TextureRenderer::end_render() noexcept
 
 
 
-void TextureRenderer::load_stencil() noexcept
-{
-    const Vector2 texture_size = render_texture_.size();
-
-    glGenRenderbuffers(1, &stencil_id_);
-    glBindRenderbuffer(GL_RENDERBUFFER, stencil_id_);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (int)texture_size.x, (int)texture_size.y);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, render_texture_.render_texture().id);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil_id_);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-
-void TextureRenderer::unload_stencil() noexcept
-{
-    glDeleteRenderbuffers(1, &stencil_id_);
-    stencil_id_ = 0;
-}
-
-
-
-
 void TextureRenderer::resize(const Vector2& size) noexcept
 {
-    UnloadRenderTexture(render_texture_);
-    render_texture_ = ScopedRenderTexture(size);
-
-    if (!has_stencil_and_depth_buffer())
-        return;
-
-    unload_stencil();
-    load_stencil();
+    frame_buffer_ = std::make_unique<FrameBuffer>(size, frame_buffer_->msaa_samples(), frame_buffer_->has_depth_buffer(), frame_buffer_->has_stencil_buffer());
 }
 
 
