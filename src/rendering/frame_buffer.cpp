@@ -137,6 +137,7 @@ void FrameBuffer::enable() noexcept
 
     enable_frame_buffer();
     glViewport(0, 0, (int)width(), (int)height());
+    set_texture_projection_matrix();
 }
 
 
@@ -144,15 +145,42 @@ void FrameBuffer::disable() noexcept
 {
     rlDrawRenderBatchActive();
 
+    copy_frame_buffer_to_resolve_texture();
+    disable_frame_buffer();
+
+    glViewport(0, 0, GetScreenWidth(), GetScreenHeight());
+    set_window_projection_matrix();
+}
+
+
+void FrameBuffer::copy_frame_buffer_to_resolve_texture() const noexcept
+{
     glBindFramebuffer(GL_READ_FRAMEBUFFER, frame_buffer_);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolve_frame_buffer_);
     glBlitFramebuffer(0, 0, (int)width(), (int)height(),
                        0, 0, (int)width(), (int)height(),
                        GL_COLOR_BUFFER_BIT, GL_LINEAR);
+}
 
-    disable_frame_buffer();
 
-    glViewport(0, 0, GetScreenWidth(), GetScreenHeight());
+void FrameBuffer::set_texture_projection_matrix() const noexcept
+{
+    rlMatrixMode(RL_PROJECTION);
+    rlLoadIdentity();
+    rlOrtho(0, (double)width(), (double)height(), 0, 0.0, 1.0);
+
+    rlMatrixMode(RL_MODELVIEW);
+    rlLoadIdentity();
+}
+
+
+void FrameBuffer::set_window_projection_matrix() const noexcept
+{
+    rlMatrixMode(RL_PROJECTION);
+    rlLoadIdentity();
+    rlOrtho(0, GetScreenWidth(), GetScreenHeight(), 0, 0.0, 1.0);
+    rlMatrixMode(RL_MODELVIEW);
+    rlLoadIdentity();
 }
 
 

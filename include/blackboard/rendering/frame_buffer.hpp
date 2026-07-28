@@ -78,8 +78,13 @@ private:
 
     void load_render_buffer(uint32_t& buffer_id, uint32_t format, uint32_t attachment);
 
+    void copy_frame_buffer_to_resolve_texture() const noexcept;
+
     void enable_frame_buffer() const noexcept { glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_); }
     void disable_frame_buffer() const noexcept { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+
+    void set_texture_projection_matrix() const noexcept;
+    void set_window_projection_matrix() const noexcept;
 };
 
 

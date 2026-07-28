@@ -14,7 +14,6 @@ namespace bb::editor
 
 
 
-// TODO: fix vanish not working
 template <typename T> requires std::derived_from<T, Drawable> && std::derived_from<T, Bounds>
 class Vanish : public Updateable, public Drawable
 {
@@ -35,7 +34,7 @@ public:
 
 
     explicit Vanish(T& object, const float scale_speed = 2, const float transparency_speed = 1.5) noexcept :
-        texture_(1, false, false),
+        texture_(4, false, false),
 
         object(object),
 
