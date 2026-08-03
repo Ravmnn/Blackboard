@@ -11,7 +11,7 @@
 #include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_manager.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
 
 
 
@@ -48,7 +48,7 @@ public:
     bool dynamic_background_color = false;
 
     StrokeRendererGL stroke_renderer;
-    StrokeMeshManager stroke_manager;
+    StrokeMeshGLManager stroke_manager;
 
 
     Event<> environment_changed;
@@ -91,8 +91,6 @@ private:
     void update_tool_changed_event() noexcept;
     void update_vanish_animations() noexcept;
     void update_effects() noexcept;
-
-    [[nodiscard]] Matrix calculate_stroke_effect_mvp() const noexcept;
 
 
     void draw_self() noexcept override;

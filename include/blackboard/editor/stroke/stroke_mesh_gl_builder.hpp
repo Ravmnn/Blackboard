@@ -14,7 +14,7 @@ namespace bb::editor
 class StrokeMeshGLBuilder
 {
 public:
-    float cap_curvature = 0.1;
+    float cap_curvature = 0.2;
 
 
     StrokeMeshGL build(const StrokeMesh& mesh) noexcept;

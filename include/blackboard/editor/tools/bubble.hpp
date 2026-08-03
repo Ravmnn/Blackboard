@@ -28,6 +28,8 @@ protected:
 
 
 public:
+    const Camera2D& camera;
+
     Vector2 target;
 
     animation::Spring<float> half_thickness;
@@ -40,7 +42,7 @@ public:
     bool sync_trail_color = true;
 
 
-    Bubble(float thickness) noexcept;
+    Bubble(const Camera2D& camera, float thickness) noexcept;
 
 
     void update() noexcept override;

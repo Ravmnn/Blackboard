@@ -51,7 +51,7 @@ void TextureRenderer::resize(const Vector2& size) noexcept
 
 
 
-void TextureRenderer::draw_y_inverted_texture(const Texture& texture) noexcept
+void TextureRenderer::draw_y_inverted_texture_full(const Texture& texture) noexcept
 {
     DrawTextureRec(texture, { 0, 0, (float)texture.width, (float)-texture.height }, {}, WHITE);
 }

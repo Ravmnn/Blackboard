@@ -39,9 +39,9 @@ void WindowRenderer::end_render() noexcept
 void WindowRenderer::render_buffer_to_window() const noexcept
 {
     BeginDrawing();
-    clear();
+    clear_without_enabling();
 
-    draw_y_inverted_texture(contents().texture);
+    draw_y_inverted_texture_full(contents().texture);
 
     EndDrawing();
 }

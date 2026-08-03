@@ -10,7 +10,9 @@ using bb::editor::EraserBody;
 
 
 
-EraserBody::EraserBody(Eraser& eraser) noexcept : Bubble(BaseThickness),
+EraserBody::EraserBody(Eraser& eraser) noexcept :
+    Bubble(eraser.editor().canvas.raylib_camera(), BaseThickness),
+
     eraser(eraser)
 {
     outline_thickness.set_value_immediately(1.0);

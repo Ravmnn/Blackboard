@@ -18,12 +18,20 @@ class Renderer : Activatable
 {
 public:
     Color clear_color = BLANK;
+    bool clear_on_enable = true;
 
 
     using Activatable::active;
 
 
-    virtual void begin_render() { enable(); clear(); }
+    virtual void begin_render()
+    {
+        enable();
+
+        if (clear_on_enable)
+            clear_without_enabling();
+    }
+
     virtual void end_render() { disable(); }
 
 
@@ -39,8 +47,20 @@ public:
     }
 
 
+    void clear() noexcept
+    {
+        begin_render();
+        clear_without_enabling();
+        end_render();
+    }
+
+
 protected:
-    void clear() const noexcept { ClearBackground(clear_color); Stencil::clear(); }
+    void clear_without_enabling() const noexcept
+    {
+        ClearBackground(clear_color);
+        Stencil::clear();
+    }
 };
 
 

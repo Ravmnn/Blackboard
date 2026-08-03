@@ -89,9 +89,6 @@ StrokePoint Brush::create_stroke_point() const noexcept
 
 void Brush::draw() noexcept
 {
-    if (!draw_finished())
-        editor().stroke_manager.draw_stroke(stroke_);
-
     body.draw();
 }
 

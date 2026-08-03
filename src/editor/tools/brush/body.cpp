@@ -1,5 +1,6 @@
 #include <blackboard/editor/tools/brush/body.hpp>
 
+#include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/editor_environment.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 
@@ -11,7 +12,9 @@ using bb::editor::BrushBody;
 
 
 
-BrushBody::BrushBody(Brush& brush) noexcept : Bubble(brush.thickness),
+BrushBody::BrushBody(Brush& brush) noexcept :
+    Bubble(brush.editor().canvas.raylib_camera(), brush.thickness),
+
     brush(brush)
 {
     brush.changed_in.subscribe([this]() noexcept { on_brush_changed_in(); }, "editor::BrushBody::brush_changed_in_callback");

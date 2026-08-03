@@ -2,6 +2,7 @@
 
 #include <rlgl.h>
 
+#include <blackboard/camera_matrix.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
@@ -81,10 +82,6 @@ void Editor::update() noexcept
 
     Clickable::update();
 
-    // TODO: first pass draws only coverage on a offscreen texture using additive blending (white color)
-    // TODO: second pass draws only the color on another offscreen texture
-    // TODO: the final result is the multiplicative blending between the two
-
     canvas.update();
     background.update();
     current_environment->update();
@@ -150,22 +147,10 @@ void Editor::update_vanish_animations() noexcept
 
 void Editor::update_effects() noexcept
 {
-    stroke_renderer.effect.mvp = calculate_stroke_effect_mvp();
+    stroke_renderer.effect.mvp = CameraMatrix::get_orthographic_matrix_from_camera(canvas.raylib_camera()   );
     stroke_renderer.effect.camera_zoom = canvas.raylib_camera().zoom;
 
     stroke_renderer.effect.update();
-}
-
-
-
-
-Matrix Editor::calculate_stroke_effect_mvp() const noexcept
-{
-    const Matrix view = GetCameraMatrix2D(canvas.raylib_camera());
-    const Matrix ortho =  MatrixOrtho(0, GetScreenWidth(), GetScreenHeight(), 0, -1, 1);
-    const Matrix mvp = MatrixMultiply(view, ortho);
-
-    return mvp;
 }
 
 
@@ -189,23 +174,27 @@ void Editor::draw_to_canvas() noexcept
     background.draw();
     canvas.camera.disable();
 
+
+    if (wire_mode_)
+        rlEnableWireMode();
+
+    stroke_manager.clear_composition();
+    stroke_manager.draw_stored_meshes_to_composition();
+
+    rlDisableWireMode();
+
+    if (!draw_environment.brush.draw_finished())
+        stroke_manager.draw_stroke_to_composition(draw_environment.brush.stroke());
+
     canvas.begin_render();
-    canvas.camera.enable();
-        if (wire_mode_)
-            rlEnableWireMode();
+        stroke_manager.draw_composition();
 
-        BeginBlendMode(BLEND_ALPHA_PREMULTIPLY);
-        stroke_manager.draw();
-        EndBlendMode();
+        canvas.camera.enable();
+            current_environment->draw();
+            mouse_late_mode_indicator.draw();
 
-        rlDisableWireMode();
-
-
-        current_environment->draw();
-        mouse_late_mode_indicator.draw();
-
-        draw_vanish_animations();
-    canvas.camera.disable();
+            draw_vanish_animations();
+        canvas.camera.disable();
     canvas.end_render();
 }
 
@@ -220,7 +209,7 @@ void Editor::draw_vanish_animations() noexcept
 
 void Editor::draw_canvas_content() noexcept
 {
-    TextureRenderer::draw_y_inverted_texture(canvas.contents().texture);
+    TextureRenderer::draw_y_inverted_texture_full(canvas.contents().texture);
 }
 
 

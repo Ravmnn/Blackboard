@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <rlgl.h>
+
 
 
 
@@ -19,7 +21,7 @@ StrokeMeshManager::StrokeMeshManager(StrokeRenderer& renderer) noexcept :
 
 
 
-void StrokeMeshManager::draw() noexcept
+void StrokeMeshManager::draw_stored_meshes() const noexcept
 {
     if (renderer)
         renderer->draw_stroke_meshes(meshes);
@@ -31,14 +33,7 @@ void StrokeMeshManager::draw_stroke(const Stroke& stroke) const noexcept
     const auto mesh = generator.generate_mesh(stroke);
 
     if (mesh)
-        draw_stroke_mesh(*mesh);
-}
-
-
-void StrokeMeshManager::draw_stroke_mesh(const StrokeMesh& mesh) const noexcept
-{
-    if (renderer)
-        renderer->draw_stroke_mesh(mesh);
+        renderer->draw_stroke_mesh(*mesh);
 }
 
 

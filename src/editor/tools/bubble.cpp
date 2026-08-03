@@ -15,7 +15,9 @@ using bb::editor::Bubble,
 
 
 
-Bubble::Bubble(const float thickness) noexcept :
+Bubble::Bubble(const Camera2D& camera, const float thickness) noexcept :
+    camera(camera),
+
     half_thickness(thickness, 0.15, 40),
     stretch(0, 0.01, 30),
     outline_thickness(2, 5),
@@ -23,7 +25,7 @@ Bubble::Bubble(const float thickness) noexcept :
     color(WHITE, 5),
     outline_color(WHITE, 5),
 
-    trail(StrokePoint({}, 0), 10)
+    trail(camera, StrokePoint({}, 0), 10)
 {
     stretch.max = 45;
 }

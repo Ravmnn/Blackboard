@@ -12,11 +12,11 @@ StrokeEffect::StrokeEffect() noexcept :
     rendering::Effect(LoadShaderFromMemory(Shaders::StrokeVertex, Shaders::StrokeFragment)),
 
     mvp(shader(), "u_mvp", {}),
-    camera_zoom(shader(), "u_camera_zoom", {}),
-    smoothness(shader(), "u_smoothness", 0.1),
+    camera_zoom(shader(), "u_camera_zoom", 1),
+    smoothness(shader(), "u_smoothness", 0.2),
     smoothness_min(shader(), "u_smoothness_min", 0.0),
     smoothness_max(shader(), "u_smoothness_max", 0.9),
-    smoothness_thickness_influence(shader(), "u_smoothness_thickness_influence", 10)
+    smoothness_thickness_influence(shader(), "u_smoothness_thickness_influence", 3)
 {
     use_raylib_batch_system = false;
 }

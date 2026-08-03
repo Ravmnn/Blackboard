@@ -36,7 +36,12 @@ public:
     [[nodiscard]] RenderTexture contents() const noexcept override { return frame_buffer_->to_render_texture(); }
 
 
-    static void draw_y_inverted_texture(const Texture& texture) noexcept;
+    void draw_y_inverted_texture_full() const noexcept {
+        draw_y_inverted_texture_full(contents().texture);
+    }
+
+
+    static void draw_y_inverted_texture_full(const Texture& texture) noexcept;
 };
 
 

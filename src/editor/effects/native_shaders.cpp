@@ -70,7 +70,7 @@ void main()
     float fade = smoothstep(0.0, final_smoothness, border_distance);
 
     vec4 final_color = color;
-    final_color.a = mix(0, color.a, fade);
+    final_color.a = mix(0, final_color.a, fade);
 
     out_color = final_color;
 }
