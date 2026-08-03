@@ -26,9 +26,10 @@ EditorBackground::EditorBackground(const Editor& editor, const float zoom_visibi
 
     effect.alt_spacing = 80;
     effect.alt_radius = 1.0;
-    effect.alt_alpha_factor = 0.25;
 
     effect.soft_outline_thickness = 0.1;
+
+    max_alpha = 0.3;
 }
 
 
@@ -53,7 +54,7 @@ void EditorBackground::update_effect() noexcept
 float EditorBackground::get_alpha_factor() const noexcept
 {
     const float t = Interpolate::inverse(zoom_visibility_interval_max, zoom_visibility_interval_min, editor.canvas.raylib_camera().zoom);
-    return max_alpha_factor * std::clamp(t, 0.0f, 1.0f);
+    return std::clamp(t, min_alpha, max_alpha);
 }
 
 

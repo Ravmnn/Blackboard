@@ -50,12 +50,15 @@ std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<
     samples.reserve(size * samples_per_segment + 1);
 
     for (size_t i = 1; i < size; i++)
-    {
-        const unsigned int samples_amount = (adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment);
-        add_samples_from_segment(samples, StrokePointInterpolation(points, (int)i), samples_amount, i);
-    }
+        add_samples_from_segment(samples, StrokePointInterpolation(points, (int)i), samples_amount(points, i), i);
 
     return samples;
+}
+
+
+unsigned int StrokeMeshGenerator::samples_amount(const std::vector<StrokePoint>& points, size_t i) const noexcept
+{
+    return adaptative_samples_per_segment ? calculate_adaptative_samples_amount(points, i) : samples_per_segment;
 }
 
 
@@ -91,6 +94,8 @@ void StrokeMeshGenerator::add_samples_from_segment(std::vector<StrokeSample>& sa
 
 std::vector<StrokeEdge> StrokeMeshGenerator::create_edges(const std::vector<StrokeSample>& samples) noexcept
 {
+    constexpr float DirectionEpsilon = 0.0001f;
+
     std::vector<StrokeEdge> edges(samples.size());
 
     for (size_t i = 0; i < samples.size(); i++)
@@ -98,12 +103,9 @@ std::vector<StrokeEdge> StrokeMeshGenerator::create_edges(const std::vector<Stro
         const Vector2 direction = get_direction_from_samples(samples, i);
 
         if (Vector2Length(direction) < DirectionEpsilon)
-        {
             edges[i] = (i > 0) ? edges[i - 1] : StrokeEdge(samples[i].position, samples[i].position);
-            continue;
-        }
-
-        edges[i] = create_edge(samples[i], Vector2Normalize(direction));
+        else
+            edges[i] = create_edge(samples[i], Vector2Normalize(direction));
     }
 
     return edges;
@@ -113,7 +115,7 @@ std::vector<StrokeEdge> StrokeMeshGenerator::create_edges(const std::vector<Stro
 StrokeEdge StrokeMeshGenerator::create_edge(const StrokeSample& sample, const Vector2& direction) noexcept
 {
     const Vector2 normal = { -direction.y, direction.x };
-    const float half_thickness = sample.half_thickness();
+    float half_thickness = sample.half_thickness();
 
     return { sample.position, normal, half_thickness };
 }
@@ -142,6 +144,12 @@ std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<S
 
     for (size_t i = 0; i < samples.size(); i++)
         mesh->emplace_back(samples[i], edges[i]);
+
+    if (mesh->size() >= 2)
+    {
+        mesh->front().sample.is_extremity = true;
+        mesh->back().sample.is_extremity = true;
+    }
 
     return std::unique_ptr<StrokeMesh>(mesh);
 }

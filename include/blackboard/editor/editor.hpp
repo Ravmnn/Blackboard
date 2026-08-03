@@ -1,6 +1,5 @@
 #pragma once
 
-#include "blackboard/editor/stroke/stroke_renderer_gl.hpp"
 #include <blackboard/editor/effects/stroke.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/clickable.hpp>

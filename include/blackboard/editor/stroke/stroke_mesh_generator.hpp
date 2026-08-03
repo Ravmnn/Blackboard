@@ -15,12 +15,8 @@ namespace bb::editor
 
 class StrokeMeshGenerator
 {
-private:
-    static constexpr float DirectionEpsilon = 0.0001f;
-
-
 public:
-    unsigned int samples_per_segment;
+    uint32_t samples_per_segment;
     bool adaptative_samples_per_segment = true;
 
 
@@ -35,6 +31,7 @@ private:
     static std::vector<StrokePoint> remove_close_points(const std::vector<StrokePoint>& points) noexcept;
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     [[nodiscard]] std::vector<StrokeSample> create_samples(const std::vector<StrokePoint>& points) const noexcept;
+    [[nodiscard]] unsigned int samples_amount(const std::vector<StrokePoint>& points, size_t i) const noexcept;
     [[nodiscard]] unsigned int calculate_adaptative_samples_amount(const std::vector<StrokePoint>& points, size_t i) const noexcept;
     static float calculate_average_curvature(const std::vector<StrokePoint>& points, size_t i) noexcept;
     static void add_samples_from_segment(std::vector<StrokeSample>& samples, const StrokePointInterpolation& segment, unsigned int samples_amount, size_t i) noexcept;

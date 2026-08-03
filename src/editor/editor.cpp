@@ -25,7 +25,7 @@ Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
     Clickable(canvas),
 
-    background(*this, 1, 0.35),
+    background(*this, 2, 0.5),
 
     palette(DefaultPaletteColor),
 
@@ -38,10 +38,7 @@ Editor::Editor(Context& ui_context) noexcept :
 {
     clip = false;
 
-
-    background.max_alpha_factor = 0.40;
-
-    stroke_renderer.effect.smoothness = 0.35;
+    stroke_renderer.effect.smoothness = 0.3;
     stroke_renderer.effect.smoothness_thickness_influence = 25;
 
 
@@ -84,6 +81,9 @@ void Editor::update() noexcept
 
     Clickable::update();
 
+    // TODO: first pass draws only coverage on a offscreen texture using additive blending (white color)
+    // TODO: second pass draws only the color on another offscreen texture
+    // TODO: the final result is the multiplicative blending between the two
 
     canvas.update();
     background.update();
@@ -189,16 +189,14 @@ void Editor::draw_to_canvas() noexcept
     background.draw();
     canvas.camera.disable();
 
-    // TODO: cleanup
-    // TODO: support caps
-    // TODO: antialiasing to other stuff besides stroke
-
     canvas.begin_render();
     canvas.camera.enable();
         if (wire_mode_)
             rlEnableWireMode();
 
+        BeginBlendMode(BLEND_ALPHA_PREMULTIPLY);
         stroke_manager.draw();
+        EndBlendMode();
 
         rlDisableWireMode();
 

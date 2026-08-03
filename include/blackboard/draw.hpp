@@ -17,17 +17,16 @@ namespace bb
 
 
 
+struct SectionTriangle
+{
+    Vector2 center;
+    Vector2 current;
+    Vector2 next;
+};
+
+
 class Draw
 {
-private:
-    struct SectionTriangle
-    {
-        Vector2 center;
-        Vector2 current;
-        Vector2 next;
-    };
-
-
 public:
     static void rounded_rectangle(const Rectangle& rectangle, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
     {
@@ -63,7 +62,7 @@ public:
     }
 
 
-    static void stretched_ellipse_outline(const Vector2& center, const float radius, const float stretch, const float thickness, const Color& color = WHITE, const uint32_t resolution = 16) noexcept
+    static void stretched_ellipse_outline(const Vector2& center, const float radius, const float stretch, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         ellipse_outline(center, radius + stretch, radius, thickness, color, resolution);
     }
@@ -78,7 +77,7 @@ public:
     }
 
 
-    static void ellipse_outline(const Vector2& center, const float radius_x, const float radius_y, const float thickness, const Color& color = WHITE, const uint32_t resolution = 16) noexcept
+    static void ellipse_outline(const Vector2& center, const float radius_x, const float radius_y, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         std::vector<SectionTriangle> triangles;
         triangles.reserve(resolution);
@@ -98,7 +97,7 @@ public:
     }
 
 
-    static void circle_outline(const Vector2& center, const float radius, const float thickness, const Color& color, const uint32_t resolution = 16) noexcept
+    static void circle_outline(const Vector2& center, const float radius, const float thickness, const Color& color, const uint32_t resolution = 32) noexcept
     {
         circle_section_outline(center, radius, 0, 360, thickness, color, resolution);
     }
@@ -114,7 +113,7 @@ public:
     }
 
 
-    static void circle_section_outline(const Vector2& center, const float radius, const float start_angle, const float end_angle, const float thickness, const Color& color, const uint32_t resolution = 16) noexcept
+    static void circle_section_outline(const Vector2& center, const float radius, const float start_angle, const float end_angle, const float thickness, const Color& color, const uint32_t resolution = 32) noexcept
     {
         const float angle_step = calculate_circle_section_angle_step(start_angle, end_angle, resolution);
 
@@ -128,7 +127,48 @@ public:
     }
 
 
-private:
+
+
+
+
+
+
+    static std::vector<SectionTriangle> calculate_circle_section_triangles(const Vector2& center, const float radius, const uint32_t resolution = 32) noexcept
+    {
+        const float angle_step = calculate_circle_section_angle_step(0, 360, resolution);
+
+        std::vector<SectionTriangle> vertices;
+        vertices.reserve(resolution);
+
+        for (size_t i = 0; i < resolution; i++)
+            vertices.push_back(calculate_circle_section_triangle(center, radius, 0, angle_step, i));
+
+        return vertices;
+    }
+
+
+    static SectionTriangle calculate_circle_section_triangle(const Vector2& center, const float radius, const float start_angle, const float angle_step, const size_t i)
+    {
+        const auto fi = (float)i;
+        const float current_angle = start_angle + fi * angle_step;
+        const float next_angle = (float)start_angle + (fi + 1) * angle_step;
+
+        const Vector2 current_point = center + Vector2{ cosf(current_angle) * radius, sinf(current_angle) * radius };
+        const Vector2 next_point = center + Vector2{ cosf(next_angle) * radius, sinf(next_angle) * radius };
+
+        return SectionTriangle{ .center = center, .current = current_point, .next = next_point };
+    }
+
+
+    static float calculate_circle_section_angle_step(const float start_angle, const float end_angle, const uint32_t resolution = 32) noexcept
+    {
+        const auto angle_distance_in_rads = (float)((end_angle - start_angle) * M_PI / 180.0);
+        return angle_distance_in_rads / (float)resolution;
+    }
+
+
+
+
     static SectionTriangle calculate_ellipse_triangle(const Vector2& center, const float radius_x, const float radius_y, const uint32_t resolution, const size_t i) noexcept
     {
         const float angle1 = (2.0f * PI * (float)i) / (float)resolution;
@@ -145,28 +185,6 @@ private:
         };
 
         return SectionTriangle{ .center = center, .current = p1, .next = p2 };
-    }
-
-
-
-
-    static float calculate_circle_section_angle_step(const float start_angle, const float end_angle, const uint32_t resolution) noexcept
-    {
-        const auto angle_distance_in_rads = (float)((end_angle - start_angle) * M_PI / 180.0);
-        return angle_distance_in_rads / (float)resolution;
-    }
-
-
-    static SectionTriangle calculate_circle_section_triangle(const Vector2& center, const float radius, const float start_angle, const float angle_step, const size_t i)
-    {
-        const auto fi = (float)i;
-        const float current_angle = start_angle + fi * angle_step;
-        const float next_angle = (float)start_angle + (fi + 1) * angle_step;
-
-        const Vector2 current_point = center + Vector2{ cosf(current_angle) * radius, sinf(current_angle) * radius };
-        const Vector2 next_point = center + Vector2{ cosf(next_angle) * radius, sinf(next_angle) * radius };
-
-        return SectionTriangle{ .center = center, .current = current_point, .next = next_point };
     }
 
 

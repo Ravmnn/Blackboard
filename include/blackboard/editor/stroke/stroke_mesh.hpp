@@ -64,6 +64,7 @@ public:
     Color outline_color = WHITE;
 
     float curvature;
+    bool is_extremity = false;
 
 
     StrokeSample() = default;
@@ -108,6 +109,7 @@ public:
 
     [[nodiscard]] const StrokePointInterpolation& interpolation() const noexcept { return sample.interpolation; }
 
+    [[nodiscard]] bool is_extremity() const noexcept { return sample.is_extremity; }
     [[nodiscard]] float curvature() const noexcept { return sample.curvature; }
     [[nodiscard]] const Vector2& normal() const noexcept { return edge.normal; }
 

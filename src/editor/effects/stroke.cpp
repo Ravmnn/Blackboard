@@ -14,7 +14,7 @@ StrokeEffect::StrokeEffect() noexcept :
     mvp(shader(), "u_mvp", {}),
     camera_zoom(shader(), "u_camera_zoom", {}),
     smoothness(shader(), "u_smoothness", 0.1),
-    smoothness_min(shader(), "u_smoothness_min", 0.05),
+    smoothness_min(shader(), "u_smoothness_min", 0.0),
     smoothness_max(shader(), "u_smoothness_max", 0.9),
     smoothness_thickness_influence(shader(), "u_smoothness_thickness_influence", 10)
 {

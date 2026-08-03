@@ -31,7 +31,9 @@ public:
 
     float zoom_visibility_interval_min;
     float zoom_visibility_interval_max;
-    float max_alpha_factor = 0.6;
+
+    float min_alpha = 0;
+    float max_alpha = 1;
 
 
     EditorBackground(const Editor& editor, float zoom_visibility_interval_min, float zoom_visibility_interval_max) noexcept;

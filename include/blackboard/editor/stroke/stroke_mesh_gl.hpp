@@ -27,6 +27,9 @@ struct StrokeMeshGLVertex
     float thickness;
 
     float border_distance;
+
+
+    StrokeMeshGLVertex(const StrokeMeshNode& node, const Vector2& position, float border_distance) noexcept;
 };
 
 
@@ -51,10 +54,6 @@ public:
 
     [[nodiscard]] uint32_t vbo() const noexcept { return vbo_; }
     [[nodiscard]] uint32_t vao() const noexcept { return vao_; }
-
-
-    static StrokeMeshGL from_stroke(const StrokeMesh& mesh) noexcept;
-    static void add_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& current, const StrokeMeshNode& next);
 };
 
 
