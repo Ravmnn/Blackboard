@@ -13,7 +13,7 @@ namespace bb::editor
 
 
 
-class StrokeRendererGL : public StrokeRenderer
+class StrokeRendererGL : public StrokeRenderer, public Updateable
 {
 private:
     rendering::TextureRenderer coverage_;
@@ -25,6 +25,9 @@ public:
 
 
     StrokeRendererGL() noexcept;
+
+
+    void update() noexcept override;
 
 
     void draw_composition() const noexcept;

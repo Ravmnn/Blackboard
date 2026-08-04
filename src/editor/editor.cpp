@@ -11,7 +11,6 @@
 
 
 
-// BUG: resizing the window breaks the composition stroke renderer texture
 // BUG: transparent color stroke isn't working properly
 
 
@@ -98,6 +97,7 @@ void Editor::update() noexcept
     update_effects();
 
     stroke_manager.renderer->view_area = canvas.camera.bounding_box();
+    stroke_renderer.update();
 
 
     Component::update();

@@ -2,6 +2,7 @@
 
 #include <rlgl.h>
 
+#include <blackboard/window.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
 
@@ -17,6 +18,18 @@ StrokeRendererGL::StrokeRendererGL() noexcept
 {
     coverage_.clear_on_enable = false;
     color_.clear_on_enable = false;
+}
+
+
+
+
+void StrokeRendererGL::update() noexcept
+{
+    if (!Window::resized())
+        return;
+
+    coverage_.resize(Window::size());
+    color_.resize(Window::size());
 }
 
 
