@@ -11,6 +11,12 @@
 
 
 
+// BUG: resizing the window breaks the composition stroke renderer texture
+// BUG: transparent color stroke isn't working properly
+
+
+
+
 using bb::editor::Editor,
     bb::math::Segment,
     bb::ui::Component,
@@ -162,30 +168,18 @@ void Editor::update_effects() noexcept
 
 void Editor::draw_self() noexcept
 {
+    draw_background();
+    draw_strokes();
+
     draw_to_canvas();
     draw_canvas_content();
+
     draw_statistics();
 }
 
 
 void Editor::draw_to_canvas() noexcept
 {
-    canvas.camera.enable();
-    background.draw();
-    canvas.camera.disable();
-
-
-    if (wire_mode_)
-        rlEnableWireMode();
-
-    stroke_manager.clear_composition();
-    stroke_manager.draw_stored_meshes_to_composition();
-
-    rlDisableWireMode();
-
-    if (!draw_environment.brush.draw_finished())
-        stroke_manager.draw_stroke_to_composition(draw_environment.brush.stroke());
-
     canvas.begin_render();
         stroke_manager.draw_composition();
 
@@ -196,6 +190,29 @@ void Editor::draw_to_canvas() noexcept
             draw_vanish_animations();
         canvas.camera.disable();
     canvas.end_render();
+}
+
+
+void Editor::draw_background() noexcept
+{
+    canvas.camera.enable();
+    background.draw();
+    canvas.camera.disable();
+}
+
+
+void Editor::draw_strokes() noexcept
+{
+    if (wire_mode_)
+        rlEnableWireMode();
+
+    stroke_manager.clear_composition();
+    stroke_manager.draw_stored_meshes_to_composition();
+
+    if (!draw_environment.brush.draw_finished())
+        stroke_manager.draw_stroke_to_composition(draw_environment.brush.stroke());
+
+    rlDisableWireMode();
 }
 
 
@@ -256,6 +273,10 @@ StrokeMesh* Editor::get_stroke_intersecting_segment(const Segment& segment) noex
 
     return nullptr;
 }
+
+
+
+
 
 
 
