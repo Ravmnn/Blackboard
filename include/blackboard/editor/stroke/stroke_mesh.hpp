@@ -64,7 +64,8 @@ public:
     Color outline_color = WHITE;
 
     float curvature;
-    bool is_extremity = false;
+    bool is_begin = false;
+    bool is_end = false;
 
 
     StrokeSample() = default;
@@ -74,6 +75,7 @@ public:
     [[nodiscard]] float t() const noexcept { return (float)index / (float)max_index; }
 
     [[nodiscard]] float half_thickness() const noexcept { return thickness / 2; }
+    [[nodiscard]] bool is_extremity() const noexcept { return is_begin || is_end; }
 
 
     [[nodiscard]] float calculate_curvature() const noexcept;
@@ -109,9 +111,16 @@ public:
 
     [[nodiscard]] const StrokePointInterpolation& interpolation() const noexcept { return sample.interpolation; }
 
-    [[nodiscard]] bool is_extremity() const noexcept { return sample.is_extremity; }
+    [[nodiscard]] bool is_extremity() const noexcept { return sample.is_extremity(); }
+    [[nodiscard]] bool is_begin() const noexcept { return sample.is_begin; }
+    [[nodiscard]] bool is_end() const noexcept { return sample.is_end; }
+
     [[nodiscard]] float curvature() const noexcept { return sample.curvature; }
-    [[nodiscard]] const Vector2& normal() const noexcept { return edge.normal; }
+
+    [[nodiscard]] Vector2 forward_direction() const noexcept { return { edge.normal.y, -edge.normal.x }; }
+    [[nodiscard]] Vector2 backward_direction() const noexcept { return { -edge.normal.y, edge.normal.x }; }
+    [[nodiscard]] const Vector2& up_normal() const noexcept { return edge.normal; }
+    [[nodiscard]] Vector2 down_normal() const noexcept { return edge.normal * -1; }
 
     [[nodiscard]] Vector2& position() noexcept { return sample.position; }
     [[nodiscard]] float& thickness() noexcept { return sample.thickness; }
