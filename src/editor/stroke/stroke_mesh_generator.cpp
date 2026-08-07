@@ -147,8 +147,8 @@ std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<S
 
     if (mesh->size() >= 2)
     {
-        mesh->front().sample.is_extremity = true;
-        mesh->back().sample.is_extremity = true;
+        mesh->front().sample.is_begin = true;
+        mesh->back().sample.is_end = true;
     }
 
     return std::unique_ptr<StrokeMesh>(mesh);

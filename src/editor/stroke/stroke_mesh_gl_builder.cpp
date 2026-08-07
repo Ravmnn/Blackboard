@@ -64,7 +64,8 @@ void StrokeMeshGLBuilder::add_vertices_from_stroke_node(std::vector<StrokeMeshGL
 
 void StrokeMeshGLBuilder::add_cap_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& node) noexcept
 {
-    const std::vector<SectionTriangle> triangles = Draw::calculate_circle_section_triangles(node.position(), node.half_thickness(), 50);
+    const Vector2 direction = node.is_begin() ? node.backward_direction() : node.forward_direction();
+    const std::vector<SectionTriangle> triangles = Draw::calculate_semi_circle_section_triangles(node.position(), direction, node.half_thickness(), 50);
 
     for (const auto& triangle : triangles)
     {
