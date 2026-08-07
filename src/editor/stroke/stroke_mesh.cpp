@@ -72,7 +72,7 @@ StrokeEdge::StrokeEdge(const Vector2& position, const Vector2& normal, const flo
 StrokeEdge::StrokeEdge(const Vector2& top, const Vector2& bottom) noexcept :
     top(top),
     bottom(bottom),
-    normal(Vector2Normalize(top - bottom / 2))
+    normal(Vector2Normalize((top - bottom) / 2))
 {}
 
 
