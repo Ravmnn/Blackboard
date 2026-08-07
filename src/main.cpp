@@ -1,3 +1,4 @@
+#include "blackboard/draw.hpp"
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/rendering/window_renderer.hpp>

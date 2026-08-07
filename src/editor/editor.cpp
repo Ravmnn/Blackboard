@@ -11,11 +11,6 @@
 
 
 
-// BUG: transparent color stroke isn't working properly
-
-
-
-
 using bb::editor::Editor,
     bb::math::Segment,
     bb::ui::Component,
