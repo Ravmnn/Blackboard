@@ -10,5 +10,6 @@ sources = files(
 
 executable('bboard', sources,
     dependencies: global_deps,
-    link_with: [ui_lib, editor_lib, rendering_lib]
+    link_with: [ui_lib, editor_lib, rendering_lib],
+    cpp_args: ['-DNO_FONT_AWESOME']
 )
