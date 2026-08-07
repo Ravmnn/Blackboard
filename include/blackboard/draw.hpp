@@ -91,20 +91,29 @@ public:
 
 
 
-    static void circle(const Vector2& center, const float radius, const Color& color, const uint32_t resolution = 32) noexcept
+    static void semi_circle(const Vector2& center, const Vector2& direction, const float radius, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
+    {
+        for (size_t i = 0; i < resolution; i++)
+            draw_triangle(calculate_semi_circle_section_triangle(center, direction, radius, i, resolution), color);
+    }
+
+
+
+
+    static void circle(const Vector2& center, const float radius, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         circle_section(center, radius, 0, 360, color, resolution);
     }
 
 
-    static void circle_outline(const Vector2& center, const float radius, const float thickness, const Color& color, const uint32_t resolution = 32) noexcept
+    static void circle_outline(const Vector2& center, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         circle_section_outline(center, radius, 0, 360, thickness, color, resolution);
     }
 
 
 
-    static void circle_section(const Vector2& center, const float radius, const float start_angle, const float end_angle, const Color& color, const uint32_t resolution = 32) noexcept
+    static void circle_section(const Vector2& center, const float radius, const float start_angle, const float end_angle, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         const float angle_step = calculate_circle_section_angle_step(start_angle, end_angle, resolution);
 
@@ -113,7 +122,7 @@ public:
     }
 
 
-    static void circle_section_outline(const Vector2& center, const float radius, const float start_angle, const float end_angle, const float thickness, const Color& color, const uint32_t resolution = 32) noexcept
+    static void circle_section_outline(const Vector2& center, const float radius, const float start_angle, const float end_angle, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32) noexcept
     {
         const float angle_step = calculate_circle_section_angle_step(start_angle, end_angle, resolution);
 
@@ -129,6 +138,37 @@ public:
 
 
 
+
+
+
+
+    static std::vector<SectionTriangle> calculate_semi_circle_section_triangles(const Vector2& center, const Vector2& direction, const float radius, const uint32_t resolution = 32) noexcept
+    {
+        std::vector<SectionTriangle> triangles;
+        triangles.reserve(resolution);
+
+        for (size_t i = 0; i < resolution; i++)
+            triangles.push_back(calculate_semi_circle_section_triangle(center, direction, radius, i, resolution));
+
+        return triangles;
+    }
+
+
+    static SectionTriangle calculate_semi_circle_section_triangle(const Vector2& center, const Vector2& direction, const float radius, const size_t i, const uint32_t resolution) noexcept
+    {
+        constexpr float HalfPI = PI / 2;
+        const float angle_step = PI / (float)resolution;
+
+        const float base_angle = std::atan2(direction.y, direction.x);
+
+        const float current_angle = base_angle - HalfPI + angle_step * (float)i;
+        const float next_angle = base_angle - HalfPI + angle_step * (float)(i + 1);
+
+        const Vector2 current_point { center.x + radius * std::cos(current_angle), center.y + radius * std::sin(current_angle) };
+        const Vector2 next_point { center.x + radius * std::cos(next_angle), center.y + radius * std::sin(next_angle) };
+
+        return SectionTriangle{ center, current_point, next_point };
+    }
 
 
 
