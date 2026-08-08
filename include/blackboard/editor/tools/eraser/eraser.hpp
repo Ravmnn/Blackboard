@@ -6,7 +6,7 @@
 
 
 
-namespace bb::math { struct Segment; }
+namespace bb::math { class Segment; }
 
 
 namespace bb::editor

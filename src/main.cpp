@@ -1,66 +1,31 @@
-#include <imgui.h>
-#include <rl_imgui.h>
+#include <blackboard/app.hpp>
 
-#include <blackboard/ui/context.hpp>
-#include <blackboard/editor/editor.hpp>
-#include <blackboard/rendering/window_renderer.hpp>
-
-#include <rlgl.h>
 
 
 
 // TODO: add profiler (IMGUI)
+// TODO: add logging system (IMGUI)
 
 
-using bb::editor::Editor,
-    bb::ui::Context,
-    bb::rendering::WindowRenderer;
+
+
+using bb::App;
 
 
 
 
 int main(int /*unused*/, char** /*unused*/)
 {
-    const int monitor = GetCurrentMonitor();
+    App::initialize();
 
-    SetTraceLogLevel(LOG_WARNING);
-
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
-    InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
-    PollInputEvents();
-
-
+    while (App::is_open())
     {
-        WindowRenderer window_renderer;
-        window_renderer.use_buffer_texture = false;
-
-        Context ui_context;
-        new Editor(ui_context);
-
-
-        rlImGuiSetup(true);
-
-        while (!WindowShouldClose())
-        {
-            rlDisableBackfaceCulling(); // IMGUI enables this every frame, so it also have to be disabled every frame
-
-
-            ui_context.update();
-
-            window_renderer.begin_render();
-            ui_context.draw();
-
-
-            rlImGuiBegin();
-            rlImGuiEnd();
-
-            window_renderer.end_render();
-        }
-
-        rlImGuiShutdown();
+        App::update();
+        App::draw();
     }
 
-    CloseWindow();
+    App::deinitialize();
+
 
     return 0;
 }

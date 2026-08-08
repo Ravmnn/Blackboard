@@ -53,7 +53,7 @@ void Context::update_mouse_input(Component& component) noexcept
 
     clickable->caught_mouse_input = false;
 
-    if (!had_component_with_mouse_input && clickable->can_receive_input() && clickable->is_mouse_over())
+    if (!disable_mouse_input && !had_component_with_mouse_input && clickable->can_receive_input() && clickable->is_mouse_over())
     {
         clickable->caught_mouse_input = true;
         component_with_mouse_input_ = &component;

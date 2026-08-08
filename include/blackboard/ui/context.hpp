@@ -26,6 +26,9 @@ private:
 
 
 public:
+    bool disable_mouse_input = false;
+
+
     void update() noexcept override;
     void draw() noexcept override;
 
