@@ -39,7 +39,7 @@ Editor::Editor(Context& ui_context) noexcept :
 {
     clip = false;
 
-    stroke_renderer.effect.smoothness = 0.3;
+    stroke_renderer.effect.smoothness = 0.2;
     stroke_renderer.effect.smoothness_thickness_influence = 25;
 
 
