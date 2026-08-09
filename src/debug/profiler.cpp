@@ -6,40 +6,31 @@
 
 
 using bb::debug::Profiler,
-    bb::debug::ProfilerGroupItem;
+    bb::debug::ProfilerItem;
 
 
 
 
-void Profiler::begin_group(const std::string& id) noexcept
+void Profiler::begin(const std::string& id) noexcept
 {
-    auto* const group = new ProfilerGroupItem(id);
-    current_group()->items.push_back(std::unique_ptr<ProfilerGroupItem>(group));
-    groups_.push(group);
+    if (disable)
+        return;
+
+    if (!current_item()->has_item(id))
+        current_item()->items.push_back(std::make_unique<ProfilerItem>(id));
+
+    items_.push(current_item()->get_item_with_id(id));
+    current_item()->reset();
 }
 
 
-void Profiler::end_group() noexcept
+void Profiler::end() noexcept
 {
-    assert(!groups_.empty());
-    groups_.pop();
-}
+    if (disable)
+        return;
 
-
-
-
-void Profiler::begin_item(const std::string& id) noexcept
-{
-    assert(!current_stopwatch_);
-    current_stopwatch_ = new ProfilerStopwatchItem(id);
-}
-
-
-void Profiler::end_item() noexcept
-{
-    assert(current_stopwatch_);
-    current_stopwatch_->capture_time();
-    current_group()->items.push_back(std::unique_ptr<ProfilerStopwatchItem>(current_stopwatch_));
+    current_item()->capture_time();
+    items_.pop();
 }
 
 
@@ -47,16 +38,17 @@ void Profiler::end_item() noexcept
 
 void Profiler::reset() noexcept
 {
-    root_group_->items.clear();
+    root_->reset();
+    items_ = {};
 }
 
 
 
 
-ProfilerGroupItem* Profiler::current_group() noexcept
+ProfilerItem* Profiler::current_item() noexcept
 {
-    if (!groups_.empty())
-        return groups_.top();
+    if (!items_.empty())
+        return items_.top();
 
-    return root_group_.get();
+    return root_.get();
 }

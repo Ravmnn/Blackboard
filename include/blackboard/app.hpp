@@ -1,6 +1,6 @@
 #pragma once
 
-#include "raylib.h"
+#include <blackboard/editor/editor.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/rendering/window_renderer.hpp>
 
@@ -18,6 +18,7 @@ class App
 public:
     inline static rendering::WindowRenderer* window_renderer = nullptr;
     inline static ui::Context* ui_context = nullptr;
+    inline static editor::Editor* editor = nullptr;
 
 
     static void initialize() noexcept;
@@ -37,6 +38,11 @@ private:
 
     static void deinitialize_app() noexcept;
     static void deinitialize_imgui() noexcept;
+
+
+    static void update_keybindings() noexcept;
+
+    static void draw_imgui() noexcept;
 };
 
 

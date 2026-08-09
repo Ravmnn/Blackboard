@@ -14,6 +14,7 @@ namespace bb::debug
 class IMGUISetup
 {
 public:
+    inline static const ImVec4 ThemeColorText = rlImGuiColors::Convert(Color(255, 200, 200, 255));
     inline static const ImVec4 ThemeColorBorder = rlImGuiColors::Convert(Color(150, 30, 10, 255));
 
     inline static const ImVec4 ThemeColor = rlImGuiColors::Convert(Color(230, 50, 20, 255));

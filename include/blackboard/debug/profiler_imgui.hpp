@@ -9,13 +9,21 @@ namespace bb::debug
 
 
 
-class ProfilerGroupItem;
+class ProfilerItem;
 
 
 class ProfilerIMGUI
 {
 public:
-    static void draw(const ProfilerGroupItem& group) noexcept;
+    inline static bool is_open = false;
+
+
+    static void draw(const ProfilerItem& item) noexcept;
+
+
+private:
+    static void draw_item(const ProfilerItem& item) noexcept;
+    static void draw_time(const ProfilerItem& item) noexcept;
 };
 
 

@@ -32,9 +32,6 @@ private:
     static constexpr Color DefaultBackgroundColor = { 18, 18, 18, 255 };
 
 
-    bool draw_statistics_ = false;
-    bool wire_mode_ = false;
-
     Tool* last_tool_ = nullptr;
 
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
@@ -65,6 +62,9 @@ public:
     ColorMenu* color_menu;
 
 
+    bool wire_mode = false;
+
+
     Editor(ui::Context& ui_context) noexcept;
 
 
@@ -86,7 +86,6 @@ public:
 
 private:
     void update_focus() noexcept;
-    void update_keybindings() noexcept;
     void update_background() noexcept;
     void update_tool_changed_event() noexcept;
     void update_vanish_animations() noexcept;

@@ -1,17 +1,22 @@
 #include <blackboard/ui/context.hpp>
 
+#include <blackboard/debug/profiler.hpp>
 #include <blackboard/ui/clickable.hpp>
 
 
 
 
-using bb::ui::Context;
+using bb::ui::Context,
+    bb::debug::Profiler;
 
 
 
 
 void Context::update() noexcept
 {
+    Profiler::begin("ui::update");
+
+
     component_with_mouse_input_ = nullptr;
 
     update_focus();
@@ -19,6 +24,9 @@ void Context::update() noexcept
     if (!components_.empty())
         for (int i = (int)components_.size() - 1; i >= 0; i--)
             update_component_children_first(*components_[i]);
+
+
+    Profiler::end();
 }
 
 
@@ -65,8 +73,14 @@ void Context::update_mouse_input(Component& component) noexcept
 
 void Context::draw() noexcept
 {
+    Profiler::begin("ui::draw");
+
+
     for (std::unique_ptr<Component>& component : components_)
         draw_component_parent_first(*component);
+
+
+    Profiler::end();
 }
 
 

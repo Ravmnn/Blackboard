@@ -3,7 +3,9 @@
 #include <string>
 #include <memory>
 #include <optional>
+#include <algorithm>
 
+#include <blackboard/average.hpp>
 #include <blackboard/stopwatch.hpp>
 
 
@@ -19,64 +21,40 @@ class ProfilerItem
 {
 private:
     std::string id_;
-    std::optional<long> captured_time_ = std::nullopt;
-
-
-public:
-    explicit ProfilerItem(const std::string& id) noexcept : id_(id) {}
-    virtual ~ProfilerItem() = default;
-
-
-    void capture_time() noexcept {
-        if (!captured_time_)
-            captured_time_ = time_in_ms();
-    }
-
-
-    [[nodiscard]] virtual long time_in_ms() const noexcept = 0;
-    [[nodiscard]] long captured_time() const noexcept { return captured_time_ ? *captured_time_ : -1; }
-};
-
-
-
-
-class ProfilerStopwatchItem : public ProfilerItem
-{
-private:
     Stopwatch stopwatch_;
 
+    std::optional<long> captured_time_ = std::nullopt;
+    Average average_time_;
+    long min_time_ = 0;
+    long max_time_ = 0;
+
 
 public:
-    using ProfilerItem::ProfilerItem;
+    std::vector<std::unique_ptr<ProfilerItem>> items;
+
+
+    explicit ProfilerItem(const std::string& id) noexcept;
+
+
+    void capture_time() noexcept;
 
 
     void reset() noexcept { stopwatch_.reset(); }
 
 
-    [[nodiscard]] long time_in_ms() const noexcept override { return stopwatch_.elapsed_ms().count(); }
-};
+    [[nodiscard]] bool has_item(const std::string& id) const noexcept { return get_item_with_id(id); }
 
 
+    [[nodiscard]] ProfilerItem* get_item_with_id(const std::string& id) const noexcept;
 
 
-class ProfilerGroupItem : public ProfilerItem
-{
-public:
-    using ProfilerItem::ProfilerItem;
+    [[nodiscard]] long time_in_ms() const noexcept { return stopwatch_.elapsed_ms().count(); }
 
-
-    std::vector<std::unique_ptr<ProfilerItem>> items;
-
-
-    [[nodiscard]] long time_in_ms() const noexcept override
-    {
-        long accumulation = 0;
-
-        for (const std::unique_ptr<ProfilerItem>& item : items)
-            accumulation += item->time_in_ms();
-
-        return accumulation;
-    }
+    [[nodiscard]] const std::string& id() const noexcept { return id_; }
+    [[nodiscard]] long captured_time() const noexcept { return captured_time_ ? *captured_time_ : time_in_ms(); }
+    [[nodiscard]] float average_time() const noexcept { return average_time_.get(); }
+    [[nodiscard]] long min_time() const noexcept { return min_time_; }
+    [[nodiscard]] long max_time() const noexcept { return max_time_; }
 };
 
 

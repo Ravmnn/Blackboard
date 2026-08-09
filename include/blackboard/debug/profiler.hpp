@@ -16,24 +16,24 @@ namespace bb::debug
 class Profiler
 {
 private:
-    inline static std::unique_ptr<ProfilerGroupItem> root_group_ = std::make_unique<ProfilerGroupItem>("total");
+    inline static std::unique_ptr<ProfilerItem> root_ = std::make_unique<ProfilerItem>("total");
 
-    static std::stack<ProfilerGroupItem*> groups_;
-    inline static ProfilerStopwatchItem* current_stopwatch_ = nullptr;
+    inline static std::stack<ProfilerItem*> items_;
 
 
 public:
-    static void begin_group(const std::string& id) noexcept;
-    static void end_group() noexcept;
+    inline static bool disable = false;
 
-    static void begin_item(const std::string& id) noexcept;
-    static void end_item() noexcept;
+
+    static void begin(const std::string& id) noexcept;
+    static void end() noexcept;
 
     static void reset() noexcept;
+    static void clear() noexcept { root_->items.clear(); }
 
 
-    static ProfilerGroupItem* current_group() noexcept;
-    static const ProfilerGroupItem* root() noexcept { return root_group_.get(); }
+    static ProfilerItem* current_item() noexcept;
+    static const ProfilerItem* root() noexcept { return root_.get(); }
 };
 
 

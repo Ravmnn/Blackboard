@@ -3,6 +3,7 @@
 #include <rlgl.h>
 
 #include <blackboard/camera_matrix.hpp>
+#include <blackboard/debug/profiler.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
@@ -12,6 +13,7 @@
 
 
 using bb::editor::Editor,
+    bb::debug::Profiler,
     bb::math::Segment,
     bb::ui::Component,
     bb::ui::Context,
@@ -76,8 +78,10 @@ Editor::Editor(Context& ui_context) noexcept :
 
 void Editor::update() noexcept
 {
+    Profiler::begin("editor::update");
+
+
     update_focus();
-    update_keybindings();
     update_background();
 
     Clickable::update();
@@ -96,6 +100,9 @@ void Editor::update() noexcept
 
 
     Component::update();
+
+
+    Profiler::end();
 }
 
 
@@ -103,18 +110,6 @@ void Editor::update_focus() noexcept
 {
     if (is_pressed() && ui_context->component_with_mouse_input() == this)
         ui_context->set_focus_to(this);
-}
-
-
-void Editor::update_keybindings() noexcept
-{
-    if (IsKeyPressed(KEY_ONE)) draw_statistics_ = !draw_statistics_;
-
-    // TODO: move everything related to debug to another class
-    //if (IsKeyPressed(KEY_TWO)) stroke_manager.renderer_rl.should_debug_draw_points = !stroke_manager.renderer_rl.should_debug_draw_points;
-    //if (IsKeyPressed(KEY_THREE)) stroke_manager.renderer_rl.should_debug_draw_samples = !stroke_manager.renderer_rl.should_debug_draw_samples;
-    //if (IsKeyPressed(KEY_FOUR)) stroke_manager.renderer_rl.should_debug_draw_edges = !stroke_manager.renderer_rl.should_debug_draw_edges;
-    if (IsKeyPressed(KEY_FIVE)) wire_mode_ = !wire_mode_;
 }
 
 
@@ -163,18 +158,25 @@ void Editor::update_effects() noexcept
 
 void Editor::draw_self() noexcept
 {
+    Profiler::begin("editor::draw");
+
+
     draw_background();
     draw_strokes();
 
     draw_to_canvas();
     draw_canvas_content();
 
-    draw_statistics();
+
+    Profiler::end();
 }
 
 
 void Editor::draw_to_canvas() noexcept
 {
+    Profiler::begin("editor::draw::canvas");
+
+
     canvas.begin_render();
         stroke_manager.draw_composition();
 
@@ -185,6 +187,9 @@ void Editor::draw_to_canvas() noexcept
             draw_vanish_animations();
         canvas.camera.disable();
     canvas.end_render();
+
+
+    Profiler::end();
 }
 
 
@@ -198,7 +203,10 @@ void Editor::draw_background() noexcept
 
 void Editor::draw_strokes() noexcept
 {
-    if (wire_mode_)
+    Profiler::begin("editor::draw::strokes");
+
+
+    if (wire_mode)
         rlEnableWireMode();
 
     stroke_manager.clear_composition();
@@ -208,6 +216,9 @@ void Editor::draw_strokes() noexcept
         stroke_manager.draw_stroke_to_composition(draw_environment.brush.stroke());
 
     rlDisableWireMode();
+
+
+    Profiler::end();
 }
 
 
@@ -222,15 +233,6 @@ void Editor::draw_vanish_animations() noexcept
 void Editor::draw_canvas_content() noexcept
 {
     TextureRenderer::draw_y_inverted_texture_full(canvas.contents().texture);
-}
-
-
-void Editor::draw_statistics() const noexcept
-{
-    if (!draw_statistics_)
-        return;
-
-    DrawText(std::to_string(GetFPS()).c_str(), 0, 0, 30, WHITE);
 }
 
 
