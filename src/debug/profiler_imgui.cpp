@@ -1,5 +1,6 @@
 #include <blackboard/debug/profiler_imgui.hpp>
 
+#include <cmath>
 #include <sstream>
 
 #include <imgui.h>
@@ -14,7 +15,7 @@ using bb::debug::ProfilerIMGUI;
 
 
 
-void ProfilerIMGUI::draw(const ProfilerItem& item) noexcept
+void ProfilerIMGUI::draw(ProfilerItem& item) noexcept
 {
     if (!is_open)
         return;
@@ -29,18 +30,14 @@ void ProfilerIMGUI::draw(const ProfilerItem& item) noexcept
 }
 
 
-void ProfilerIMGUI::draw_item(const ProfilerItem& item) noexcept
+void ProfilerIMGUI::draw_item(ProfilerItem& item) noexcept
 {
-    int flags = ImGuiTreeNodeFlags_DrawLinesToNodes | ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed
-                        | ImGuiTreeNodeFlags_SpanAvailWidth;
+    const bool open = ImGui::TreeNodeEx(item.id().c_str(), get_tree_node_flags(item));
+    draw_time(item);
 
-    if (item.items.empty())
-        flags |= ImGuiTreeNodeFlags_Leaf;
-
-    if (!ImGui::TreeNodeEx(item.id().c_str(), flags))
+    if (!open)
         return;
 
-    draw_time(item);
     for (const auto& item : item.items)
         draw_item(*item);
 
@@ -48,12 +45,24 @@ void ProfilerIMGUI::draw_item(const ProfilerItem& item) noexcept
 }
 
 
-void ProfilerIMGUI::draw_time(const ProfilerItem& item) noexcept
+int ProfilerIMGUI::get_tree_node_flags(const ProfilerItem& item) noexcept
+{
+    int flags = ImGuiTreeNodeFlags_DrawLinesToNodes | ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed
+                        | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    if (item.items.empty())
+        flags |= ImGuiTreeNodeFlags_Leaf;
+
+    return flags;
+}
+
+
+void ProfilerIMGUI::draw_time(ProfilerItem& item) noexcept
 {
     const auto average = Stopwatch::elapsed_from_ns(item.average_time_ns());
 
     std::stringstream text;
-    text << average.ms << "." << average.ns << "ms";
+    text << average.ms << "." << std::round((float)average.ns / 1000.0f) << "ms";
 
     ImGui::SameLine();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text.str().c_str()).x);

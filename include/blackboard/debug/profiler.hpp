@@ -35,7 +35,7 @@ public:
 
 
     static ProfilerItem* current_item() noexcept;
-    static const ProfilerItem* root() noexcept { return root_.get(); }
+    static ProfilerItem* root() noexcept { return root_.get(); }
 };
 
 

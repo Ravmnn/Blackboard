@@ -1,6 +1,6 @@
 sources = files(
     'imgui.cpp', 'imgui_draw.cpp', 'imgui_tables.cpp', 'imgui_widgets.cpp',
-    'rl_imgui.cpp'
+    'rl_imgui.cpp', 'implot.cpp', 'implot_items.cpp'
 )
 
 imgui_lib = static_library('imgui', sources,

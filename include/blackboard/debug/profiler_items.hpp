@@ -51,7 +51,7 @@ public:
 
     [[nodiscard]] const std::string& id() const noexcept { return id_; }
     [[nodiscard]] long captured_time_ns() const noexcept { return captured_time_ns_ ? *captured_time_ns_ : time_in_ns(); }
-    [[nodiscard]] long average_time_ns() const noexcept { return (long)average_time_ns_.get(); }
+    [[nodiscard]] long average_time_ns() noexcept { return (long)average_time_ns_.get(); }
     [[nodiscard]] long min_time_ns() const noexcept { return min_time_ns_; }
     [[nodiscard]] long max_time_ns() const noexcept { return max_time_ns_; }
 };
