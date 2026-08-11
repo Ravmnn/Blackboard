@@ -37,9 +37,10 @@ void App::initialize_window() noexcept
 {
     const int monitor = GetCurrentMonitor();
 
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED  | FLAG_MSAA_4X_HINT);
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
+    SetTargetFPS(0);
 }
 
 
@@ -96,6 +97,7 @@ void App::deinitialize_imgui() noexcept
 
 void App::update() noexcept
 {
+    Profiler::begin_root();
     Profiler::begin("app::update");
 
 
@@ -135,10 +137,13 @@ void App::draw() noexcept
 
     draw_imgui();
 
+    Profiler::begin("gl::sync");
     window_renderer->end_render();
+    Profiler::end();
 
 
     Profiler::reset();
+    Profiler::end_root();
 }
 
 

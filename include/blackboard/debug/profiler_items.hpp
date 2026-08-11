@@ -3,7 +3,6 @@
 #include <string>
 #include <memory>
 #include <optional>
-#include <algorithm>
 
 #include <blackboard/average.hpp>
 #include <blackboard/stopwatch.hpp>
@@ -23,10 +22,10 @@ private:
     std::string id_;
     Stopwatch stopwatch_;
 
-    std::optional<long> captured_time_ = std::nullopt;
-    Average average_time_;
-    long min_time_ = 0;
-    long max_time_ = 0;
+    std::optional<long> captured_time_ns_ = std::nullopt;
+    Average average_time_ns_;
+    long min_time_ns_ = 0;
+    long max_time_ns_ = 0;
 
 
 public:
@@ -48,13 +47,13 @@ public:
     [[nodiscard]] ProfilerItem* get_item_with_id(const std::string& id) const noexcept;
 
 
-    [[nodiscard]] long time_in_ms() const noexcept { return stopwatch_.elapsed_ms().count(); }
+    [[nodiscard]] long time_in_ns() const noexcept { return stopwatch_.elapsed_ns().count(); }
 
     [[nodiscard]] const std::string& id() const noexcept { return id_; }
-    [[nodiscard]] long captured_time() const noexcept { return captured_time_ ? *captured_time_ : time_in_ms(); }
-    [[nodiscard]] float average_time() const noexcept { return average_time_.get(); }
-    [[nodiscard]] long min_time() const noexcept { return min_time_; }
-    [[nodiscard]] long max_time() const noexcept { return max_time_; }
+    [[nodiscard]] long captured_time_ns() const noexcept { return captured_time_ns_ ? *captured_time_ns_ : time_in_ns(); }
+    [[nodiscard]] long average_time_ns() const noexcept { return (long)average_time_ns_.get(); }
+    [[nodiscard]] long min_time_ns() const noexcept { return min_time_ns_; }
+    [[nodiscard]] long max_time_ns() const noexcept { return max_time_ns_; }
 };
 
 

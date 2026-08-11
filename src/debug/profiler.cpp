@@ -36,15 +36,6 @@ void Profiler::end() noexcept
 
 
 
-void Profiler::reset() noexcept
-{
-    root_->reset();
-    items_ = {};
-}
-
-
-
-
 ProfilerItem* Profiler::current_item() noexcept
 {
     if (!items_.empty())

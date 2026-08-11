@@ -9,7 +9,7 @@ using bb::debug::ProfilerItem;
 
 
 ProfilerItem::ProfilerItem(const std::string& id) noexcept
-    : id_(id), average_time_(256)
+    : id_(id), average_time_ns_(128)
 {}
 
 
@@ -17,19 +17,19 @@ ProfilerItem::ProfilerItem(const std::string& id) noexcept
 
 void ProfilerItem::capture_time() noexcept
 {
-    const long time = time_in_ms();
+    const long time = time_in_ns();
 
-    if (!captured_time_)
-        min_time_ = max_time_= time;
+    if (!captured_time_ns_)
+        min_time_ns_ = max_time_ns_= time;
 
-    captured_time_ = time;
-    average_time_.add((float)time);
+    captured_time_ns_ = time;
+    average_time_ns_.add((float)time);
 
-    if (time > max_time_)
-        max_time_ = time;
+    if (time > max_time_ns_)
+        max_time_ns_ = time;
 
-    if (time < min_time_)
-        min_time_ = time;
+    if (time < min_time_ns_)
+        min_time_ns_ = time;
 }
 
 

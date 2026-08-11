@@ -22,6 +22,11 @@ public:
     inline static const ImVec4 ThemeColorActive = rlImGuiColors::Convert(Color(240, 180, 190, 255));
     inline static const ImVec4 ThemeColorHighlight = rlImGuiColors::Convert(Color(255, 50, 50, 255));
 
+    inline static const ImVec4 ThemeColorSofter = rlImGuiColors::Convert(Color(100, 15, 5, 255));
+    inline static const ImVec4 ThemeColorHoveredSofter = rlImGuiColors::Convert(Color(120, 20, 20, 255));
+    inline static const ImVec4 ThemeColorActiveSofter = rlImGuiColors::Convert(Color(140, 30, 30, 255));
+    inline static const ImVec4 ThemeColorHighlightSofter = rlImGuiColors::Convert(Color(160, 10, 10, 255));
+
     inline static const ImVec4 ThemeWindowColor = rlImGuiColors::Convert(Color(30, 10, 10, 200));
     inline static const ImVec4 ThemeWindowTitleColor = rlImGuiColors::Convert(Color(50, 10, 10, 200));
 
