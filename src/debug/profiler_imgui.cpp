@@ -3,7 +3,6 @@
 #include <cmath>
 #include <sstream>
 
-#include <imgui.h>
 #include <implot.h>
 
 #include <blackboard/debug/imgui_style_set.hpp>
@@ -27,6 +26,8 @@ void ProfilerImGui::draw(ProfilerItem& item) noexcept
     ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, window_size);
     ImGui::Begin("Profiler", &is_open);
 
+    // TODO:
+    //draw_fps_graph();
     draw_chart(item);
     draw_items(item);
 
@@ -37,13 +38,31 @@ void ProfilerImGui::draw(ProfilerItem& item) noexcept
 
 
 
+void ProfilerImGui::draw_fps_graph() noexcept
+{
+    const ImVec2 plot_size = { 770, 330 };
+
+    // TODO: move centering utility functions to another place (ImGuiLayout?)
+    center_horizontally(plot_size);
+    if (!ImPlot::BeginPlot("FPS Graph", plot_size, get_chart_flags()))
+        return;
+
+    ImPlot::SetupAxes(nullptr, "FPS", ImPlotAxisFlags_NoDecorations);
+    ImPlot::SetupAxesLimits(0, 1, 0, 240);
+
+
+
+    ImPlot::EndPlot();
+}
+
+
+
+
 void ProfilerImGui::draw_chart(ProfilerItem& item) noexcept
 {
     const ImVec2 plot_size = { 770, 330 };
-    const float available_x = ImGui::GetContentRegionAvail().x;
 
-    ImGui::SetCursorPosX((available_x - plot_size.x) * 0.5f);
-
+    center_horizontally(plot_size);
     if (!ImPlot::BeginPlot("Profiler Chart", plot_size, get_chart_flags()))
         return;
 
@@ -140,11 +159,20 @@ int ProfilerImGui::get_tree_node_flags(const ProfilerItem& item) noexcept
 void ProfilerImGui::draw_time(ProfilerItem& item) noexcept
 {
     std::stringstream stream;
-    stream << std::setprecision(3) << Stopwatch::ns_to_ms_double(item.average_time_ns()).count() << "ms";
+    stream << std::fixed << std::setprecision(3) << Stopwatch::ns_to_ms_double(item.average_time_ns()).count() << "ms";
 
     const std::string text = stream.str();
 
     ImGui::SameLine();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text.c_str()).x);
     ImGui::Text("%s", text.c_str());
+}
+
+
+
+
+void ProfilerImGui::center_horizontally(const ImVec2& size) noexcept
+{
+    const float available_x = ImGui::GetContentRegionAvail().x;
+    ImGui::SetCursorPosX((available_x - size.x) * 0.5f);
 }

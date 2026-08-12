@@ -3,6 +3,8 @@
 #include <tuple>
 #include <vector>
 
+#include <imgui.h>
+
 
 
 
@@ -25,6 +27,8 @@ public:
 
 
 private:
+    static void draw_fps_graph() noexcept;
+
     static void draw_chart(ProfilerItem& item) noexcept;
     static void draw_pie_chart(ProfilerItem& item) noexcept;
     static int get_chart_flags() noexcept;
@@ -37,6 +41,9 @@ private:
     static int get_tree_node_flags(const ProfilerItem& item) noexcept;
 
     static void draw_time(ProfilerItem& item) noexcept;
+
+
+    static void center_horizontally(const ImVec2& size) noexcept;
 };
 
 
