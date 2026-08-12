@@ -47,14 +47,20 @@ void ProfilerImGui::draw_chart(ProfilerItem& item) noexcept
     if (!ImPlot::BeginPlot("Profiler Chart", plot_size, get_chart_flags()))
         return;
 
+    draw_pie_chart(item);
+
+    ImPlot::EndPlot();
+}
+
+
+void ProfilerImGui::draw_pie_chart(ProfilerItem& item) noexcept
+{
     const auto data = get_items_chart_node(item);
     const auto labels = std::get<0>(data);
     const auto values = std::get<1>(data);
 
     ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoDecorations, ImPlotAxisFlags_NoDecorations);
     ImPlot::PlotPieChart(labels.data(), values.data(), (int)labels.size(), 0.5, 0.5, 0.4);
-
-    ImPlot::EndPlot();
 }
 
 

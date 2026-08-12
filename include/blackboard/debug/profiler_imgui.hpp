@@ -26,6 +26,7 @@ public:
 
 private:
     static void draw_chart(ProfilerItem& item) noexcept;
+    static void draw_pie_chart(ProfilerItem& item) noexcept;
     static int get_chart_flags() noexcept;
 
     static std::tuple<std::vector<const char*>, std::vector<double>> get_items_chart_node(ProfilerItem& item) noexcept;
