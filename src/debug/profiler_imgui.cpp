@@ -6,6 +6,7 @@
 #include <implot.h>
 
 #include <blackboard/debug/imgui_style_set.hpp>
+#include <blackboard/debug/imgui_layout.hpp>
 #include <blackboard/debug/profiler_items.hpp>
 
 
@@ -21,13 +22,12 @@ void ProfilerImGui::draw(ProfilerItem& item) noexcept
     if (!is_open)
         return;
 
-    const ImVec2 window_size = { 700, 400 };
+    const ImVec2 window_size = { 800, 600 };
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, window_size);
     ImGui::Begin("Profiler", &is_open);
 
-    // TODO:
-    //draw_fps_graph();
+    draw_fps();
     draw_chart(item);
     draw_items(item);
 
@@ -38,21 +38,9 @@ void ProfilerImGui::draw(ProfilerItem& item) noexcept
 
 
 
-void ProfilerImGui::draw_fps_graph() noexcept
+void ProfilerImGui::draw_fps() noexcept
 {
-    const ImVec2 plot_size = { 770, 330 };
-
-    // TODO: move centering utility functions to another place (ImGuiLayout?)
-    center_horizontally(plot_size);
-    if (!ImPlot::BeginPlot("FPS Graph", plot_size, get_chart_flags()))
-        return;
-
-    ImPlot::SetupAxes(nullptr, "FPS", ImPlotAxisFlags_NoDecorations);
-    ImPlot::SetupAxesLimits(0, 1, 0, 240);
-
-
-
-    ImPlot::EndPlot();
+    ImGui::Text("FPS: %i", GetFPS());
 }
 
 
@@ -62,7 +50,8 @@ void ProfilerImGui::draw_chart(ProfilerItem& item) noexcept
 {
     const ImVec2 plot_size = { 770, 330 };
 
-    center_horizontally(plot_size);
+    // "... - 20" to fix wrong centralization (i don't know why it calculates wrongly)
+    ImGuiLayout::center_horizontally({ plot_size.x - 20, plot_size.y });
     if (!ImPlot::BeginPlot("Profiler Chart", plot_size, get_chart_flags()))
         return;
 
@@ -120,9 +109,15 @@ void ProfilerImGui::get_items_chart_node(ProfilerItem& item, std::vector<const c
 void ProfilerImGui::draw_items(ProfilerItem& item) noexcept
 {
     ImGuiStyleSet::push_frame_transparent_background();
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 10, 10 });
+
     ImGui::BeginChild("child::items", {}, ImGuiChildFlags_FrameStyle);
+
     ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+
     draw_item(item);
+
     ImGui::EndChild();
 }
 
@@ -166,13 +161,4 @@ void ProfilerImGui::draw_time(ProfilerItem& item) noexcept
     ImGui::SameLine();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text.c_str()).x);
     ImGui::Text("%s", text.c_str());
-}
-
-
-
-
-void ProfilerImGui::center_horizontally(const ImVec2& size) noexcept
-{
-    const float available_x = ImGui::GetContentRegionAvail().x;
-    ImGui::SetCursorPosX((available_x - size.x) * 0.5f);
 }

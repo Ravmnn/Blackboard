@@ -3,7 +3,6 @@
 
 
 
-// TODO: add profiler (IMGUI)
 // TODO: add logging system (IMGUI)
 
 

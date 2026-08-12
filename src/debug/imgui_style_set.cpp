@@ -1,6 +1,7 @@
 #include <blackboard/debug/imgui_style_set.hpp>
 
 #include <rl_imgui_colors.h>
+#include <implot.h>
 
 
 
@@ -13,6 +14,7 @@ using bb::debug::ImGuiStyleSet;
 void ImGuiStyleSet::setup_style() noexcept
 {
     auto& style = ImGui::GetStyle();
+    // auto& plot_style = ImPlot::GetStyle();
 
     style.FontSizeBase = 17;
 
@@ -23,6 +25,7 @@ void ImGuiStyleSet::setup_style() noexcept
     style.WindowRounding = 7;
     style.WindowTitleAlign = { 0.5, 0.5 };
     style.WindowPadding = { 10, 10 };
+    style.FramePadding = { 4, 4 };
 
     style.Colors[ImGuiCol_FrameBg] = ThemeColorSofter;
     style.Colors[ImGuiCol_FrameBgHovered] = ThemeColorHoveredSofter;
