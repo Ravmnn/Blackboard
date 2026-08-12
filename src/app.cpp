@@ -1,25 +1,35 @@
 #include <blackboard/app.hpp>
 
+#include <filesystem>
+
+#include <platform_folders.h>
+
 #include <rlgl.h>
 
 #include <rl_imgui.h>
 #include <implot.h>
 
+#include <blackboard/app_paths.hpp>
 #include <blackboard/debug/profiler.hpp>
 #include <blackboard/debug/imgui_style_set.hpp>
+#include <blackboard/debug/logger.hpp>
 #include <blackboard/debug/profiler_imgui.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
 
 
+// TODO: organize these usings
 using bb::App,
     bb::debug::ImGuiStyleSet,
     bb::debug::Profiler,
     bb::debug::ProfilerImGui,
+    bb::debug::Logger,
     bb::rendering::WindowRenderer,
     bb::ui::Context,
-    bb::editor::Editor;
+    bb::editor::Editor,
+
+    std::filesystem::path;
 
 
 
@@ -28,9 +38,22 @@ void App::initialize() noexcept
 {
     SetTraceLogLevel(LOG_WARNING);
 
+    initialize_logger();
     initialize_window();
     initialize_app();
     initialize_imgui();
+}
+
+
+void App::initialize_logger() noexcept
+{
+    Logger::log_to_stdout = true;
+    Logger::log_to_file = true;
+    Logger::log_file_directory = AppPaths::logs();
+
+    Logger::create_log_file();
+
+    Logger::info("Application started");
 }
 
 
@@ -42,6 +65,8 @@ void App::initialize_window() noexcept
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
     SetTargetFPS(0);
+
+    Logger::info("Window created", true);
 }
 
 
@@ -52,6 +77,8 @@ void App::initialize_app() noexcept
 
     ui_context = new Context;
     editor = new Editor(*ui_context);
+
+    Logger::info("Editor created", true);
 }
 
 
@@ -61,6 +88,8 @@ void App::initialize_imgui() noexcept
     ImPlot::CreateContext();
 
     ImGuiStyleSet::setup_style();
+
+    Logger::info("ImGui context created", true);
 }
 
 
@@ -68,10 +97,12 @@ void App::initialize_imgui() noexcept
 
 void App::deinitialize() noexcept
 {
+    Logger::info("Application shutting down");
+
     deinitialize_app();
     deinitialize_imgui();
-
-    CloseWindow();
+    deinitialize_window();
+    deinitialize_logger();
 }
 
 
@@ -82,6 +113,8 @@ void App::deinitialize_app() noexcept
 
     window_renderer = nullptr;
     ui_context = nullptr;
+
+    Logger::info("Editor destroyed", true);
 }
 
 
@@ -89,6 +122,23 @@ void App::deinitialize_imgui() noexcept
 {
     rlImGuiShutdown();
     ImPlot::DestroyContext();
+
+    Logger::info("ImGui context destroyed", true);
+}
+
+
+void App::deinitialize_window() noexcept
+{
+    CloseWindow();
+    Logger::info("Window destroyed", true);
+}
+
+
+void App::deinitialize_logger() noexcept
+{
+    Logger::info("Bye bye!");
+
+    Logger::close_log_file();
 }
 
 
@@ -135,7 +185,7 @@ void App::draw() noexcept
     window_renderer->begin_render();
 
     Profiler::begin("app::draw");
-        ui_context->draw();
+    ui_context->draw();
     Profiler::end();
 
     draw_imgui();

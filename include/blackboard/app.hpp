@@ -16,6 +16,9 @@ namespace bb
 class App
 {
 public:
+    static constexpr std::string Name = "blackboard";
+
+
     inline static rendering::WindowRenderer* window_renderer = nullptr;
     inline static ui::Context* ui_context = nullptr;
     inline static editor::Editor* editor = nullptr;
@@ -32,12 +35,15 @@ public:
 
 
 private:
+    static void initialize_logger() noexcept;
     static void initialize_window() noexcept;
     static void initialize_app() noexcept;
     static void initialize_imgui() noexcept;
 
     static void deinitialize_app() noexcept;
     static void deinitialize_imgui() noexcept;
+    static void deinitialize_window() noexcept;
+    static void deinitialize_logger() noexcept;
 
 
     static void update_keybindings() noexcept;

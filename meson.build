@@ -30,8 +30,13 @@ imgui_dep = dependency('imgui',
     fallback: ['imgui', 'imgui_dep']
 )
 
+platform_folders_dep = dependency('platform_folders',
+    required: false,
+    fallback: ['platform_folders', 'platform_folders_dep']
+)
 
-global_deps = [math_lib, project_dep, raylib_dep, imgui_dep]
+
+global_deps = [math_lib, project_dep, raylib_dep, imgui_dep, platform_folders_dep]
 
 
 
