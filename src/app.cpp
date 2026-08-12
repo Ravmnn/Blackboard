@@ -3,9 +3,10 @@
 #include <rlgl.h>
 
 #include <rl_imgui.h>
+#include <implot.h>
 
 #include <blackboard/debug/profiler.hpp>
-#include <blackboard/debug/imgui_setup.hpp>
+#include <blackboard/debug/imgui_style_set.hpp>
 #include <blackboard/debug/profiler_imgui.hpp>
 #include <blackboard/editor/editor.hpp>
 
@@ -13,9 +14,9 @@
 
 
 using bb::App,
-    bb::debug::IMGUISetup,
+    bb::debug::ImGuiStyleSet,
     bb::debug::Profiler,
-    bb::debug::ProfilerIMGUI,
+    bb::debug::ProfilerImGui,
     bb::rendering::WindowRenderer,
     bb::ui::Context,
     bb::editor::Editor;
@@ -57,8 +58,9 @@ void App::initialize_app() noexcept
 void App::initialize_imgui() noexcept
 {
     rlImGuiSetup(true);
+    ImPlot::CreateContext();
 
-    IMGUISetup::setup_style();
+    ImGuiStyleSet::setup_style();
 }
 
 
@@ -86,6 +88,7 @@ void App::deinitialize_app() noexcept
 void App::deinitialize_imgui() noexcept
 {
     rlImGuiShutdown();
+    ImPlot::DestroyContext();
 }
 
 
@@ -115,7 +118,7 @@ void App::update() noexcept
 
 void App::update_keybindings() noexcept
 {
-    if (IsKeyPressed(KEY_F1)) ProfilerIMGUI::is_open = !ProfilerIMGUI::is_open;
+    if (IsKeyPressed(KEY_F1)) ProfilerImGui::is_open = !ProfilerImGui::is_open;
 
     // TODO: move debug drawing from StrokeRendererRL to a separated class
     // if (IsKeyPressed(KEY_TWO)) editor->stroke_manager.renderer_rl.should_debug_draw_points = !editor->stroke_manager.renderer_rl.should_debug_draw_points;
@@ -150,6 +153,6 @@ void App::draw() noexcept
 void App::draw_imgui() noexcept
 {
     rlImGuiBegin();
-    ProfilerIMGUI::draw(*Profiler::root());
+    ProfilerImGui::draw(*Profiler::root());
     rlImGuiEnd();
 }

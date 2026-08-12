@@ -1,6 +1,9 @@
 #pragma once
 
+#include <cmath>
+
 #include <chrono>
+#include <sstream>
 
 
 
@@ -18,13 +21,7 @@ private:
 
 
 public:
-    struct Elapsed
-    {
-        long ms;
-        long ns;
-    };
-
-
+    using MillisecondsDouble = std::chrono::duration<double, std::milli>;
 
 
     [[nodiscard]] std::chrono::nanoseconds elapsed_ns() const noexcept {
@@ -40,16 +37,13 @@ public:
     }
 
 
-    [[nodiscard]] Elapsed elapsed() const noexcept { return elapsed_from_ns(elapsed_ns().count()); }
+    [[nodiscard]] MillisecondsDouble elapsed_ms_double() const noexcept {
+        return std::chrono::duration_cast<MillisecondsDouble>(std::chrono::steady_clock::now() - start_);
+    }
 
 
-    [[nodiscard]] static Elapsed elapsed_from_ns(const long nanoseconds) noexcept
-    {
-        const auto ns = std::chrono::nanoseconds(nanoseconds);
-        const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(ns);
-        const auto ns_remainder = ns - ms;
-
-        return Elapsed{ .ms = ms.count(), .ns = ns_remainder.count() };
+    [[nodiscard]] static MillisecondsDouble ns_to_ms_double(const long nanoseconds) {
+        return std::chrono::duration_cast<MillisecondsDouble>(std::chrono::nanoseconds(nanoseconds));
     }
 
 

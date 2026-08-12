@@ -11,15 +11,15 @@ namespace bb::debug
 
 
 
-class IMGUISetup
+class ImGuiStyleSet
 {
 public:
-    inline static const ImVec4 ThemeColorText = rlImGuiColors::Convert(Color(255, 200, 200, 255));
+    inline static const ImVec4 ThemeColorText = rlImGuiColors::Convert(Color(255, 175, 175, 255));
     inline static const ImVec4 ThemeColorBorder = rlImGuiColors::Convert(Color(150, 30, 10, 255));
 
     inline static const ImVec4 ThemeColor = rlImGuiColors::Convert(Color(230, 50, 20, 255));
-    inline static const ImVec4 ThemeColorHovered = rlImGuiColors::Convert(Color(240, 160, 150, 255));
-    inline static const ImVec4 ThemeColorActive = rlImGuiColors::Convert(Color(240, 180, 190, 255));
+    inline static const ImVec4 ThemeColorHovered = rlImGuiColors::Convert(Color(240, 130, 120, 255));
+    inline static const ImVec4 ThemeColorActive = rlImGuiColors::Convert(Color(240, 100, 100, 255));
     inline static const ImVec4 ThemeColorHighlight = rlImGuiColors::Convert(Color(255, 50, 50, 255));
 
     inline static const ImVec4 ThemeColorSofter = rlImGuiColors::Convert(Color(100, 15, 5, 255));
@@ -32,6 +32,9 @@ public:
 
 
     static void setup_style() noexcept;
+
+
+    static void push_frame_transparent_background() noexcept;
 };
 
 
