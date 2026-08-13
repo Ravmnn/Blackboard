@@ -1,8 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <vector>
-#include <concepts>
 
 #include <blackboard/drawable.hpp>
 #include <blackboard/bounds.hpp>

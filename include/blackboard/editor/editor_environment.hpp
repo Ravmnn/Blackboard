@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-
-
 #include <blackboard/drawable.hpp>
 #include <blackboard/mouse_button_event.hpp>
 

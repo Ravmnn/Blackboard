@@ -8,8 +8,9 @@
 
 
 
-using bb::editor::StrokeMeshGL,
-    bb::editor::StrokeMeshGLVertex;
+using
+bb::editor::StrokeMeshGLVertex,
+bb::editor::StrokeMeshGL;
 
 
 

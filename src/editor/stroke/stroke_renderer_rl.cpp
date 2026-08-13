@@ -1,16 +1,15 @@
 #include <blackboard/editor/stroke/stroke_renderer_rl.hpp>
 
 #include <blackboard/math/collisions.hpp>
-#include <blackboard/editor/stroke/stroke.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 
 
 
 
-using bb::editor::StrokeRendererRL,
-    bb::math::Collisions,
-    bb::editor::StrokeMeshNode;
+using
+bb::math::Collisions,
+bb::editor::StrokeMeshNode,
+bb::editor::StrokeRendererRL;
 
 
 

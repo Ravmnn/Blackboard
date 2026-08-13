@@ -2,14 +2,14 @@
 
 #include <blackboard/math/collisions.hpp>
 #include <blackboard/editor/editor.hpp>
-#include <blackboard/editor/editor_selection_environment.hpp>
 
 
 
 
-using bb::editor::Selection,
-    bb::math::Rect,
-    bb::math::Collisions;
+using
+bb::math::Rect,
+bb::math::Collisions,
+bb::editor::Selection;
 
 
 

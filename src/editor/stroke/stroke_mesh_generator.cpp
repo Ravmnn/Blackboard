@@ -5,12 +5,13 @@
 
 
 
-using bb::editor::StrokeMeshNode,
-    bb::editor::StrokeMeshGenerator,
-    bb::editor::StrokePoint,
-    bb::editor::StrokeSample,
-    bb::editor::StrokeEdge,
-    bb::editor::StrokeMesh;
+using
+bb::editor::StrokePoint,
+bb::editor::StrokeSample,
+bb::editor::StrokeEdge,
+bb::editor::StrokeMesh,
+bb::editor::StrokeMeshNode,
+bb::editor::StrokeMeshGenerator;
 
 
 

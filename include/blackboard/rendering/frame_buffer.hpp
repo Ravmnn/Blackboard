@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #include <glad.h>
 #include <raylib.h>
 

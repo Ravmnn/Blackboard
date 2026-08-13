@@ -1,9 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <vector>
-#include <sstream>
-#include <iostream>
 #include <fstream>
 #include <filesystem>
 
@@ -60,6 +56,7 @@ private:
 
     static void log_line(const std::string& text, bool duration) { log(text + '\n', duration); }
     static void log(const std::string& text, bool duration);
+    static std::string get_log_duration() noexcept;
 
     static void write_line_to_all_streams(const std::string& text) { write_to_all_streams(text + '\n'); }
     static void write_to_all_streams(const std::string& text);

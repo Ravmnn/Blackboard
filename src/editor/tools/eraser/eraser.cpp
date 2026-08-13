@@ -1,16 +1,15 @@
 #include <blackboard/editor/tools/eraser/eraser.hpp>
 
-#include <algorithm>
-
 #include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 
 
 
 
-using bb::editor::Eraser,
-    bb::editor::StrokeMesh,
-    bb::math::Segment;
+using
+bb::math::Segment,
+bb::editor::StrokeMesh,
+bb::editor::Eraser;
 
 
 

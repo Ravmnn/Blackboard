@@ -3,7 +3,9 @@
 
 
 
-using bb::TextureSample, bb::rendering::ScopedRenderTexture;
+using
+bb::TextureSample,
+bb::rendering::ScopedRenderTexture;
 
 
 

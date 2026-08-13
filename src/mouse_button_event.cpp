@@ -7,7 +7,9 @@
 
 
 
-using bb::MouseButtonEvent, bb::ui::Clickable;
+using
+bb::MouseButtonEvent,
+bb::ui::Clickable;
 
 
 

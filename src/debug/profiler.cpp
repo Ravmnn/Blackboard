@@ -1,12 +1,11 @@
 #include <blackboard/debug/profiler.hpp>
 
-#include <cassert>
 
 
 
-
-using bb::debug::Profiler,
-    bb::debug::ProfilerItem;
+using
+bb::debug::Profiler,
+bb::debug::ProfilerItem;
 
 
 

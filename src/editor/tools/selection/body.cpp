@@ -1,15 +1,15 @@
 #include <blackboard/editor/tools/selection/body.hpp>
 
 #include <blackboard/draw.hpp>
-#include <blackboard/editor/editor.hpp>
 #include <blackboard/editor/tools/selection/selection.hpp>
 
 
 
 
-using bb::editor::SelectionBody,
-    bb::Draw,
-    bb::math::Rect;
+using
+bb::math::Rect,
+bb::Draw,
+bb::editor::SelectionBody;
 
 
 

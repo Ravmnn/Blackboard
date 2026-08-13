@@ -7,19 +7,19 @@
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 
 
 
 
-using bb::editor::Editor,
-    bb::debug::Profiler,
-    bb::math::Segment,
-    bb::ui::Component,
-    bb::ui::Context,
-    bb::editor::StrokeMesh,
-    bb::editor::StrokeMeshCollider,
-    bb::rendering::TextureRenderer;
+using
+bb::math::Segment,
+bb::debug::Profiler,
+bb::rendering::TextureRenderer,
+bb::ui::Context,
+bb::ui::Component,
+bb::editor::StrokeMesh,
+bb::editor::StrokeMeshCollider,
+bb::editor::Editor;
 
 
 

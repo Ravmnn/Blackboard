@@ -5,8 +5,9 @@
 
 
 
-using bb::editor::Tool,
-    bb::editor::Editor;
+using
+bb::editor::Tool,
+bb::editor::Editor;
 
 
 

@@ -1,7 +1,6 @@
 #include <blackboard/editor/tools/brush/body.hpp>
 
 #include <blackboard/editor/editor.hpp>
-#include <blackboard/editor/editor_environment.hpp>
 #include <blackboard/editor/tools/brush/brush.hpp>
 
 

@@ -1,14 +1,11 @@
 #include <blackboard/editor/stroke/stroke_mesh_manager.hpp>
 
-#include <cassert>
-
-#include <rlgl.h>
 
 
 
-
-using bb::editor::StrokeMeshManager,
-    bb::editor::StrokeMesh;
+using
+bb::editor::StrokeMesh,
+bb::editor::StrokeMeshManager;
 
 
 

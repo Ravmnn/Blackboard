@@ -1,8 +1,5 @@
 #include <blackboard/debug/imgui_style_set.hpp>
 
-#include <rl_imgui_colors.h>
-#include <implot.h>
-
 
 
 

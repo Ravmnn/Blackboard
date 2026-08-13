@@ -6,8 +6,9 @@
 
 
 
-using bb::ui::Context,
-    bb::debug::Profiler;
+using
+bb::debug::Profiler,
+bb::ui::Context;
 
 
 

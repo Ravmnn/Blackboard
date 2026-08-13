@@ -6,9 +6,10 @@
 
 
 
-using bb::editor::ColorMenu,
-    bb::ui::Button,
-    bb::ui::Clickable;
+using
+bb::ui::Clickable,
+bb::ui::Button,
+bb::editor::ColorMenu;
 
 
 

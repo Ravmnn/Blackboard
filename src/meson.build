@@ -5,7 +5,7 @@ subdir('ui')
 
 
 sources = files(
-    'main.cpp', 'app.cpp', 'texture_sample.cpp', 'timer.cpp', 'mouse_button_event.cpp', 'mouse_button_set.cpp',
+    'main.cpp', 'app.cpp', 'texture_sample.cpp', 'mouse_button_event.cpp', 'mouse_button_set.cpp',
     'mouse_position_provider.cpp'
 )
 

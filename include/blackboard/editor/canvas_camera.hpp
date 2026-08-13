@@ -1,6 +1,5 @@
 #pragma once
 
-#include <blackboard/updateable.hpp>
 #include <blackboard/activatable.hpp>
 #include <blackboard/bounds.hpp>
 #include <blackboard/animation/interpolation.hpp>

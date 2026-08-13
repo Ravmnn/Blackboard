@@ -5,8 +5,9 @@
 
 
 
-using bb::MouseButtonSet,
-    bb::ui::Clickable;
+using
+bb::MouseButtonSet,
+bb::ui::Clickable;
 
 
 

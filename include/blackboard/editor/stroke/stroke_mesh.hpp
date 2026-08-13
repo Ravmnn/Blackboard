@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #include <blackboard/animation/interpolate.hpp>
 #include <blackboard/editor/stroke/stroke.hpp>
 

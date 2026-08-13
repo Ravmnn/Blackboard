@@ -1,8 +1,9 @@
 #pragma once
 
-#include <imgui.h>
 
 
+
+struct ImVec2;
 
 
 namespace bb::debug

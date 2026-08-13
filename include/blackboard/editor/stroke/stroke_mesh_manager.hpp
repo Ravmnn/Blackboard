@@ -1,11 +1,8 @@
 #pragma once
 
 #include <blackboard/drawable.hpp>
-#include <blackboard/rendering/texture_renderer.hpp>
-#include <blackboard/editor/stroke/stroke_mesh.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_generator.hpp>
-#include <blackboard/editor/stroke/stroke_renderer_rl.hpp>
-#include <blackboard/editor/stroke/stroke_renderer_gl.hpp>
+#include <blackboard/editor/stroke/stroke_renderer.hpp>
 
 
 

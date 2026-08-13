@@ -1,7 +1,6 @@
 #include <blackboard/debug/logger.hpp>
 
-#include <format>
-#include <filesystem>
+#include <iostream>
 
 #include <blackboard/current_time.hpp>
 
@@ -61,19 +60,23 @@ void Logger::close_log_file() noexcept
 void Logger::log(const std::string& text, const bool duration)
 {
     std::stringstream stream;
-    std::stringstream aux;
 
     stream << '[' << CurrentTime::hour_minute_second_with_ms() << ']';
-
-    if (duration)
-        aux << std::fixed << std::setprecision(3) << '(' << std::setw(7) << std::setfill('0') << stopwatch_.elapsed_ms_double().count() << "ms" << ')';
-
-    stream << ' ' << std::left << std::setw(16) << aux.str();
+    stream << ' ' << std::left << std::setw(13) << (duration ? get_log_duration() : "");
     stream << " " << text;
 
     stopwatch_.reset();
 
     write_to_all_streams(stream.str());
+}
+
+
+std::string Logger::get_log_duration() noexcept
+{
+    std::stringstream aux;
+    aux << std::fixed << std::setprecision(3) << '(' << std::setw(7) << std::setfill('0') << stopwatch_.elapsed_ms_double().count() << "ms" << ')';
+
+    return aux.str();
 }
 
 

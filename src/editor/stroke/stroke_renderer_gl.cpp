@@ -3,7 +3,6 @@
 #include <rlgl.h>
 
 #include <blackboard/window.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
 
 

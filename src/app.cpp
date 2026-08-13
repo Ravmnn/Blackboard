@@ -1,9 +1,5 @@
 #include <blackboard/app.hpp>
 
-#include <filesystem>
-
-#include <platform_folders.h>
-
 #include <rlgl.h>
 
 #include <rl_imgui.h>
@@ -19,17 +15,17 @@
 
 
 
-// TODO: organize these usings
-using bb::App,
-    bb::debug::ImGuiStyleSet,
-    bb::debug::Profiler,
-    bb::debug::ProfilerImGui,
-    bb::debug::Logger,
-    bb::rendering::WindowRenderer,
-    bb::ui::Context,
-    bb::editor::Editor,
+using
+std::filesystem::path,
 
-    std::filesystem::path;
+bb::debug::ImGuiStyleSet,
+bb::debug::Profiler,
+bb::debug::ProfilerImGui,
+bb::debug::Logger,
+bb::rendering::WindowRenderer,
+bb::ui::Context,
+bb::editor::Editor,
+bb::App;
 
 
 

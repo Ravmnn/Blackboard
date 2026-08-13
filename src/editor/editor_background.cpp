@@ -7,10 +7,11 @@
 
 
 
-using bb::editor::EditorBackground,
-    bb::rendering::TextureRenderer,
-    bb::animation::Interpolate,
-    bb::math::Rect;
+using
+bb::math::Rect,
+bb::animation::Interpolate,
+bb::rendering::TextureRenderer,
+bb::editor::EditorBackground;
 
 
 

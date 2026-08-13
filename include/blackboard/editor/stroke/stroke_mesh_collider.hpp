@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
 #include <blackboard/math/segment.hpp>
 

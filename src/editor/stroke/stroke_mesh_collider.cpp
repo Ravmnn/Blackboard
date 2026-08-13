@@ -3,9 +3,10 @@
 
 
 
-using bb::editor::StrokeMeshCollider,
-    bb::editor::StrokeMesh,
-    bb::math::Segment;
+using
+bb::math::Segment,
+bb::editor::StrokeMesh,
+bb::editor::StrokeMeshCollider;
 
 
 

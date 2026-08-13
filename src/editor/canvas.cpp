@@ -5,9 +5,10 @@
 
 
 
-using bb::editor::Canvas,
-    bb::rendering::WindowRenderer,
-    bb::rendering::TextureRenderer;
+using
+bb::rendering::WindowRenderer,
+bb::rendering::TextureRenderer,
+bb::editor::Canvas;
 
 
 

@@ -1,11 +1,13 @@
-//#include <blackboard/editor/stroke/stroke_renderer_gl.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
 
+#include <cassert>
 
 
 
-using bb::editor::StrokeMeshGLManager,
-    bb::editor::StrokeRendererGL;
+
+using
+bb::editor::StrokeMeshGLManager,
+bb::editor::StrokeRendererGL;
 
 
 

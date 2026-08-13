@@ -1,6 +1,5 @@
 #include <blackboard/rendering/frame_buffer.hpp>
 
-#include <cstdint>
 #include <rlgl.h>
 
 #include <blackboard/rendering/window_renderer.hpp>
@@ -8,8 +7,9 @@
 
 
 
-using bb::rendering::FrameBuffer,
-    bb::rendering::WindowRenderer;
+using
+bb::rendering::FrameBuffer,
+bb::rendering::WindowRenderer;
 
 
 

@@ -1,13 +1,13 @@
 #include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
 
-#include <blackboard/draw.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
 
 
-using bb::editor::StrokeMeshGLBuilder,
-    bb::editor::StrokeMeshGL;
+using
+bb::editor::StrokeMeshGL,
+bb::editor::StrokeMeshGLBuilder;
 
 
 

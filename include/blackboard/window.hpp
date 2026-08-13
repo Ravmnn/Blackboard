@@ -40,7 +40,7 @@ public:
 
     static bool moved() noexcept
     {
-        const bool has = last_position_ != position(); refresh();
+        const bool has = last_position_ != position();
         refresh();
 
         return has;

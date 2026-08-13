@@ -1,17 +1,16 @@
 #pragma once
 
-#include <blackboard/editor/effects/stroke.hpp>
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/ui/components/component.hpp>
+#include <blackboard/editor/mouse_late_mode_indicator.hpp>
 #include <blackboard/editor/vanish.hpp>
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas.hpp>
-#include <blackboard/editor/mouse_late_mode_indicator.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
 #include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
 
 
 

@@ -1,10 +1,5 @@
 #include <blackboard/editor/stroke/trail.hpp>
 
-#include <algorithm>
-
-#include <cstdio>
-#include <raymath.h>
-
 #include <blackboard/camera_matrix.hpp>
 
 

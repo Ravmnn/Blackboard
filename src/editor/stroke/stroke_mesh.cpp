@@ -2,18 +2,17 @@
 
 #include <algorithm>
 
-#include <raymath.h>
 
 
 
-
-using bb::editor::StrokeMesh,
-    bb::editor::StrokePointInterpolation,
-    bb::editor::StrokeSample,
-    bb::editor::StrokeEdge,
-    bb::editor::StrokeMeshNode,
-    bb::editor::StrokeMeshQuad,
-    bb::editor::StrokeMeshCapSegment;
+using
+bb::editor::StrokePointInterpolation,
+bb::editor::StrokeSample,
+bb::editor::StrokeEdge,
+bb::editor::StrokeMeshNode,
+bb::editor::StrokeMeshQuad,
+bb::editor::StrokeMesh,
+bb::editor::StrokeMeshCapSegment;
 
 
 

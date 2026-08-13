@@ -1,14 +1,13 @@
 #include <blackboard/editor/canvas_camera.hpp>
 
-#include <blackboard/animation/interpolation.hpp>
 #include <blackboard/editor/canvas.hpp>
 
-#include <raymath.h>
 
 
 
-
-using bb::editor::CanvasCamera, bb::animation::ExponentialInterpolation;
+using
+bb::animation::ExponentialInterpolation,
+bb::editor::CanvasCamera;
 
 
 

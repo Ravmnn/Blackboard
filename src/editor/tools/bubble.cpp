@@ -3,14 +3,14 @@
 #include <rlgl.h>
 
 #include <blackboard/draw.hpp>
-#include <blackboard/rendering/stencil.hpp>
 
 
 
 
-using bb::editor::Bubble,
-    bb::editor::StrokePoint,
-    bb::rendering::Stencil;
+using
+bb::rendering::Stencil,
+bb::editor::StrokePoint,
+bb::editor::Bubble;
 
 
 

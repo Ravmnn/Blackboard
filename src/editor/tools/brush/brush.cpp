@@ -5,8 +5,9 @@
 
 
 
-using bb::editor::Brush,
-    bb::editor::StrokePoint;
+using
+bb::editor::StrokePoint,
+bb::editor::Brush;
 
 
 

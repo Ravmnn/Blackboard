@@ -3,11 +3,6 @@
 
 
 
-// TODO: add logging system (IMGUI)
-
-
-
-
 using bb::App;
 
 

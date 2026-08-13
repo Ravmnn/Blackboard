@@ -1,9 +1,5 @@
 #pragma once
 
-#include <optional>
-
-#include <raylib.h>
-
 #include <blackboard/rendering/effects/effect.hpp>
 
 

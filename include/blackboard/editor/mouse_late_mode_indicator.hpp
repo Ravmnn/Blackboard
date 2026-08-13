@@ -1,9 +1,9 @@
 #pragma once
 
-#include <blackboard/drawable.hpp>
 #include <blackboard/stopwatch.hpp>
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
+#include <blackboard/drawable.hpp>
 
 
 
