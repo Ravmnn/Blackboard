@@ -24,16 +24,12 @@ void ImGuiStyleSet::setup_style() noexcept
     style.WindowPadding = { 10, 10 };
     style.FramePadding = { 4, 4 };
 
+
     style.Colors[ImGuiCol_FrameBg] = ThemeColorSofter;
     style.Colors[ImGuiCol_FrameBgHovered] = ThemeColorHoveredSofter;
     style.Colors[ImGuiCol_FrameBgActive] = ThemeColorActiveSofter;
 
     style.Colors[ImGuiCol_Border] = ThemeColorBorder;
-    style.Colors[ImGuiCol_Text] = ThemeColorText;
-
-    style.Colors[ImGuiCol_Button] = ThemeColor;
-    style.Colors[ImGuiCol_ButtonHovered] = ThemeColorHovered;
-    style.Colors[ImGuiCol_ButtonActive] = ThemeColorActive;
 
     style.Colors[ImGuiCol_WindowBg] = ThemeWindowColor;
 
@@ -45,19 +41,25 @@ void ImGuiStyleSet::setup_style() noexcept
     style.Colors[ImGuiCol_ResizeGripHovered] = ThemeColorHighlight;
     style.Colors[ImGuiCol_ResizeGripActive] = ThemeColorHighlight;
 
+    style.Colors[ImGuiCol_Text] = ThemeColorText;
+
+    style.Colors[ImGuiCol_Button] = ThemeButtonColor;
+    style.Colors[ImGuiCol_ButtonHovered] = ThemeButtonColorHovered;
+    style.Colors[ImGuiCol_ButtonActive] = ThemeButtonColorActive;
+
+    style.Colors[ImGuiCol_ScrollbarGrab] = ThemeColorScrollBar;
+    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ThemeColorHoveredScrollBar;
+    style.Colors[ImGuiCol_ScrollbarGrabActive] = ThemeColorActiveScrollBar;
+
     style.Colors[ImGuiCol_Header] = ThemeColorSofter;
     style.Colors[ImGuiCol_HeaderHovered] = ThemeColorHoveredSofter;
     style.Colors[ImGuiCol_HeaderActive] = ThemeColorActiveSofter;
-
-    style.Colors[ImGuiCol_ScrollbarGrab] = ThemeColor;
-    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ThemeColorHovered;
-    style.Colors[ImGuiCol_ScrollbarGrabActive] = ThemeColorActive;
 }
 
 
 
 
-void ImGuiStyleSet::push_frame_transparent_background() noexcept
+void ImGuiStyleSet::push_frame_translucid_background() noexcept
 {
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, rlImGuiColors::Convert(BLANK));
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ThemeColorTranslucidBackground);
 }

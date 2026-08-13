@@ -24,7 +24,8 @@ bool Logger::create_log_file() noexcept
     try
     {
         fs::create_directories(*log_file_directory);
-        log_file_ = std::make_unique<std::ofstream>(get_log_file_name());
+        log_file_path_ = get_log_file_path();
+        log_file_ = std::make_unique<std::ofstream>(*log_file_path_);
     }
     catch (...)
     {
@@ -35,7 +36,7 @@ bool Logger::create_log_file() noexcept
 }
 
 
-std::string Logger::get_log_file_name() noexcept
+std::string Logger::get_log_file_path() noexcept
 {
     const auto ymd = CurrentTime::year_month_day();
     const auto hms = CurrentTime::hour_minute_second();
@@ -52,6 +53,7 @@ void Logger::close_log_file() noexcept
 
     log_file_->close();
     log_file_ = nullptr;
+    log_file_path_.reset();
 }
 
 

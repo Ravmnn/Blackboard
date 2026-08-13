@@ -7,9 +7,10 @@
 
 #include <blackboard/app_paths.hpp>
 #include <blackboard/debug/profiler.hpp>
-#include <blackboard/debug/imgui_style_set.hpp>
 #include <blackboard/debug/logger.hpp>
+#include <blackboard/debug/imgui_style_set.hpp>
 #include <blackboard/debug/profiler_imgui.hpp>
+#include <blackboard/debug/logger_imgui.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
@@ -18,10 +19,11 @@
 using
 std::filesystem::path,
 
-bb::debug::ImGuiStyleSet,
 bb::debug::Profiler,
-bb::debug::ProfilerImGui,
 bb::debug::Logger,
+bb::debug::ImGuiStyleSet,
+bb::debug::ProfilerImGui,
+bb::debug::LoggerImGui,
 bb::rendering::WindowRenderer,
 bb::ui::Context,
 bb::editor::Editor,
@@ -165,6 +167,7 @@ void App::update() noexcept
 void App::update_keybindings() noexcept
 {
     if (IsKeyPressed(KEY_F1)) ProfilerImGui::is_open = !ProfilerImGui::is_open;
+    if (IsKeyPressed(KEY_F2)) LoggerImGui::is_open = !LoggerImGui::is_open;
 
     // TODO: move debug drawing from StrokeRendererRL to a separated class
     // if (IsKeyPressed(KEY_TWO)) editor->stroke_manager.renderer_rl.should_debug_draw_points = !editor->stroke_manager.renderer_rl.should_debug_draw_points;
@@ -200,5 +203,6 @@ void App::draw_imgui() noexcept
 {
     rlImGuiBegin();
     ProfilerImGui::draw(*Profiler::root());
+    LoggerImGui::draw();
     rlImGuiEnd();
 }

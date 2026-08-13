@@ -20,6 +20,8 @@ private:
     inline static std::stringstream string_stream_;
 
     inline static std::unique_ptr<std::ofstream> log_file_ = nullptr;
+    inline static std::optional<std::string> log_file_path_ = std::nullopt;
+
     inline static std::vector<std::ostream*> custom_streams_;
 
     inline static Stopwatch stopwatch_;
@@ -49,10 +51,11 @@ public:
 
 
     static std::string get_all_logs() noexcept { return string_stream_.str(); }
+    static const std::optional<std::string>& log_file_path() noexcept { return log_file_path_; }
 
 
 private:
-    static std::string get_log_file_name() noexcept;
+    static std::string get_log_file_path() noexcept;
 
     static void log_line(const std::string& text, bool duration) { log(text + '\n', duration); }
     static void log(const std::string& text, bool duration);

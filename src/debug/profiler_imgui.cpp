@@ -4,6 +4,7 @@
 
 #include <blackboard/debug/imgui_style_set.hpp>
 #include <blackboard/debug/imgui_layout.hpp>
+#include <blackboard/debug/imgui_widget.hpp>
 #include <blackboard/debug/profiler_items.hpp>
 
 
@@ -19,17 +20,13 @@ void ProfilerImGui::draw(ProfilerItem& item) noexcept
     if (!is_open)
         return;
 
-    const ImVec2 window_size = { 800, 600 };
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, window_size);
-    ImGui::Begin("Profiler", &is_open);
+    ImGuiWidget::begin_window("Profiler", { 800, 600 }, is_open);
 
     draw_fps();
     draw_chart(item);
     draw_items(item);
 
-    ImGui::End();
-    ImGui::PopStyleVar();
+    ImGuiWidget::end_window();
 }
 
 
@@ -105,17 +102,9 @@ void ProfilerImGui::get_items_chart_node(ProfilerItem& item, std::vector<const c
 
 void ProfilerImGui::draw_items(ProfilerItem& item) noexcept
 {
-    ImGuiStyleSet::push_frame_transparent_background();
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 10, 10 });
-
-    ImGui::BeginChild("child::items", {}, ImGuiChildFlags_FrameStyle);
-
-    ImGui::PopStyleColor();
-    ImGui::PopStyleVar();
-
+    ImGuiWidget::begin_frame_child("profiler::items");
     draw_item(item);
-
-    ImGui::EndChild();
+    ImGuiWidget::end_frame_child();
 }
 
 
