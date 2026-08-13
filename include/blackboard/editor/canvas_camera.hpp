@@ -31,6 +31,9 @@ private:
 public:
     const Canvas& canvas;
 
+    bool disable_zoom = false;
+    bool disable_move = false;
+
     float min_zoom;
     float max_zoom;
     float zoom_factor;

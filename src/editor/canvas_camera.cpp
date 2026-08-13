@@ -45,14 +45,17 @@ void CanvasCamera::update() noexcept
 
 void CanvasCamera::update_dragging() noexcept
 {
+    if (disable_move)
+        return;
+
     if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
-        target_camera_.target += GetMouseDelta() / target_camera_.zoom * -1;
+        target_camera_.target += MousePositionProvider::screen().mouse_delta() / target_camera_.zoom * -1;
 }
 
 
 void CanvasCamera::update_zoom() noexcept
 {
-    if (GetMouseWheelMove() == 0)
+    if (disable_zoom || GetMouseWheelMove() == 0)
         return;
 
     const Vector2 mouse_world = canvas.mouse_position();

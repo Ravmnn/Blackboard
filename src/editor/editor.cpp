@@ -110,6 +110,8 @@ void Editor::update_focus() noexcept
 {
     if (is_pressed() && ui_context->component_with_mouse_input() == this)
         ui_context->set_focus_to(this);
+
+    canvas.camera.disable_move = canvas.camera.disable_zoom = !caught_mouse_input;
 }
 
 
