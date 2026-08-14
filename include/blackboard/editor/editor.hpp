@@ -31,15 +31,16 @@ private:
     static constexpr Color DefaultBackgroundColor = { 18, 18, 18, 255 };
 
 
+    std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
+
     Tool* last_tool_ = nullptr;
 
-    std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
+    Canvas* canvas_ = nullptr;
 
 
 public:
     EditorBackground background;
 
-    Canvas canvas;
     Palette palette;
     bool dynamic_background_color = false;
 
@@ -70,8 +71,10 @@ public:
     void update() noexcept override;
 
 
-    [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
+    [[nodiscard]] Canvas& canvas() noexcept { return *canvas_; }
+    [[nodiscard]] const Canvas& canvas() const noexcept { return *canvas_; }
 
+    [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
 
     [[nodiscard]] bool is_point_over(const Vector2& /* unused */) const noexcept override { return true; }
 
@@ -80,7 +83,7 @@ public:
 
     StrokeMesh* get_stroke_under_point(const Vector2& point) noexcept;
     StrokeMesh* get_stroke_intersecting_segment(const math::Segment& segment) noexcept;
-    StrokeMesh* get_stroke_under_mouse() noexcept { return get_stroke_under_point(canvas.mouse_position()); }
+    StrokeMesh* get_stroke_under_mouse() noexcept { return get_stroke_under_point(canvas().mouse_position()); }
 
 
 private:

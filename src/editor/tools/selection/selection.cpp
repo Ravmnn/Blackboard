@@ -70,7 +70,7 @@ void Selection::draw() noexcept
 
 Vector2 Selection::position() const noexcept
 {
-    return editor().canvas.mouse_position();
+    return editor().canvas().mouse_position();
 }
 
 

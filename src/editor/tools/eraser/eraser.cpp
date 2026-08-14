@@ -57,7 +57,7 @@ void Eraser::draw() noexcept
 
 Vector2 Eraser::position() const noexcept
 {
-    return editor().canvas.mouse_position();
+    return editor().canvas().mouse_position();
 }
 
 

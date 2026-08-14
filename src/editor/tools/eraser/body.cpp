@@ -11,7 +11,7 @@ using bb::editor::EraserBody;
 
 
 EraserBody::EraserBody(Eraser& eraser) noexcept :
-    Bubble(eraser.editor().canvas.raylib_camera(), BaseThickness),
+    Bubble(eraser.editor().canvas().raylib_camera(), BaseThickness),
 
     eraser(eraser)
 {

@@ -15,9 +15,9 @@ using bb::editor::EditorEnvironment;
 EditorEnvironment::EditorEnvironment(Editor& editor) noexcept :
     editor(editor),
 
-    left_button(MouseButtonEvent(MOUSE_BUTTON_LEFT, editor.canvas)),
-    right_button(MouseButtonEvent(MOUSE_BUTTON_RIGHT, editor.canvas)),
-    middle_button(MouseButtonEvent(MOUSE_BUTTON_MIDDLE, editor.canvas))
+    left_button(MouseButtonEvent(MOUSE_BUTTON_LEFT, editor.canvas())),
+    right_button(MouseButtonEvent(MOUSE_BUTTON_RIGHT, editor.canvas())),
+    middle_button(MouseButtonEvent(MOUSE_BUTTON_MIDDLE, editor.canvas()))
 {
     left_button.clickable = &editor;
     right_button.clickable = &editor;

@@ -53,7 +53,7 @@ void EditorSelectionEnvironment::draw_selected_strokes() noexcept
 
     constexpr float SelectionOutlineBaseThickness = 4;
 
-    selection_mesh_outline_renderer_.overwrite_outline_thickness = SelectionOutlineBaseThickness / editor.canvas.raylib_camera().zoom;
+    selection_mesh_outline_renderer_.overwrite_outline_thickness = SelectionOutlineBaseThickness / editor.canvas().raylib_camera().zoom;
 
 
     auto* const last_renderer = editor.stroke_manager.renderer;

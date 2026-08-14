@@ -54,7 +54,7 @@ void EditorBackground::update_effect() noexcept
 
 float EditorBackground::get_alpha_factor() const noexcept
 {
-    const float t = Interpolate::inverse(zoom_visibility_interval_max, zoom_visibility_interval_min, editor.canvas.raylib_camera().zoom);
+    const float t = Interpolate::inverse(zoom_visibility_interval_max, zoom_visibility_interval_min, editor.canvas().raylib_camera().zoom);
     return std::clamp(t, min_alpha, max_alpha);
 }
 
@@ -63,8 +63,8 @@ float EditorBackground::get_alpha_factor() const noexcept
 
 void EditorBackground::draw() noexcept
 {
-    const Vector2 start = editor.canvas.map_point_using_interpolated_camera({ 0, 0 });
-    const Vector2 end = editor.canvas.map_point_using_interpolated_camera(editor.canvas.resolution());
+    const Vector2 start = editor.canvas().map_point_using_interpolated_camera({ 0, 0 });
+    const Vector2 end = editor.canvas().map_point_using_interpolated_camera(editor.canvas().resolution());
     const Rectangle rect = Rect::from_two_points(start, end);
 
     effect.enable();

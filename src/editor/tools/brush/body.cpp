@@ -12,7 +12,7 @@ using bb::editor::BrushBody;
 
 
 BrushBody::BrushBody(Brush& brush) noexcept :
-    Bubble(brush.editor().canvas.raylib_camera(), brush.thickness),
+    Bubble(brush.editor().canvas().raylib_camera(), brush.thickness),
 
     brush(brush)
 {

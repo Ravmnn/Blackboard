@@ -26,11 +26,13 @@ bb::editor::Editor;
 
 Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
-    Clickable(*dynamic_cast<MousePositionProvider*>(&canvas)),
+    Clickable(*dynamic_cast<MousePositionProvider*>(new Canvas(this))),
+
+    // workaround to initialization order
+    canvas_(const_cast<Canvas*>(dynamic_cast<const Canvas*>(&mouse_position_provider))),
 
     background(*this, 2, 0.5),
 
-    canvas(this),
     palette(DefaultPaletteColor),
 
     stroke_manager(stroke_renderer),
@@ -38,7 +40,7 @@ Editor::Editor(Context& ui_context) noexcept :
     draw_environment(*this),
     selection_environment(*this),
 
-    mouse_late_mode_indicator(canvas, *this)
+    mouse_late_mode_indicator(*canvas_, *this)
 {
     clip = false;
 
@@ -96,7 +98,7 @@ void Editor::update() noexcept
     update_vanish_animations();
     update_effects();
 
-    stroke_manager.renderer->view_area = canvas.camera.bounding_box();
+    stroke_manager.renderer->view_area = canvas_->camera.bounding_box();
     stroke_renderer.update();
 
 
@@ -109,7 +111,7 @@ void Editor::update_focus() noexcept
     if (is_pressed() && caught_mouse_input)
         ui_context->set_focus_to(this);
 
-    canvas.camera.disable_move = canvas.camera.disable_zoom = !caught_mouse_input;
+    canvas_->camera.disable_move = canvas_->camera.disable_zoom = !caught_mouse_input;
 }
 
 
@@ -143,8 +145,8 @@ void Editor::update_vanish_animations() noexcept
 
 void Editor::update_effects() noexcept
 {
-    stroke_renderer.effect.mvp = CameraMatrix::get_orthographic_matrix_from_camera(canvas.raylib_camera()   );
-    stroke_renderer.effect.camera_zoom = canvas.raylib_camera().zoom;
+    stroke_renderer.effect.mvp = CameraMatrix::get_orthographic_matrix_from_camera(canvas_->raylib_camera()   );
+    stroke_renderer.effect.camera_zoom = canvas_->raylib_camera().zoom;
 
     stroke_renderer.effect.update();
 }
@@ -176,16 +178,16 @@ void Editor::draw_to_canvas() noexcept
     Profiler::begin("editor::draw::canvas");
 
 
-    canvas.begin_render();
+    canvas_->begin_render();
         stroke_manager.draw_composition();
 
-        canvas.camera.enable();
+        canvas_->camera.enable();
             current_environment->draw();
             mouse_late_mode_indicator.draw();
 
             draw_vanish_animations();
-        canvas.camera.disable();
-    canvas.end_render();
+        canvas_->camera.disable();
+    canvas_->end_render();
 
 
     Profiler::end();
@@ -194,9 +196,9 @@ void Editor::draw_to_canvas() noexcept
 
 void Editor::draw_background() noexcept
 {
-    canvas.camera.enable();
+    canvas_->camera.enable();
     background.draw();
-    canvas.camera.disable();
+    canvas_->camera.disable();
 }
 
 

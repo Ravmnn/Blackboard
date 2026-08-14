@@ -44,7 +44,7 @@ void Brush::update() noexcept
 
 void Brush::update_cursor() noexcept
 {
-    cursor.target_position = editor().canvas.mouse_position();
+    cursor.target_position = editor().canvas().mouse_position();
     cursor.immediate = !active();
     cursor.update();
 }
@@ -98,5 +98,5 @@ void Brush::draw() noexcept
 
 Vector2 Brush::position() const noexcept
 {
-    return active() ? cursor.position() : editor().canvas.mouse_position();
+    return active() ? cursor.position() : editor().canvas().mouse_position();
 }
