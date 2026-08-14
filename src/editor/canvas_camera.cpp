@@ -10,6 +10,11 @@ bb::animation::ExponentialInterpolation,
 bb::editor::CanvasCamera;
 
 
+// TODO: make Canvas a Component and Clickable; add it as a child of Editor; add a way of Clickable objects to be able to pass input to components behind them
+// TODO: use Canvas::caught_mouse_input to determine if it's able to move or zoom
+// TODO: add an UI event for scrolling on a component and make Canvas use that to zoom instead of global scrolling getter?
+
+
 
 
 CanvasCamera::CanvasCamera(const Canvas& canvas, const float min_zoom, const float max_zoom, const float zoom_factor) noexcept :
@@ -48,7 +53,7 @@ void CanvasCamera::update_dragging() noexcept
     if (disable_move)
         return;
 
-    if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
+    if (canvas.middle_button.is_button_down())
         target_camera_.target += MousePositionProvider::screen().mouse_delta() / target_camera_.zoom * -1;
 }
 
