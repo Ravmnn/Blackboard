@@ -4,7 +4,7 @@
 #include <blackboard/math/rect.hpp>
 #include <blackboard/mouse_position_provider.hpp>
 #include <blackboard/rendering/texture_renderer.hpp>
-#include <blackboard/ui/clickable.hpp>
+#include <blackboard/ui/scrollable.hpp>
 #include <blackboard/ui/components/component.hpp>
 #include <blackboard/editor/canvas_camera.hpp>
 
@@ -20,7 +20,7 @@ namespace bb::editor
 class Stroke;
 
 
-class Canvas : public ui::Component, public ui::Clickable, public Initializable, public MousePositionProvider, public rendering::TextureRenderer
+class Canvas : public ui::Component, public ui::Scrollable, public Initializable, public MousePositionProvider, public rendering::TextureRenderer
 {
 public:
     MouseButtonEvent middle_button;

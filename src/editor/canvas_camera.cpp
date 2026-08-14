@@ -60,11 +60,11 @@ void CanvasCamera::update_dragging() noexcept
 
 void CanvasCamera::update_zoom() noexcept
 {
-    if (disable_zoom || GetMouseWheelMove() == 0)
+    if (disable_zoom || !canvas.scrolled())
         return;
 
     const Vector2 mouse_world = canvas.mouse_position();
-    target_camera_.zoom += GetMouseWheelMove() * target_camera_.zoom * zoom_factor;
+    target_camera_.zoom += (float)canvas.scroll_value() * target_camera_.zoom * zoom_factor;
     target_camera_.zoom = Clamp(target_camera_.zoom, min_zoom, max_zoom);
 
     const Vector2 mouse_world_after = canvas.mouse_position();

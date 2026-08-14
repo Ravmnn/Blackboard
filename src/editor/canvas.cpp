@@ -7,9 +7,6 @@
 
 using
 bb::rendering::WindowRenderer,
-bb::rendering::TextureRenderer,
-bb::ui::Clickable,
-bb::ui::Component,
 bb::editor::Canvas;
 
 
@@ -18,7 +15,7 @@ bb::editor::Canvas;
 // TODO: add global antialiasing samples for editor
 Canvas::Canvas(Component* parent) noexcept :
     Component(parent, {}),
-    Clickable(*dynamic_cast<MousePositionProvider*>(this)),
+    Scrollable(*dynamic_cast<MousePositionProvider*>(this)),
     TextureRenderer(16, true, true),
 
     middle_button(MOUSE_BUTTON_MIDDLE, *this),
@@ -57,7 +54,7 @@ void Canvas::update() noexcept
     if (IsWindowResized())
         resize_texture_renderer();
 
-    Clickable::update();
+    Scrollable::update();
     Component::update();
 
     camera.update();
