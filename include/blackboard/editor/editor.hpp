@@ -98,7 +98,6 @@ private:
     void draw_strokes() noexcept;
 
     void draw_vanish_animations() noexcept;
-    void draw_canvas_content() noexcept;
     void draw_statistics() const noexcept;
 
 

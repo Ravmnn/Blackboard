@@ -16,6 +16,12 @@ namespace bb::math
 class Rect
 {
 public:
+    static Rectangle from_position_and_size(const Vector2& position, const Vector2& size) noexcept
+    {
+        return { position.x, position.y, size.x, size.y };
+    }
+
+
     static Rectangle from_two_points(const Vector2& start, const Vector2& end) noexcept
     {
         const float left = std::min(start.x, end.x);

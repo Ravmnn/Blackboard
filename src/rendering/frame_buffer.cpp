@@ -6,6 +6,8 @@
 
 
 
+// TODO: add detailed logging (expose info, don't add logging instructions here)
+
 
 using
 bb::rendering::FrameBuffer,
@@ -62,9 +64,6 @@ void FrameBuffer::load_depth_and_stencil_buffers(const bool load_depth, const bo
 
     if (load_stencil)
         load_render_buffer(stencil_render_buffer_, GL_STENCIL_INDEX8, GL_STENCIL_ATTACHMENT);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        TraceLog(LOG_WARNING, "FrameBuffer MSAA incompleto!");
 }
 
 

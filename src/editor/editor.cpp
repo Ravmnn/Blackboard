@@ -26,10 +26,11 @@ bb::editor::Editor;
 
 Editor::Editor(Context& ui_context) noexcept :
     Component(nullptr, {}),
-    Clickable(canvas),
+    Clickable(*dynamic_cast<MousePositionProvider*>(&canvas)),
 
     background(*this, 2, 0.5),
 
+    canvas(this),
     palette(DefaultPaletteColor),
 
     stroke_manager(stroke_renderer),
@@ -85,8 +86,8 @@ void Editor::update() noexcept
     update_background();
 
     Clickable::update();
+    Component::update();
 
-    canvas.update();
     background.update();
     current_environment->update();
     mouse_late_mode_indicator.update();
@@ -99,16 +100,13 @@ void Editor::update() noexcept
     stroke_renderer.update();
 
 
-    Component::update();
-
-
     Profiler::end();
 }
 
 
 void Editor::update_focus() noexcept
 {
-    if (is_pressed() && ui_context->component_with_mouse_input() == this)
+    if (is_pressed() && caught_mouse_input)
         ui_context->set_focus_to(this);
 
     canvas.camera.disable_move = canvas.camera.disable_zoom = !caught_mouse_input;
@@ -167,7 +165,6 @@ void Editor::draw_self() noexcept
     draw_strokes();
 
     draw_to_canvas();
-    draw_canvas_content();
 
 
     Profiler::end();
@@ -229,12 +226,6 @@ void Editor::draw_vanish_animations() noexcept
     for (auto& vanish : vanish_animations_)
         if (vanish)
             vanish->draw();
-}
-
-
-void Editor::draw_canvas_content() noexcept
-{
-    TextureRenderer::draw_y_inverted_texture_full(canvas.contents().texture);
 }
 
 
