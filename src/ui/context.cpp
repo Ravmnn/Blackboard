@@ -18,7 +18,7 @@ void Context::update() noexcept
     Profiler::begin("ui::update");
 
 
-    component_with_mouse_input_ = nullptr;
+    components_with_mouse_input_.clear();
 
     update_focus();
 
@@ -54,18 +54,21 @@ void Context::update_mouse_input(Component& component) noexcept
 {
     auto* const clickable = dynamic_cast<Clickable*>(&component);
 
-    const bool had_component_with_mouse_input = component_with_mouse_input_;
-    component_with_mouse_input_ = nullptr;
-
     if (!clickable)
         return;
 
+    const bool has_any_component_with_mouse_input = !components_with_mouse_input_.empty();
+    const bool last_component_with_mouse_input_blocks_input = has_any_component_with_mouse_input && components_with_mouse_input_.front()->as<Clickable>()->block_input;
+
+    const bool should_get_input = clickable->can_receive_input() && clickable->is_mouse_over();
+    const bool should_block_input = has_any_component_with_mouse_input && last_component_with_mouse_input_blocks_input;
+
     clickable->caught_mouse_input = false;
 
-    if (!disable_mouse_input && !had_component_with_mouse_input && clickable->can_receive_input() && clickable->is_mouse_over())
+    if (!disable_mouse_input && !should_block_input && should_get_input)
     {
         clickable->caught_mouse_input = true;
-        component_with_mouse_input_ = &component;
+        components_with_mouse_input_.push_back(&component);
     }
 }
 

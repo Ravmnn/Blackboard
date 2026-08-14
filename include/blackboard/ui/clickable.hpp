@@ -26,6 +26,7 @@ public:
     Event<> hover;
 
     bool ignore_input = false;
+    bool block_input = true;
     bool ignore_event_triggering = false;
     bool caught_mouse_input = false;
 

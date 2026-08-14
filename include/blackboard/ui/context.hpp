@@ -21,7 +21,7 @@ class Context : public Updateable, public Drawable
 private:
     std::vector<std::unique_ptr<Component>> components_;
 
-    Component* component_with_mouse_input_ = nullptr;
+    std::vector<Component*> components_with_mouse_input_;
     Component* component_with_focus_ = nullptr;
 
 
@@ -36,7 +36,7 @@ public:
     void add_component(Component& component) noexcept { components_.push_back(std::unique_ptr<Component>(&component)); }
 
     [[nodiscard]] const std::vector<std::unique_ptr<Component>>& components() const noexcept { return components_; }
-    [[nodiscard]] Component* component_with_mouse_input() noexcept { return component_with_mouse_input_; }
+    [[nodiscard]] std::vector<Component*> components_with_mouse_input() noexcept { return components_with_mouse_input_; }
     [[nodiscard]] Component* component_with_focus() noexcept { return component_with_focus_; }
 
 
