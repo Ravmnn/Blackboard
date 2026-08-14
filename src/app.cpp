@@ -6,6 +6,7 @@
 #include <implot.h>
 
 #include <blackboard/app_paths.hpp>
+#include <blackboard/debug/gl_debug.hpp>
 #include <blackboard/debug/profiler.hpp>
 #include <blackboard/debug/logger.hpp>
 #include <blackboard/debug/imgui_style_set.hpp>
@@ -19,6 +20,7 @@
 using
 std::filesystem::path,
 
+bb::debug::GlDebug,
 bb::debug::Profiler,
 bb::debug::Logger,
 bb::debug::ImGuiStyleSet,
@@ -63,6 +65,8 @@ void App::initialize_window() noexcept
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
     SetTargetFPS(0);
+
+    GlDebug::setup_gl_debug();
 
     Logger::info("Window created", true);
 }

@@ -87,6 +87,9 @@ public:
 
 
 private:
+    void log_canvas_framebuffer_status() noexcept;
+
+
     void update_focus() noexcept;
     void update_background() noexcept;
     void update_tool_changed_event() noexcept;

@@ -43,6 +43,10 @@ void FrameBuffer::load(const bool load_depth, const bool load_stencil) noexcept
 
     load_render_buffer(color_render_buffer_, GL_RGBA8, GL_COLOR_ATTACHMENT0);
     load_depth_and_stencil_buffers(load_depth, load_stencil);
+
+    enable_frame_buffer();
+    frame_buffer_gl_status_ = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    disable_frame_buffer();
 }
 
 

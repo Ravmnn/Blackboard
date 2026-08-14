@@ -3,7 +3,9 @@
 #include <rlgl.h>
 
 #include <blackboard/camera_matrix.hpp>
+#include <blackboard/debug/gl_to_string.hpp>
 #include <blackboard/debug/profiler.hpp>
+#include <blackboard/debug/logger.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
@@ -13,7 +15,9 @@
 
 using
 bb::math::Segment,
+bb::debug::GlToString,
 bb::debug::Profiler,
+bb::debug::Logger,
 bb::rendering::TextureRenderer,
 bb::ui::Context,
 bb::ui::Component,
@@ -74,6 +78,19 @@ Editor::Editor(Context& ui_context) noexcept :
     color_menu->hide();
 
     color_menu->color_selected.subscribe([this](const Color& color) { palette.set_current_color(color); });
+
+
+    log_canvas_framebuffer_status();
+}
+
+
+void Editor::log_canvas_framebuffer_status() noexcept
+{
+    const int status = canvas_->frame_buffer().gl_status();
+    const std::string status_string = GlToString::frame_buffer_status(status);
+    const std::string message = std::format("Canvas framebuffer status: {0} ({1:x} = {1})", status_string, status);
+
+    Logger::info(message);
 }
 
 

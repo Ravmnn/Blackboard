@@ -30,6 +30,8 @@ private:
 
     uint16_t msaa_samples_ = 1;
 
+    int frame_buffer_gl_status_ = 0;
+
 
 public:
     FrameBuffer(uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
@@ -54,6 +56,8 @@ public:
     [[nodiscard]] uint32_t stencil_render_buffer_id() const noexcept { return stencil_render_buffer_; }
     [[nodiscard]] uint32_t resolve_frame_buffer_id() const noexcept { return resolve_frame_buffer_; }
     [[nodiscard]] const Texture& resolve_texture() const noexcept { return resolve_texture_; }
+
+    [[nodiscard]] int gl_status() const noexcept { return frame_buffer_gl_status_; }
 
     [[nodiscard]] bool has_depth_buffer() const noexcept { return depth_render_buffer_ > 0; }
     [[nodiscard]] bool has_stencil_buffer() const noexcept { return stencil_render_buffer_ > 0; }
