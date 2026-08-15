@@ -22,13 +22,14 @@ class Tool : public Updateable, public Drawable, public Activatable, public Boun
 {
 protected:
     bool was_active_ = false;
-    bool got_inactive_ = false;
-    bool got_active_ = false;
 
 
 public:
     Event<> changed_in;
     Event<> changed_out;
+
+    Event<> got_active;
+    Event<> got_inactive;
 
 
     EditorEnvironment& environment;
@@ -46,16 +47,19 @@ public:
     [[nodiscard]] virtual Vector2 position() const noexcept = 0;
 
     [[nodiscard]] bool was_active() const noexcept { return was_active_; }
-    [[nodiscard]] bool got_active() const noexcept { return got_active_; }
-    [[nodiscard]] bool got_inactive() const noexcept { return got_inactive_; }
 
 
 protected:
+    virtual void update_when_active() noexcept {}
+
     void update_active_state() noexcept;
 
 
-    virtual void on_changed_in() {}
-    virtual void on_changed_out() {}
+    virtual void on_got_active() noexcept {}
+    virtual void on_got_inactive() noexcept {}
+
+    virtual void on_changed_in() noexcept {}
+    virtual void on_changed_out() noexcept {}
 };
 
 

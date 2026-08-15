@@ -25,19 +25,19 @@ Brush::Brush(EditorEnvironment& environment, const float thickness) noexcept : T
 
 void Brush::update() noexcept
 {
-    if (got_inactive_)
-        stroke_.points.clear();
-
     Tool::update();
 
     color_ = editor().palette.current_color();
 
     update_cursor();
-    update_canvas_actions();
-
     body.update();
 
     current_thickness_ = thickness_from_speed();
+}
+
+
+void Brush::update_when_active() noexcept
+{
     add_stroke_point();
 }
 
@@ -50,16 +50,9 @@ void Brush::update_cursor() noexcept
 }
 
 
-void Brush::update_canvas_actions() noexcept
-{
-    if (got_inactive_)
-        editor().stroke_manager.add_stroke(stroke_);
-}
-
-
 void Brush::add_stroke_point() noexcept
 {
-    if (!active() || cursor.is_too_slow())
+    if (cursor.is_too_slow())
         return;
 
     stroke_.points.push_back(create_stroke_point());
@@ -83,6 +76,15 @@ StrokePoint Brush::create_stroke_point() const noexcept
         .thickness = current_thickness_,
         .color = color_
     };
+}
+
+
+
+
+void Brush::on_got_inactive() noexcept
+{
+    editor().stroke_manager.add_stroke(stroke_);
+    stroke_.points.clear();
 }
 
 

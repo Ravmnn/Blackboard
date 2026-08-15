@@ -52,6 +52,8 @@ public:
 
 
 protected:
+    void update_when_active() noexcept override;
+
     void update_selection() noexcept;
 
     size_t selected_mesh_nodes_for_stroke(const StrokeMesh& mesh) noexcept;

@@ -41,12 +41,17 @@ public:
 
 
 private:
+    void update_when_active() noexcept override;
+
     [[nodiscard]] float distance_delta() const noexcept { return Vector2Length(position() - last_position_); }
 
     void update_strokes_to_remove() noexcept;
 
     void add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept;
     void remove_strokes_from_remove_queue() noexcept;
+
+
+    void on_got_inactive() noexcept override;
 };
 
 

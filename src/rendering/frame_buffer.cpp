@@ -6,8 +6,6 @@
 
 
 
-// TODO: add detailed logging (expose info, don't add logging instructions here)
-
 
 using
 bb::rendering::FrameBuffer,

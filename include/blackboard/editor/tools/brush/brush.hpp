@@ -60,13 +60,13 @@ public:
     [[nodiscard]] const Stroke& stroke() const noexcept { return stroke_; }
     void clear_stroke() noexcept { stroke_.points.clear(); }
 
-    [[nodiscard]] bool draw_started() const noexcept { return got_active_; }
-    [[nodiscard]] bool draw_finished() const noexcept { return got_inactive_; }
+    [[nodiscard]] bool draw_started() const noexcept { return got_active.triggered(); }
+    [[nodiscard]] bool draw_finished() const noexcept { return got_inactive.triggered(); }
 
 
 private:
+    void update_when_active() noexcept override;
     void update_cursor() noexcept;
-    void update_canvas_actions() noexcept;
 
     void add_stroke_point() noexcept;
     void modify_previous_points_thickness(float thickness) noexcept;
@@ -79,6 +79,9 @@ private:
     [[nodiscard]] float max_thickness() const noexcept { return std::min(max_thickness_, thickness + thickness_max_increase_); }
 
     [[nodiscard]] float distance_to_last_point() const noexcept { return Vector2Distance(stroke_.points.back(), cursor.position()); }
+
+
+    void on_got_inactive() noexcept override;
 };
 
 

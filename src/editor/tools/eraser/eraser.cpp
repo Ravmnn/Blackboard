@@ -25,14 +25,14 @@ void Eraser::update() noexcept
 {
     Tool::update();
 
-    if (active())
-        update_strokes_to_remove();
-
-    if (got_inactive_)
-        remove_strokes_from_remove_queue();
-
     body.update();
     last_position_ = position();
+}
+
+
+void Eraser::update_when_active() noexcept
+{
+    update_strokes_to_remove();
 }
 
 
@@ -42,6 +42,14 @@ void Eraser::update_strokes_to_remove() noexcept
 
     if (StrokeMesh* const stroke = editor().get_stroke_intersecting_segment(segment))
         add_stroke_to_remove_queue(*stroke);
+}
+
+
+
+
+void Eraser::on_got_inactive() noexcept
+{
+    remove_strokes_from_remove_queue();
 }
 
 

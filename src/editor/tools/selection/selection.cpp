@@ -22,14 +22,18 @@ Selection::Selection(EditorEnvironment& environment) noexcept : Tool(environment
 
 
 
-// TODO: add Tool::update_when_active
 void Selection::update() noexcept
 {
-    if (active())
-        update_selection();
+    Tool::update();
 
     end_position_ = position();
     body.update();
+}
+
+
+void Selection::update_when_active() noexcept
+{
+    update_selection();
 }
 
 
