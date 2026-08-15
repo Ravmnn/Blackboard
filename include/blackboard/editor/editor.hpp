@@ -7,6 +7,7 @@
 #include <blackboard/editor/vanish.hpp>
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_debug_renderer.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
 #include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
@@ -44,6 +45,8 @@ public:
     Palette palette;
     bool dynamic_background_color = false;
 
+
+    StrokeMeshDebugRenderer stroke_debug_renderer;
     StrokeRendererGL stroke_renderer;
     StrokeMeshGLManager stroke_manager;
 
@@ -95,6 +98,7 @@ private:
     void update_tool_changed_event() noexcept;
     void update_vanish_animations() noexcept;
     void update_effects() noexcept;
+    void update_keybindings() noexcept;
 
 
     void draw_self() noexcept override;
@@ -102,6 +106,7 @@ private:
 
     void draw_background() noexcept;
     void draw_strokes() noexcept;
+    void draw_debug_strokes() noexcept;
 
     void draw_vanish_animations() noexcept;
     void draw_statistics() const noexcept;

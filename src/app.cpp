@@ -172,12 +172,6 @@ void App::update_keybindings() noexcept
 {
     if (IsKeyPressed(KEY_F1)) ProfilerImGui::is_open = !ProfilerImGui::is_open;
     if (IsKeyPressed(KEY_F2)) LoggerImGui::is_open = !LoggerImGui::is_open;
-
-    // TODO: move debug drawing from StrokeRendererRL to a separated class
-    // if (IsKeyPressed(KEY_TWO)) editor->stroke_manager.renderer_rl.should_debug_draw_points = !editor->stroke_manager.renderer_rl.should_debug_draw_points;
-    // if (IsKeyPressed(KEY_THREE)) editor->stroke_manager.renderer_rl.should_debug_draw_samples = !editor->stroke_manager.renderer_rl.should_debug_draw_samples;
-    // if (IsKeyPressed(KEY_FOUR)) editor->stroke_manager.renderer_rl.should_debug_draw_edges = !editor->stroke_manager.renderer_rl.should_debug_draw_edges;
-    if (IsKeyPressed(KEY_FIVE)) editor->wire_mode = !editor->wire_mode;
 }
 
 

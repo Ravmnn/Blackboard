@@ -114,6 +114,7 @@ void Editor::update() noexcept
     update_tool_changed_event();
     update_vanish_animations();
     update_effects();
+    update_keybindings();
 
     stroke_manager.renderer->view_area = canvas_->camera.bounding_box();
     stroke_renderer.update();
@@ -169,6 +170,18 @@ void Editor::update_effects() noexcept
 }
 
 
+void Editor::update_keybindings() noexcept
+{
+    if (!caught_mouse_input)
+        return;
+
+    if (IsKeyPressed(KEY_ONE)) stroke_debug_renderer.draw_points = !stroke_debug_renderer.draw_points;
+    if (IsKeyPressed(KEY_TWO)) stroke_debug_renderer.draw_samples = !stroke_debug_renderer.draw_samples;
+    if (IsKeyPressed(KEY_THREE)) stroke_debug_renderer.draw_edges = !stroke_debug_renderer.draw_edges;
+    if (IsKeyPressed(KEY_FOUR)) wire_mode = !wire_mode;
+}
+
+
 
 
 
@@ -199,6 +212,8 @@ void Editor::draw_to_canvas() noexcept
         stroke_manager.draw_composition();
 
         canvas_->camera.enable();
+            draw_debug_strokes();
+
             current_environment->draw();
             mouse_late_mode_indicator.draw();
 
@@ -237,6 +252,21 @@ void Editor::draw_strokes() noexcept
 
 
     Profiler::end();
+}
+
+
+void Editor::draw_debug_strokes() noexcept
+{
+    if (!stroke_debug_renderer.any_draw_enabled())
+        return;
+
+    for (const auto& mesh : stroke_manager.meshes)
+        stroke_debug_renderer.draw(*mesh);
+
+    const auto brush_mesh = stroke_manager.generator.generate_mesh(draw_environment.brush.stroke());
+
+    if (brush_mesh)
+        stroke_debug_renderer.draw(*brush_mesh);
 }
 
 

@@ -39,8 +39,6 @@ void StrokeRendererRL::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 
     draw_edges_with_caps(mesh);
     draw_extreme_caps(mesh);
-
-    draw_debug_visualization(mesh);
 }
 
 
@@ -117,8 +115,6 @@ void StrokeRendererRL::draw_cap(const Vector2& center, const Vector2& direction,
     const Vector2 normal = { -direction.y, direction.x };
     const float angle_step = PI / CapResolution;
 
-    const Color true_color = should_debug_draw_caps ? RED : color;
-
     for (size_t i = 0; i < CapResolution; i++)
     {
         const float a0 = (float)i * angle_step;
@@ -134,48 +130,9 @@ void StrokeRendererRL::draw_cap(const Vector2& center, const Vector2& direction,
             .center = center,
             .begin = begin,
             .end = end,
-            .color = true_color,
+            .color = color,
             .outline_thickness = outline_thickness,
             .outline_color = outline_color
         });
-    }
-}
-
-
-
-
-void StrokeRendererRL::draw_debug_visualization(const StrokeMesh& mesh) const noexcept
-{
-    if (should_debug_draw_samples)
-        debug_draw_samples(mesh);
-
-    if (should_debug_draw_edges)
-        debug_draw_edges(mesh);
-
-    if (should_debug_draw_points)
-        debug_draw_points(mesh);
-}
-
-
-void StrokeRendererRL::debug_draw_points(const StrokeMesh& mesh) noexcept
-{
-    for (const auto& node : mesh)
-        DrawCircleV(node.sample.interpolation.origin_point, DebugCircleRadius, RED);
-}
-
-
-void StrokeRendererRL::debug_draw_samples(const StrokeMesh& mesh) noexcept
-{
-    for (const auto& node : mesh)
-        DrawCircleV(node.position(), DebugCircleRadius, BLUE);
-}
-
-
-void StrokeRendererRL::debug_draw_edges(const StrokeMesh& mesh) noexcept
-{
-    for (const auto& node : mesh)
-    {
-        DrawCircleV(node.edge.top, DebugCircleRadius, BLUE);
-        DrawCircleV(node.edge.bottom, DebugCircleRadius, BLUE);
     }
 }

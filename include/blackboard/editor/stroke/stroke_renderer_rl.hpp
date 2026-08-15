@@ -26,21 +26,11 @@ class StrokeMeshNode;
 class StrokeRendererRL : public StrokeRenderer
 {
 private:
-    static constexpr float DebugCircleRadius = 1;
-
-
     std::unique_ptr<StrokeMeshRenderer> default_mesh_renderer_ = nullptr;
     std::unique_ptr<StrokeMeshOutlineRenderer> default_mesh_outline_renderer_ = nullptr;
 
 
 public:
-    // TODO: move to another class
-    bool should_debug_draw_points = false;
-    bool should_debug_draw_samples = false;
-    bool should_debug_draw_edges = false;
-    bool should_debug_draw_caps = false;
-
-
     StrokeMeshRenderer* mesh_renderer;
     StrokeMeshOutlineRenderer* mesh_outline_renderer;
 
@@ -78,13 +68,6 @@ private:
             if (extra_renderer)
                 extra_renderer->render(element);
     }
-
-
-    void draw_debug_visualization(const StrokeMesh& mesh) const noexcept;
-
-    static void debug_draw_points(const StrokeMesh& mesh) noexcept;
-    static void debug_draw_samples(const StrokeMesh& mesh) noexcept;
-    static void debug_draw_edges(const StrokeMesh& mesh) noexcept;
 };
 
 
