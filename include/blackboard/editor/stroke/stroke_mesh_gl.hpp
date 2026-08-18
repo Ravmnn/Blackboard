@@ -1,11 +1,14 @@
 #pragma once
 
 #include <cstdint>
+
 #include <vector>
+#include <memory>
 
 #include <raylib.h>
 
 #include <blackboard/drawable.hpp>
+#include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
 
@@ -42,7 +45,11 @@ private:
 
 
 public:
+    std::unique_ptr<StrokeMesh> source;
     std::vector<StrokeMeshGLVertex> vertices;
+
+
+    ~StrokeMeshGL() noexcept override { unload_gl_data(); }
 
 
     void draw() noexcept override;

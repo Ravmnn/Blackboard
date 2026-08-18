@@ -41,9 +41,9 @@ void Selection::update_selection() noexcept
 {
     selection_environment.in_selection_strokes_.clear();
 
-    for (auto& stroke_mesh : editor().stroke_manager.meshes)
-        if (can_add_stroke_to_selection_list(*stroke_mesh))
-            selection_environment.in_selection_strokes_.push_back(stroke_mesh.get());
+    for (auto& stroke_mesh : editor().meshes)
+        if (can_add_stroke_to_selection_list(*stroke_mesh->source))
+            selection_environment.in_selection_strokes_.push_back(stroke_mesh->source.get());
 }
 
 

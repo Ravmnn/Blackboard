@@ -2,6 +2,8 @@
 
 #include <raymath.h>
 
+#include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
+
 
 
 
@@ -11,9 +13,20 @@ bb::editor::StrokeSample,
 bb::editor::StrokeEdge,
 bb::editor::StrokeMesh,
 bb::editor::StrokeMeshNode,
-bb::editor::StrokeMeshGenerator;
+bb::editor::StrokeMeshGenerator,
+bb::editor::StrokeMeshGL;
 
 
+
+
+std::unique_ptr<StrokeMeshGL> StrokeMeshGenerator::generate_mesh_gl(const Stroke& stroke) const noexcept
+{
+    if (stroke.points.empty())
+        return nullptr;
+
+    std::unique_ptr<StrokeMesh> mesh = generate_mesh(stroke);
+    return StrokeMeshGLBuilder().build(mesh);
+}
 
 
 std::unique_ptr<StrokeMesh> StrokeMeshGenerator::generate_mesh(const Stroke& stroke) const noexcept

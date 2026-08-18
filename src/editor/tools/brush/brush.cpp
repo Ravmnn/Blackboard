@@ -83,7 +83,7 @@ StrokePoint Brush::create_stroke_point() const noexcept
 
 void Brush::on_got_inactive() noexcept
 {
-    editor().stroke_manager.add_stroke(stroke_);
+    editor().add_stroke(stroke_);
     stroke_.points.clear();
 }
 

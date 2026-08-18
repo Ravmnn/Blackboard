@@ -8,7 +8,7 @@
 #include <blackboard/editor/palette.hpp>
 #include <blackboard/editor/canvas.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_debug_renderer.hpp>
-#include <blackboard/editor/stroke/stroke_mesh_gl_manager.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 #include <blackboard/editor/editor_background.hpp>
 #include <blackboard/editor/editor_drawing_environment.hpp>
 #include <blackboard/editor/editor_selection_environment.hpp>
@@ -32,40 +32,40 @@ private:
     static constexpr Color DefaultBackgroundColor = { 18, 18, 18, 255 };
 
 
+    Canvas* canvas_ = nullptr;
+    EditorBackground background_;
+
+    MouseLateModeIndicator mouse_late_mode_indicator_;
+
     std::vector<std::unique_ptr<Vanish<Tool>>> vanish_animations_;
 
+    EditorEnvironment* current_environment_ = nullptr;
     Tool* last_tool_ = nullptr;
-
-    Canvas* canvas_ = nullptr;
 
 
 public:
-    EditorBackground background;
-
-    Palette palette;
-    bool dynamic_background_color = false;
+    ColorMenu* color_menu = nullptr;
 
 
     StrokeMeshDebugRenderer stroke_debug_renderer;
     StrokeRendererGL stroke_renderer;
-    StrokeMeshGLManager stroke_manager;
+    StrokeMeshGenerator stroke_mesh_generator;
+
+    std::vector<std::unique_ptr<StrokeMeshGL>> meshes;
+
+
+    EditorDrawingEnvironment draw_environment;
+    EditorSelectionEnvironment selection_environment;
+
+
+    Palette palette;
+    bool dynamic_background_color = false;
+
+    bool wire_mode = false;
 
 
     Event<> environment_changed;
     Event<> tool_changed;
-
-    EditorDrawingEnvironment draw_environment;
-    EditorSelectionEnvironment selection_environment;
-    EditorEnvironment* current_environment = nullptr;
-
-
-    MouseLateModeIndicator mouse_late_mode_indicator;
-
-
-    ColorMenu* color_menu;
-
-
-    bool wire_mode = false;
 
 
     Editor(ui::Context& ui_context) noexcept;
@@ -76,6 +76,7 @@ public:
 
     [[nodiscard]] Canvas& canvas() noexcept { return *canvas_; }
     [[nodiscard]] const Canvas& canvas() const noexcept { return *canvas_; }
+    [[nodiscard]] const EditorEnvironment& current_environment() const noexcept { return *current_environment_; }
 
     [[nodiscard]] Rectangle bounding_box() const noexcept override { return {}; }
 
@@ -87,6 +88,10 @@ public:
     StrokeMesh* get_stroke_under_point(const Vector2& point) noexcept;
     StrokeMesh* get_stroke_intersecting_segment(const math::Segment& segment) noexcept;
     StrokeMesh* get_stroke_under_mouse() noexcept { return get_stroke_under_point(canvas().mouse_position()); }
+
+
+    void add_stroke(const Stroke& stroke) noexcept;
+    void remove_stroke(const StrokeMesh& mesh) noexcept;
 
 
 private:
@@ -106,10 +111,16 @@ private:
 
     void draw_background() noexcept;
     void draw_strokes() noexcept;
+    void draw_cached_and_brush_strokes() noexcept;
     void draw_debug_strokes() noexcept;
 
     void draw_vanish_animations() noexcept;
     void draw_statistics() const noexcept;
+
+
+    std::unique_ptr<StrokeMesh> brush_stroke_mesh() noexcept {
+        return stroke_mesh_generator.generate_mesh(draw_environment.brush.stroke());
+    }
 
 
     void on_environment_changed() noexcept;

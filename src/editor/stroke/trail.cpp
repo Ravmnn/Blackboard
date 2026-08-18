@@ -59,8 +59,8 @@ void Trail::remove_points_with_no_thickness() noexcept
 
 void Trail::draw() noexcept
 {
-    const auto mesh = trail_mesh_generator_.generate_mesh(*this);
+    const std::unique_ptr<StrokeMeshGL> mesh_gl = trail_mesh_generator_.generate_mesh_gl(*this);
 
-    if (mesh)
-        trail_renderer_.draw_stroke_mesh_immediate(*mesh);
+    if (mesh_gl)
+        trail_renderer_.draw_stroke_mesh_gl_immediate(*mesh_gl);
 }

@@ -84,7 +84,7 @@ void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
 void Eraser::remove_strokes_from_remove_queue() noexcept
 {
     for (auto& stroke : strokes_to_remove_)
-        editor().stroke_manager.remove_mesh(*stroke);
+        editor().remove_stroke(*stroke);
 
     strokes_to_remove_.clear();
 }

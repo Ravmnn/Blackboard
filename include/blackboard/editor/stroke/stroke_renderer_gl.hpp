@@ -13,6 +13,9 @@ namespace bb::editor
 
 
 
+class StrokeMeshGL;
+
+
 class StrokeRendererGL : public StrokeRenderer, public Updateable
 {
 private:
@@ -35,12 +38,13 @@ public:
 
 
     void draw_stroke_mesh(const StrokeMesh& mesh) noexcept override;
-    void draw_stroke_mesh_immediate(const StrokeMesh& mesh) noexcept;
+    void draw_stroke_mesh_gl(StrokeMeshGL& mesh) noexcept;
+    void draw_stroke_mesh_gl_immediate(StrokeMeshGL& mesh) noexcept;
 
 
 private:
-    void draw_stroke_mesh_coverage(const StrokeMesh& mesh) noexcept;
-    void draw_stroke_mesh_color(const StrokeMesh& mesh) noexcept;
+    void draw_stroke_mesh_gl_coverage(StrokeMeshGL& mesh) noexcept;
+    void draw_stroke_mesh_gl_color(StrokeMeshGL& mesh) noexcept;
 };
 
 

@@ -12,16 +12,28 @@ bb::editor::StrokeMeshGLBuilder;
 
 
 
-StrokeMeshGL StrokeMeshGLBuilder::build(const StrokeMesh& mesh) noexcept
+std::unique_ptr<StrokeMeshGL> StrokeMeshGLBuilder::build(std::unique_ptr<StrokeMesh>& mesh) noexcept
 {
-    StrokeMeshGL mesh_gl;
-    mesh_gl.vertices.reserve(mesh.size() * 12);
+    auto mesh_gl = build(*mesh);
+    mesh_gl->source = std::move(mesh);
+
+    return mesh_gl;
+}
+
+
+std::unique_ptr<StrokeMeshGL> StrokeMeshGLBuilder::build(const StrokeMesh& mesh) noexcept
+{
+    std::unique_ptr<StrokeMeshGL> mesh_gl = std::make_unique<StrokeMeshGL>();
+    mesh_gl->vertices.reserve(mesh.size() * 12);
 
     if (!mesh.size())
         return mesh_gl;
 
-    add_cap_vertices_from_stroke(mesh_gl.vertices, mesh);
-    add_vertices_from_stroke(mesh_gl.vertices, mesh);
+    add_cap_vertices_from_stroke(mesh_gl->vertices, mesh);
+    add_vertices_from_stroke(mesh_gl->vertices, mesh);
+
+    if (load_gl_data_automatically)
+        mesh_gl->load_gl_data();
 
     return mesh_gl;
 }

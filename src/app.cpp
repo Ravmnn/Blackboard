@@ -34,6 +34,11 @@ bb::App;
 
 
 
+// TODO: optimize more
+
+
+
+
 void App::initialize() noexcept
 {
     SetTraceLogLevel(LOG_WARNING);
@@ -61,7 +66,7 @@ void App::initialize_window() noexcept
 {
     const int monitor = GetCurrentMonitor();
 
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED | 0 | FLAG_MSAA_4X_HINT);
     InitWindow(GetMonitorWidth(monitor), GetMonitorHeight(monitor), "Blackboard");
     PollInputEvents();
     SetTargetFPS(0);

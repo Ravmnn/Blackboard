@@ -16,9 +16,11 @@ class StrokeMeshGLBuilder
 {
 public:
     float cap_curvature = 0.2;
+    bool load_gl_data_automatically = true;
 
 
-    StrokeMeshGL build(const StrokeMesh& mesh) noexcept;
+    std::unique_ptr<StrokeMeshGL> build(std::unique_ptr<StrokeMesh>& mesh) noexcept;
+    std::unique_ptr<StrokeMeshGL> build(const StrokeMesh& mesh) noexcept;
 
 
 private:

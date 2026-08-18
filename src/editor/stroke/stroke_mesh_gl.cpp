@@ -52,7 +52,6 @@ void StrokeMeshGL::load_gl_data() noexcept
     rlEnableVertexAttribute(1);
     rlEnableVertexAttribute(2);
     rlEnableVertexAttribute(3);
-    rlEnableVertexAttribute(4);
 
     rlDisableVertexArray();
 

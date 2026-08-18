@@ -9,6 +9,7 @@
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
 
 
 
@@ -34,17 +35,16 @@ Editor::Editor(Context& ui_context) noexcept :
 
     // workaround to initialization order
     canvas_(const_cast<Canvas*>(dynamic_cast<const Canvas*>(&mouse_position_provider))),
+    background_(*this, 2, 0.5),
 
-    background(*this, 2, 0.5),
+    mouse_late_mode_indicator_(*canvas_, *this),
 
-    palette(DefaultPaletteColor),
-
-    stroke_manager(stroke_renderer),
+    stroke_mesh_generator(6),
 
     draw_environment(*this),
     selection_environment(*this),
 
-    mouse_late_mode_indicator(*canvas_, *this)
+    palette(DefaultPaletteColor)
 {
     clip = false;
 
@@ -107,16 +107,16 @@ void Editor::update() noexcept
     Clickable::update();
     Component::update();
 
-    background.update();
-    current_environment->update();
-    mouse_late_mode_indicator.update();
+    background_.update();
+    current_environment_->update();
+    mouse_late_mode_indicator_.update();
 
     update_tool_changed_event();
     update_vanish_animations();
     update_effects();
     update_keybindings();
 
-    stroke_manager.renderer->view_area = canvas_->camera.bounding_box();
+    stroke_renderer.view_area = canvas_->camera.bounding_box();
     stroke_renderer.update();
 
 
@@ -136,18 +136,18 @@ void Editor::update_focus() noexcept
 void Editor::update_background() noexcept
 {
     if (dynamic_background_color)
-        background.effect.background_color = palette.background_color_from_current();
+        background_.effect.background_color = palette.background_color_from_current();
     else
-        background.effect.background_color = DefaultBackgroundColor;
+        background_.effect.background_color = DefaultBackgroundColor;
 }
 
 
 void Editor::update_tool_changed_event() noexcept
 {
-    if (current_environment->current_tool() != last_tool_)
+    if (current_environment_->current_tool() != last_tool_)
         tool_changed.trigger();
 
-    last_tool_ = current_environment->current_tool();
+    last_tool_ = current_environment_->current_tool();
 }
 
 
@@ -209,13 +209,13 @@ void Editor::draw_to_canvas() noexcept
 
 
     canvas_->begin_render();
-        stroke_manager.draw_composition();
+        stroke_renderer.draw_composition();
 
         canvas_->camera.enable();
             draw_debug_strokes();
 
-            current_environment->draw();
-            mouse_late_mode_indicator.draw();
+            current_environment_->draw();
+            mouse_late_mode_indicator_.draw();
 
             draw_vanish_animations();
         canvas_->camera.disable();
@@ -229,7 +229,7 @@ void Editor::draw_to_canvas() noexcept
 void Editor::draw_background() noexcept
 {
     canvas_->camera.enable();
-    background.draw();
+    background_.draw();
     canvas_->camera.disable();
 }
 
@@ -242,11 +242,8 @@ void Editor::draw_strokes() noexcept
     if (wire_mode)
         rlEnableWireMode();
 
-    stroke_manager.clear_composition();
-    stroke_manager.draw_stored_meshes_to_composition();
-
-    if (!draw_environment.brush.draw_finished())
-        stroke_manager.draw_stroke_to_composition(draw_environment.brush.stroke());
+    stroke_renderer.clear_composition();
+    draw_cached_and_brush_strokes();
 
     rlDisableWireMode();
 
@@ -255,15 +252,26 @@ void Editor::draw_strokes() noexcept
 }
 
 
+void Editor::draw_cached_and_brush_strokes() noexcept
+{
+    for (auto& mesh : meshes)
+        stroke_renderer.draw_stroke_mesh_gl(*mesh);
+
+    if (!draw_environment.brush.draw_finished())
+        if (auto brush_stroke = brush_stroke_mesh())
+            stroke_renderer.draw_stroke_mesh(*brush_stroke);
+}
+
+
 void Editor::draw_debug_strokes() noexcept
 {
     if (!stroke_debug_renderer.any_draw_enabled())
         return;
 
-    for (const auto& mesh : stroke_manager.meshes)
-        stroke_debug_renderer.draw(*mesh);
+    for (const auto& mesh : meshes)
+        stroke_debug_renderer.draw(*mesh->source);
 
-    const auto brush_mesh = stroke_manager.generator.generate_mesh(draw_environment.brush.stroke());
+    const auto brush_mesh = stroke_mesh_generator.generate_mesh(draw_environment.brush.stroke());
 
     if (brush_mesh)
         stroke_debug_renderer.draw(*brush_mesh);
@@ -282,11 +290,11 @@ void Editor::draw_vanish_animations() noexcept
 
 void Editor::set_current_environment(EditorEnvironment& environment) noexcept
 {
-    if (current_environment)
-        current_environment->disable();
+    if (current_environment_)
+        current_environment_->disable();
 
-    current_environment = &environment;
-    current_environment->enable();
+    current_environment_ = &environment;
+    current_environment_->enable();
 
     environment_changed.trigger();
 }
@@ -296,9 +304,9 @@ void Editor::set_current_environment(EditorEnvironment& environment) noexcept
 
 StrokeMesh* Editor::get_stroke_under_point(const Vector2& point) noexcept
 {
-    for (auto& stroke : stroke_manager.meshes)
-        if (StrokeMeshCollider::stroke_contains_point(*stroke, point))
-            return stroke.get();
+    for (auto& stroke : meshes)
+        if (StrokeMeshCollider::stroke_contains_point(*stroke->source, point))
+            return stroke->source.get();
 
     return nullptr;
 }
@@ -306,11 +314,33 @@ StrokeMesh* Editor::get_stroke_under_point(const Vector2& point) noexcept
 
 StrokeMesh* Editor::get_stroke_intersecting_segment(const Segment& segment) noexcept
 {
-    for (auto& stroke : stroke_manager.meshes)
-        if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke, segment))
-            return stroke.get();
+    for (auto& stroke : meshes)
+        if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke->source, segment))
+            return stroke->source.get();
 
     return nullptr;
+}
+
+
+
+
+void Editor::add_stroke(const Stroke& stroke) noexcept
+{
+    std::unique_ptr<StrokeMesh> mesh = stroke_mesh_generator.generate_mesh(stroke);
+
+    if (!mesh)
+        return;
+
+    std::unique_ptr<StrokeMeshGL> mesh_gl = StrokeMeshGLBuilder().build(mesh);
+    meshes.push_back(std::move(mesh_gl));
+}
+
+
+void Editor::remove_stroke(const StrokeMesh& mesh) noexcept
+{
+    std::erase_if(meshes, [&](const std::unique_ptr<StrokeMeshGL>& stroke_mesh_gl) {
+        return stroke_mesh_gl->source.get() == &mesh;
+    });
 }
 
 

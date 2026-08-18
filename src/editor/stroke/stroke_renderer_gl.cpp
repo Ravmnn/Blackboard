@@ -56,33 +56,39 @@ void StrokeRendererGL::clear_composition() noexcept
 
 void StrokeRendererGL::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 {
-    draw_stroke_mesh_coverage(mesh);
-    draw_stroke_mesh_color(mesh);
+    draw_stroke_mesh_gl(*StrokeMeshGLBuilder().build(mesh));
+}
+
+
+void StrokeRendererGL::draw_stroke_mesh_gl(StrokeMeshGL& mesh) noexcept
+{
+    draw_stroke_mesh_gl_coverage(mesh);
+    draw_stroke_mesh_gl_color(mesh);
 }
 
 
 
 
-void StrokeRendererGL::draw_stroke_mesh_coverage(const StrokeMesh& mesh) noexcept
+void StrokeRendererGL::draw_stroke_mesh_gl_coverage(StrokeMeshGL& mesh) noexcept
 {
     rlSetBlendFactorsSeparate(RL_ZERO, RL_ZERO, RL_ONE, RL_ONE, RL_FUNC_ADD, RL_FUNC_ADD);
     BeginBlendMode(BLEND_CUSTOM_SEPARATE);
 
     coverage_.begin_render();
-    draw_stroke_mesh_immediate(mesh);
+    draw_stroke_mesh_gl_immediate(mesh);
     coverage_.end_render();
 
     EndBlendMode();
 }
 
 
-void StrokeRendererGL::draw_stroke_mesh_color(const StrokeMesh& mesh) noexcept
+void StrokeRendererGL::draw_stroke_mesh_gl_color(StrokeMeshGL& mesh) noexcept
 {
     rlSetBlendFactorsSeparate(RL_ONE, RL_ZERO, RL_ZERO, RL_ZERO, RL_FUNC_ADD, RL_FUNC_ADD);
     BeginBlendMode(BLEND_CUSTOM_SEPARATE);
 
     color_.begin_render();
-    draw_stroke_mesh_immediate(mesh);
+    draw_stroke_mesh_gl_immediate(mesh);
     color_.end_render();
 
     EndBlendMode();
@@ -91,14 +97,9 @@ void StrokeRendererGL::draw_stroke_mesh_color(const StrokeMesh& mesh) noexcept
 
 
 
-void StrokeRendererGL::draw_stroke_mesh_immediate(const StrokeMesh& mesh) noexcept
+void StrokeRendererGL::draw_stroke_mesh_gl_immediate(StrokeMeshGL& mesh) noexcept
 {
-    StrokeMeshGL mesh_gl = StrokeMeshGLBuilder().build(mesh);
-    mesh_gl.load_gl_data();
-
     effect.enable();
-    mesh_gl.draw();
+    mesh.draw();
     effect.disable();
-
-    mesh_gl.unload_gl_data();
 }

@@ -48,24 +48,17 @@ void EditorSelectionEnvironment::draw() noexcept
 
 void EditorSelectionEnvironment::draw_selected_strokes() noexcept
 {
-    if (editor.stroke_manager.meshes.size() == 0)
+    if (editor.meshes.size() == 0)
         return;
 
     constexpr float SelectionOutlineBaseThickness = 4;
 
     selection_mesh_outline_renderer_.overwrite_outline_thickness = SelectionOutlineBaseThickness / editor.canvas().raylib_camera().zoom;
 
-
-    auto* const last_renderer = editor.stroke_manager.renderer;
-
-    editor.stroke_manager.renderer = &renderer_rl_;
-
     selection_effect.enable();
-    editor.stroke_manager.renderer->draw_stroke_meshes(in_selection_strokes_);
-    editor.stroke_manager.renderer->draw_stroke_meshes(selected_strokes);
+    renderer_rl_.draw_stroke_meshes(in_selection_strokes_);
+    renderer_rl_.draw_stroke_meshes(selected_strokes);
     selection_effect.disable();
-
-    editor.stroke_manager.renderer = last_renderer;
 }
 
 

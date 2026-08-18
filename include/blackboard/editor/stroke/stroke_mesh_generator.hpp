@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <blackboard/editor/stroke/stroke_mesh.hpp>
+#include <blackboard/editor/stroke/stroke_mesh_gl.hpp>
 
 
 
@@ -24,6 +24,7 @@ public:
         : samples_per_segment(samples_per_segment) {}
 
 
+    [[nodiscard]] std::unique_ptr<StrokeMeshGL> generate_mesh_gl(const Stroke& stroke) const noexcept;
     [[nodiscard]] std::unique_ptr<StrokeMesh> generate_mesh(const Stroke& stroke) const noexcept;
 
 
