@@ -1,6 +1,7 @@
 #pragma once
 
 #include <blackboard/math/rect.hpp>
+#include <blackboard/rendering/effects/rounded_rectangle.hpp>
 #include <blackboard/ui/components/shape.hpp>
 
 
@@ -14,6 +15,10 @@ namespace bb::ui
 
 class RoundedRectangle : public Shape
 {
+private:
+    rendering::RoundedRectangleEffect effect_;
+
+
 public:
     animation::Spring<Vector2> size;
     animation::ExponentialInterpolation<float> radius;
@@ -40,6 +45,7 @@ public:
 
 protected:
     void update_self() noexcept override;
+    void update_effect() noexcept;
 
     void draw_filled() noexcept override;
     void draw_outlined() noexcept override;

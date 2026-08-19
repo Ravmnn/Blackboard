@@ -3,6 +3,7 @@
 #include <blackboard/ui/focusable.hpp>
 #include <blackboard/ui/clickable.hpp>
 #include <blackboard/ui/components/component.hpp>
+#include <blackboard/ui/components/rounded_rectangle.hpp>
 #include <blackboard/editor/mouse_late_mode_indicator.hpp>
 #include <blackboard/editor/vanish.hpp>
 #include <blackboard/editor/palette.hpp>
@@ -41,6 +42,10 @@ private:
 
     EditorEnvironment* current_environment_ = nullptr;
     Tool* last_tool_ = nullptr;
+
+
+    ui::RoundedRectangle parent_rect_;
+    ui::RoundedRectangle child_rect_;
 
 
 public:

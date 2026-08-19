@@ -1,12 +1,14 @@
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 
 #include <blackboard/draw.hpp>
+#include <blackboard/ui/components/component_stencil.hpp>
 
 
 
 
 using
 bb::Draw,
+bb::rendering::Stencil,
 bb::ui::RoundedRectangle;
 
 
@@ -29,6 +31,21 @@ void RoundedRectangle::update_self() noexcept
 
     size.update();
     radius.update();
+
+    update_effect();
+}
+
+
+void RoundedRectangle::update_effect() noexcept
+{
+    effect_.position = size / 2;
+    effect_.size = size;
+    effect_.radius = radius;
+    effect_.outline_thickness = outline_thickness;
+    effect_.color = color;
+    effect_.outline_color = outline_color;
+
+    effect_.update();
 }
 
 
@@ -36,11 +53,18 @@ void RoundedRectangle::update_self() noexcept
 
 void RoundedRectangle::draw_filled() noexcept
 {
-    Draw::rounded_rectangle(top_left_absolute_position(), size, radius, color, resolution);
+    // TODO: using origin as the bottom of the screen instead of the geometry
+
+    effect_.enable();
+    DrawRectangleV(top_left_absolute_position(), size, WHITE);
+    effect_.disable();
 }
 
 
 void RoundedRectangle::draw_outlined() noexcept
 {
+    // TODO: stencil prolly gonna break
+    Stencil::disable_color();
     Draw::rounded_rectangle_outline(top_left_absolute_position(), size, radius, outline_thickness, outline_color, resolution);
+    Stencil::enable_color();
 }
