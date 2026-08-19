@@ -20,8 +20,6 @@ class Editor;
 class EditorBackground : public Updateable, public Drawable
 {
 private:
-    rendering::TextureRenderer texture_;
-
     float alpha_factor_ratio_ = 1 / 2.0;
 
 

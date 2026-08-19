@@ -16,7 +16,7 @@ bb::editor::Canvas;
 Canvas::Canvas(Component* parent) noexcept :
     Component(parent, {}),
     Scrollable(*dynamic_cast<MousePositionProvider*>(this)),
-    TextureRenderer(16, true, true),
+    TextureRenderer(4, false, true),
 
     middle_button(MOUSE_BUTTON_MIDDLE, *this),
 

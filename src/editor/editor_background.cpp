@@ -47,7 +47,6 @@ void EditorBackground::update() noexcept
 
 void EditorBackground::update_effect() noexcept
 {
-    effect.resolution = texture_.resolution();
     effect.update();
 }
 
