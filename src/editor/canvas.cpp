@@ -12,11 +12,10 @@ bb::editor::Canvas;
 
 
 
-// TODO: add global antialiasing samples for editor
 Canvas::Canvas(Component* parent) noexcept :
     Component(parent, {}),
     Scrollable(*dynamic_cast<MousePositionProvider*>(this)),
-    TextureRenderer(4, false, true),
+    TextureRenderer(0, false, true),
 
     middle_button(MOUSE_BUTTON_MIDDLE, *this),
 

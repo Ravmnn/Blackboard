@@ -12,7 +12,8 @@ namespace bb::rendering
 class Shaders
 {
 public:
-    static const char* const RoundedRectangle;
+    static const char* const RoundedRectangleVertex;
+    static const char* const RoundedRectangleFragment;
 };
 
 

@@ -47,8 +47,12 @@ protected:
     void update_self() noexcept override;
     void update_effect() noexcept;
 
-    void draw_filled() noexcept override;
-    void draw_outlined() noexcept override;
+    void draw_self() noexcept override;
+    void draw_both() noexcept;
+    void draw_fill() noexcept;
+    void draw_outline() noexcept;
+
+    void draw_quad() const noexcept;
 };
 
 

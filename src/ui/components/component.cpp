@@ -5,7 +5,9 @@
 
 
 
-using bb::ui::Component;
+using
+bb::rendering::Stencil,
+bb::ui::Component;
 
 
 
@@ -42,27 +44,27 @@ void Component::draw() noexcept
     if (!visible)
         return;
 
-    begin_drawing();
+    begin_stencil();
     draw_self();
-    end_drawing();
+    end_stencil();
 }
 
 
 
 
-void Component::begin_drawing() noexcept
+void Component::begin_stencil() noexcept
 {
     if (!clip)
         return;
 
-    ComponentStencil::enable();
-    ComponentStencil::mask_and_increment(*this);
+    Stencil::enable();
+    Stencil::begin_write(GL_EQUAL, stencil_id(), GL_INCR);
 }
 
 
-void Component::end_drawing() noexcept
+void Component::end_stencil() noexcept
 {
-    ComponentStencil::disable();
+    Stencil::disable();
 }
 
 
@@ -71,6 +73,14 @@ void Component::end_drawing() noexcept
 void Component::update_self() noexcept
 {
     relative_position.update();
+}
+
+
+
+
+uint8_t Component::stencil_id() const noexcept
+{
+    return ComponentStencil::get_stencil_id_of_component(*this);
 }
 
 

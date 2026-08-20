@@ -29,12 +29,6 @@ public:
 
 protected:
     void update_self() noexcept override;
-
-    void draw_self() noexcept override;
-    void draw_outline() noexcept;
-
-    virtual void draw_filled() noexcept = 0;
-    virtual void draw_outlined() noexcept = 0;
 };
 
 

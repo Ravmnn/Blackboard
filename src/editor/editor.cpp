@@ -39,9 +39,6 @@ Editor::Editor(Context& ui_context) noexcept :
 
     mouse_late_mode_indicator_(*canvas_, *this),
 
-    parent_rect_(this, {600, 600}, { 800, 600 }, 20, RED, 3, BLUE),
-    child_rect_(&parent_rect_, {}, { 200, 200 }, 5, MAGENTA, 3, GREEN),
-
     stroke_mesh_generator(6),
 
     draw_environment(*this),
@@ -50,8 +47,6 @@ Editor::Editor(Context& ui_context) noexcept :
     palette(DefaultPaletteColor)
 {
     clip = false;
-    parent_rect_.clip = false;
-    child_rect_.clip = false;
 
     stroke_renderer.effect.smoothness = 0.2;
     stroke_renderer.effect.smoothness_thickness_influence = 25;
@@ -106,24 +101,23 @@ void Editor::update() noexcept
     Profiler::begin("editor::update");
 
 
-    // update_focus();
-    // update_background();
+    update_focus();
+    update_background();
 
     Clickable::update();
     Component::update();
 
-    // background_.update();
-    // current_environment_->update();
-    // mouse_late_mode_indicator_.update();
+    background_.update();
+    current_environment_->update();
+    mouse_late_mode_indicator_.update();
 
-    // update_tool_changed_event();
-    // update_vanish_animations();
-    // update_effects();
-    // update_keybindings();
+    update_tool_changed_event();
+    update_vanish_animations();
+    update_effects();
+    update_keybindings();
 
-    // stroke_renderer.view_area = canvas_->camera.bounding_box();
-    // stroke_renderer.update();
-
+    stroke_renderer.view_area = canvas_->camera.bounding_box();
+    stroke_renderer.update();
 
     Profiler::end();
 }
@@ -198,10 +192,10 @@ void Editor::draw_self() noexcept
     Profiler::begin("editor::draw");
 
 
-    // draw_background();
-    // draw_strokes();
+    draw_background();
+    draw_strokes();
 
-    // draw_to_canvas();
+    draw_to_canvas();
 
 
     Profiler::end();

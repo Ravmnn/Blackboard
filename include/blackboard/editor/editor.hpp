@@ -44,10 +44,6 @@ private:
     Tool* last_tool_ = nullptr;
 
 
-    ui::RoundedRectangle parent_rect_;
-    ui::RoundedRectangle child_rect_;
-
-
 public:
     ColorMenu* color_menu = nullptr;
 

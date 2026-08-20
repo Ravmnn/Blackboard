@@ -29,22 +29,3 @@ void Shape::update_self() noexcept
     outline_thickness.update();
     outline_color.update();
 }
-
-
-
-
-void Shape::draw_self() noexcept
-{
-    draw_filled();
-    draw_outline();
-}
-
-
-void Shape::draw_outline() noexcept
-{
-    if (outline_thickness <= 0)
-        return;
-
-    ComponentStencil::mask_and_decrement(*this);
-    draw_outlined();
-}

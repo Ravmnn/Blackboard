@@ -36,6 +36,7 @@ bb::App;
 
 // TODO: optimize more
 // TODO: fix eraser not changing strokes colors (would need rebuilding the mesh gl of the stroke, so maybe adding a vertex attribute to fade?)
+// TODO: replace tools rendering by shader
 
 
 
@@ -82,6 +83,7 @@ void App::initialize_app() noexcept
 {
     window_renderer = new WindowRenderer;
     window_renderer->use_buffer_texture = false;
+    // window_renderer->clear_color = MAGENTA;
 
     ui_context = new Context;
     editor = new Editor(*ui_context);

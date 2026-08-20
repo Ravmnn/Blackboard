@@ -29,8 +29,8 @@ public:
     }
 
 
-    static void enable_color() noexcept { glColorMask(true, true, true, true); }
-    static void disable_color() noexcept { glColorMask(false, false, false, false); }
+    static void enable_color() noexcept { flush(); glColorMask(true, true, true, true); }
+    static void disable_color() noexcept { flush(); glColorMask(false, false, false, false); }
 
 
     static void begin_write(const int condition, const int stencil_value, const GLenum stencil_op) noexcept
@@ -43,6 +43,9 @@ public:
     {
         set(condition, stencil_value, GL_KEEP, true);
     }
+
+
+    static void reset() noexcept { set(GL_ALWAYS, 0, GL_KEEP); }
 
 
     static void set(const int condition, const int stencil_value, const GLenum stencil_op, const bool read_only = false) noexcept

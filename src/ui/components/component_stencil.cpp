@@ -10,15 +10,17 @@ using bb::ui::ComponentStencil;
 
 
 
-uint8_t ComponentStencil::get_stencil_value_for_component(const Component& component) noexcept
+uint8_t ComponentStencil::get_stencil_id_of_component(const Component& component) noexcept
 {
     uint8_t id = 0;
     Component* parent = component.parent;
 
     while (parent)
     {
+        if (!parent || parent->clip)
+            id++;
+
         parent = parent->parent;
-        id++;
     }
 
     return id;

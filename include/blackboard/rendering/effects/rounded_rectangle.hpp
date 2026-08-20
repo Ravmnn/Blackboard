@@ -21,6 +21,8 @@ public:
     rendering::EffectProperty<Color> outline_color;
     rendering::EffectProperty<float> outline_thickness;
     rendering::EffectProperty<float> antialiasing;
+    rendering::EffectProperty<int> outline_only;
+    rendering::EffectProperty<int> fill_only;
 
 
     RoundedRectangleEffect() noexcept;

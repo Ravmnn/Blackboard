@@ -57,6 +57,8 @@ public:
     [[nodiscard]] Vector2 top_left_relative_position() const noexcept { return relative_position - box_size() / 2; }
     [[nodiscard]] Vector2 top_left_absolute_position() const noexcept { return absolute_position() - box_size() / 2; }
 
+    [[nodiscard]] uint8_t stencil_id() const noexcept;
+
     void set_absolute_position(const Vector2& position) noexcept { relative_position.target = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
@@ -72,8 +74,8 @@ public:
 
 
 protected:
-    virtual void begin_drawing() noexcept;
-    virtual void end_drawing() noexcept;
+    virtual void begin_stencil() noexcept;
+    virtual void end_stencil() noexcept;
 
 
     virtual void update_self() noexcept;

@@ -1,5 +1,7 @@
 #include <blackboard/ui/components/rounded_rectangle.hpp>
 
+#include <rlgl.h>
+
 #include <blackboard/draw.hpp>
 #include <blackboard/ui/components/component_stencil.hpp>
 
@@ -20,7 +22,8 @@ RoundedRectangle::RoundedRectangle(Component* const parent, const Vector2& posit
 
     size(create_default_spring(size)),
     radius(create_default_exponential_interpolation(radius))
-{}
+{
+}
 
 
 
@@ -38,7 +41,7 @@ void RoundedRectangle::update_self() noexcept
 
 void RoundedRectangle::update_effect() noexcept
 {
-    effect_.position = size / 2;
+    effect_.position = absolute_position();
     effect_.size = size;
     effect_.radius = radius;
     effect_.outline_thickness = outline_thickness;
@@ -51,20 +54,53 @@ void RoundedRectangle::update_effect() noexcept
 
 
 
-void RoundedRectangle::draw_filled() noexcept
+void RoundedRectangle::draw_self() noexcept
 {
-    // TODO: using origin as the bottom of the screen instead of the geometry
+    const uint8_t stencil_id = this->stencil_id();
 
+    Stencil::disable_color();
+    Stencil::begin_write(GL_EQUAL, stencil_id, GL_INCR);
+    draw_fill();
+
+    Stencil::begin_write(GL_EQUAL, stencil_id - 1, GL_DECR);
+    draw_outline();
+
+    Stencil::begin_write(GL_LEQUAL, stencil_id, GL_KEEP);
+    Stencil::enable_color();
+
+    draw_both();
+}
+
+
+void RoundedRectangle::draw_both() noexcept
+{
     effect_.enable();
-    DrawRectangleV(top_left_absolute_position(), size, WHITE);
+    draw_quad();
     effect_.disable();
 }
 
 
-void RoundedRectangle::draw_outlined() noexcept
+void RoundedRectangle::draw_fill() noexcept
 {
-    // TODO: stencil prolly gonna break
-    Stencil::disable_color();
-    Draw::rounded_rectangle_outline(top_left_absolute_position(), size, radius, outline_thickness, outline_color, resolution);
-    Stencil::enable_color();
+    effect_.fill_only.set_value_and_update(true);
+    effect_.enable();
+    draw_quad();
+    effect_.disable();
+    effect_.fill_only.set_value_and_update(false);
+}
+
+
+void RoundedRectangle::draw_outline() noexcept
+{
+    effect_.outline_only.set_value_and_update(true);
+    effect_.enable();
+    draw_quad();
+    effect_.disable();
+    effect_.outline_only.set_value_and_update(false);
+}
+
+
+void RoundedRectangle::draw_quad() const noexcept
+{
+    Draw::rounded_rectangle(top_left_absolute_position(), size, radius, color);
 }
