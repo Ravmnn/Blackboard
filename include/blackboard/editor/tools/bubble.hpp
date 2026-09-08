@@ -3,6 +3,7 @@
 #include <blackboard/bounds.hpp>
 #include <blackboard/animation/spring.hpp>
 #include <blackboard/animation/interpolation.hpp>
+#include <blackboard/rendering/effects/ellipse.hpp>
 #include <blackboard/editor/stroke/trail.hpp>
 
 
@@ -25,6 +26,8 @@ protected:
     float last_rotation_ = 0;
     Vector2 last_position_ = {};
     Vector2 position_ = {};
+
+    rendering::EllipseEffect effect_;
 
 
 public:
@@ -62,6 +65,7 @@ protected:
     virtual void update_thickness() noexcept;
     virtual void update_stretch() noexcept;
     virtual void update_color() noexcept;
+    virtual void update_effect() noexcept;
 
     [[nodiscard]] StrokePoint create_stroke_point() const noexcept;
 

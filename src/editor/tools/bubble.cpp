@@ -42,6 +42,7 @@ void Bubble::update() noexcept
     update_thickness();
     update_stretch();
     update_color();
+    update_effect();
 }
 
 
@@ -75,6 +76,18 @@ void Bubble::update_color() noexcept
 }
 
 
+void Bubble::update_effect() noexcept
+{
+    effect_.position = position_;
+    effect_.size = { half_thickness * 2, half_thickness * 2 };
+    effect_.outline_thickness = outline_thickness;
+    effect_.color = color;
+    effect_.outline_color = outline_color;
+
+    effect_.update();
+}
+
+
 
 
 StrokePoint Bubble::create_stroke_point() const noexcept
@@ -93,7 +106,7 @@ StrokePoint Bubble::create_stroke_point() const noexcept
 void Bubble::draw() noexcept
 {
     draw_body();
-    draw_trail();
+    //draw_trail();
 }
 
 
@@ -143,11 +156,11 @@ void Bubble::draw_ellipse() noexcept
 
 void Bubble::draw_ellipse_inner() noexcept
 {
-    Draw::stretched_ellipse(position_, half_thickness, stretch, color, EllipseResolution);
+    Draw::sdf_stretched_ellipse(position_, stretch, effect_);
 }
 
 
 void Bubble::draw_ellipse_outline() noexcept
 {
-    Draw::stretched_ellipse_outline(position_, half_thickness, stretch, outline_thickness, outline_color, EllipseOutlineResolution);
+    Draw::sdf_stretched_ellipse_outline(position_, stretch, effect_);
 }

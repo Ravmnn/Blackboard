@@ -14,6 +14,8 @@ class Shaders
 public:
     static const char* const RoundedRectangleVertex;
     static const char* const RoundedRectangleFragment;
+
+    static const char* const EllipseFragment;
 };
 
 

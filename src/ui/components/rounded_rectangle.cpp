@@ -75,32 +75,18 @@ void RoundedRectangle::draw_self() noexcept
 void RoundedRectangle::draw_both() noexcept
 {
     effect_.enable();
-    draw_quad();
+    Draw::rounded_rectangle(top_left_absolute_position(), size, radius, color);
     effect_.disable();
 }
 
 
 void RoundedRectangle::draw_fill() noexcept
 {
-    effect_.fill_only.set_value_and_update(true);
-    effect_.enable();
-    draw_quad();
-    effect_.disable();
-    effect_.fill_only.set_value_and_update(false);
+    Draw::sdf_rounded_rectangle(top_left_absolute_position(), effect_);
 }
 
 
 void RoundedRectangle::draw_outline() noexcept
 {
-    effect_.outline_only.set_value_and_update(true);
-    effect_.enable();
-    draw_quad();
-    effect_.disable();
-    effect_.outline_only.set_value_and_update(false);
-}
-
-
-void RoundedRectangle::draw_quad() const noexcept
-{
-    Draw::rounded_rectangle(top_left_absolute_position(), size, radius, color);
+    Draw::sdf_rounded_rectangle_outline(top_left_absolute_position(), effect_);
 }

@@ -1,4 +1,4 @@
-sources = files('effect.cpp', 'shaders.cpp', 'rounded_rectangle.cpp')
+sources = files('effect.cpp', 'shaders.cpp', 'rounded_rectangle.cpp', 'ellipse.cpp')
 
 effects_lib = static_library('effects', sources,
     dependencies: global_deps

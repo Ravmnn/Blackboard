@@ -2,9 +2,9 @@
 
 #include <cstdint>
 
-#include <vector>
-
 #include <blackboard/math/rect.hpp>
+#include <blackboard/rendering/effects/rounded_rectangle.hpp>
+#include <blackboard/rendering/effects/ellipse.hpp>
 
 #include <raymath.h>
 
@@ -28,6 +28,68 @@ struct SectionTriangle
 class Draw
 {
 public:
+    static void sdf_rounded_rectangle(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    {
+        effect.fill_only.set_value_and_update(true);
+        effect.enable();
+        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        effect.disable();
+        effect.fill_only.set_value_and_update(false);
+    }
+
+
+    static void sdf_rounded_rectangle_outline(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    {
+        effect.outline_only.set_value_and_update(true);
+        effect.enable();
+        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        effect.disable();
+        effect.outline_only.set_value_and_update(false);
+    }
+
+
+    static void sdf_ellipse(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    {
+        effect.fill_only.set_value_and_update(true);
+        effect.enable();
+        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        effect.disable();
+        effect.fill_only.set_value_and_update(false); // TODO: test ellipse shader in SHADERed
+    }
+
+
+    static void sdf_ellipse_outline(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    {
+        effect.outline_only.set_value_and_update(true);
+        effect.enable();
+        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        effect.disable();
+        effect.outline_only.set_value_and_update(false);
+    }
+
+
+    static void sdf_stretched_ellipse(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    {
+        const Vector2 old_size = effect.size;
+
+        effect.size = { effect.size.value.x + stretch, effect.size.value.y };
+        sdf_ellipse(position, effect);
+        effect.size = old_size;
+    }
+
+
+    static void sdf_stretched_ellipse_outline(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    {
+        const Vector2 old_size = effect.size;
+
+        effect.size = { effect.size.value.x + stretch, effect.size.value.y };
+        sdf_ellipse_outline(position, effect);
+        effect.size = old_size;
+    }
+
+
+
+
     static void rounded_rectangle(const Rectangle& rectangle, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
     {
         rounded_rectangle({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, color, resolution);
