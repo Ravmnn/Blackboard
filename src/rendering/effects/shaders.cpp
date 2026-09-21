@@ -109,7 +109,8 @@ void main()
 const char* const Shaders::EllipseFragment = R"(
 #version 330
 
-uniform vec2 u_size;              // largura/altura total da elipse (bounding box)
+uniform vec2 u_size;
+uniform float u_rotation; // in degrees
 uniform vec4 u_color;
 uniform vec4 u_outline_color;
 uniform float u_outline_thickness;
@@ -117,34 +118,33 @@ uniform float u_antialiasing;
 uniform int u_outline_only;
 uniform int u_fill_only;
 
+
 in vec2 vertex_local_position;
 out vec4 out_color;
 
-// Aproximação de distância a uma elipse: exata sobre o contorno (d=0)
-// e assintoticamente correta perto dele — suficiente para AA/outline,
-// mas NÃO é uma SDF verdadeira longe da borda (não use para raymarching
-// ou composição com outras SDFs via min/max).
+
+// fast, but not the best
 float sd_ellipse_approx(vec2 p, vec2 ab)
 {
-    // "distância" no espaço normalizado da elipse (0 dentro, 1 no contorno)
-    float k1 = length(p / ab);
-    if (k1 == 0.0)
-        return -min(ab.x, ab.y);
-
-    // gradiente do campo normalizado, para converter de volta a unidades de mundo
-    vec2 grad = p / (ab * ab);
-    float k2 = length(grad);
-
-    // (k1 - 1) / k2 aproxima a distância euclidiana real até o contorno
-    return (k1 - 1.0) * k1 / max(k2, 1e-6);
+    float k0 = length(p / ab);
+    float k1 = length(p / (ab * ab));
+    return k0 * (k0 - 1.0) / max(k1, 1e-6);
 }
+
+
+mat2 rotate(float a)
+{
+    float c = cos(a), s = sin(a);
+    return mat2(c, -s, s, c);
+}
+
 
 void main()
 {
     vec2 half_size = u_size / 2.0;
     vec2 ab = half_size - u_antialiasing;
 
-    float d = sd_ellipse_approx(vertex_local_position, ab);
+    float d = sd_ellipse_approx(rotate(u_rotation) * vertex_local_position, ab);
     float aa = fwidth(d) * u_antialiasing;
 
     float outer_coverage = 1.0 - smoothstep(0.0, aa, d);
@@ -176,7 +176,7 @@ void main()
 
     out_color = vec4(rgb, alpha);
 
-    if (out_color.a <= 0.001)
+    if (out_color.a <= 0.01)
         discard;
 }
 )";

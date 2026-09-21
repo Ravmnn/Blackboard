@@ -30,6 +30,14 @@ class Draw
 public:
     static void sdf_rounded_rectangle(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
     {
+        effect.enable();
+        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        effect.disable();
+    }
+
+
+    static void sdf_rounded_rectangle_fill(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    {
         effect.fill_only.set_value_and_update(true);
         effect.enable();
         rounded_rectangle(position, effect.size, effect.radius, effect.color);
@@ -50,11 +58,19 @@ public:
 
     static void sdf_ellipse(const Vector2& position, rendering::EllipseEffect& effect) noexcept
     {
+        effect.enable();
+        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        effect.disable();
+    }
+
+
+    static void sdf_ellipse_fill(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    {
         effect.fill_only.set_value_and_update(true);
         effect.enable();
         ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
         effect.disable();
-        effect.fill_only.set_value_and_update(false); // TODO: test ellipse shader in SHADERed
+        effect.fill_only.set_value_and_update(false);
     }
 
 
@@ -72,9 +88,19 @@ public:
     {
         const Vector2 old_size = effect.size;
 
-        effect.size = { effect.size.value.x + stretch, effect.size.value.y };
+        effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
         sdf_ellipse(position, effect);
-        effect.size = old_size;
+        effect.size.set_value_and_update(old_size);
+    }
+
+
+    static void sdf_stretched_ellipse_fill(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    {
+        const Vector2 old_size = effect.size;
+
+        effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
+        sdf_ellipse_fill(position, effect);
+        effect.size.set_value_and_update(old_size);
     }
 
 
@@ -82,9 +108,9 @@ public:
     {
         const Vector2 old_size = effect.size;
 
-        effect.size = { effect.size.value.x + stretch, effect.size.value.y };
+        effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
         sdf_ellipse_outline(position, effect);
-        effect.size = old_size;
+        effect.size.set_value_and_update(old_size);
     }
 
 

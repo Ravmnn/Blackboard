@@ -3,11 +3,13 @@
 #include <rlgl.h>
 
 #include <blackboard/draw.hpp>
+#include <blackboard/debug/logger.hpp>
 
 
 
 
 using
+bb::debug::Logger,
 bb::rendering::Stencil,
 bb::editor::StrokePoint,
 bb::editor::Bubble;
@@ -106,7 +108,7 @@ StrokePoint Bubble::create_stroke_point() const noexcept
 void Bubble::draw() noexcept
 {
     draw_body();
-    //draw_trail();
+    draw_trail();
 }
 
 
@@ -125,7 +127,8 @@ void Bubble::draw_body() noexcept
     const Vector2 direction = Vector2Normalize(velocity);
     const float direction_length = Vector2Length(velocity);
 
-    const float rotation = direction_length > 1 ? atan2f(direction.y, direction.x) * RAD2DEG : last_rotation_;
+    // in degrees
+    const float rotation = direction_length > 1 ? atan2f(direction.y, direction.x) : last_rotation_;
     last_rotation_ = rotation;
 
     draw_rotated_stretched_ellipse(rotation);
@@ -134,13 +137,9 @@ void Bubble::draw_body() noexcept
 
 void Bubble::draw_rotated_stretched_ellipse(const float rotation) noexcept
 {
-    rlPushMatrix();
-        rlTranslatef(position_.x, position_.y, 0.0f);
-        rlRotatef(rotation, 0.0f, 0.0f, 1.0f);
-        rlTranslatef(-position_.x, -position_.y, 0.0f);
+    effect_.rotation.set_value_and_update(rotation);
 
-        draw_ellipse();
-    rlPopMatrix();
+    draw_ellipse();
 }
 
 
@@ -148,19 +147,6 @@ void Bubble::draw_ellipse() noexcept
 {
     Stencil::enable();
         Stencil::begin_write(GL_ALWAYS, 1, GL_REPLACE);
-        draw_ellipse_inner();
-        draw_ellipse_outline();
+        Draw::sdf_stretched_ellipse(position_, stretch, effect_);
     Stencil::disable();
-}
-
-
-void Bubble::draw_ellipse_inner() noexcept
-{
-    Draw::sdf_stretched_ellipse(position_, stretch, effect_);
-}
-
-
-void Bubble::draw_ellipse_outline() noexcept
-{
-    Draw::sdf_stretched_ellipse_outline(position_, stretch, effect_);
 }

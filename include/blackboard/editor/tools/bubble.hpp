@@ -18,7 +18,7 @@ namespace bb::editor
 class Bubble : public Updateable, public Drawable, public Bounds
 {
 protected:
-    static constexpr float StretchSpeedFactor = 1.0 / 3.0;
+    static constexpr float StretchSpeedFactor = 1.0 / 5.0;
     static constexpr uint32_t EllipseResolution = 32;
     static constexpr uint32_t EllipseOutlineResolution = 16;
 
@@ -74,8 +74,6 @@ protected:
     void draw_rotated_stretched_ellipse(float rotation) noexcept;
 
     void draw_ellipse() noexcept;
-    void draw_ellipse_inner() noexcept;
-    void draw_ellipse_outline() noexcept;
 };
 
 

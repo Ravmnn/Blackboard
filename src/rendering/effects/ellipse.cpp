@@ -13,10 +13,11 @@ bb::rendering::EllipseEffect;
 
 
 EllipseEffect::EllipseEffect() noexcept :
-    rendering::Effect(LoadShaderFromMemory(Shaders::RoundedRectangleVertex, Shaders::RoundedRectangleFragment)),
+    rendering::Effect(LoadShaderFromMemory(Shaders::RoundedRectangleVertex, Shaders::EllipseFragment)),
 
     position(shader(), "u_position", {}),
     size(shader(), "u_size", { 10, 10}),
+    rotation(shader(), "u_rotation", 0),
     color(shader(), "u_color", WHITE),
     outline_color(shader(), "u_outline_color", WHITE),
     outline_thickness(shader(), "u_outline_thickness", 0),
@@ -34,6 +35,7 @@ void EllipseEffect::update() noexcept
 
     position.update();
     size.update();
+    rotation.update();
     color.update();
     outline_color.update();
     outline_thickness.update();

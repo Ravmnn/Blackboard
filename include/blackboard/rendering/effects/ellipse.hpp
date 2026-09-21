@@ -16,6 +16,7 @@ class EllipseEffect : public rendering::Effect
 public:
     rendering::EffectProperty<Vector2> position;
     rendering::EffectProperty<Vector2> size;
+    rendering::EffectProperty<float> rotation;
     rendering::EffectProperty<Color> color;
     rendering::EffectProperty<Color> outline_color;
     rendering::EffectProperty<float> outline_thickness;

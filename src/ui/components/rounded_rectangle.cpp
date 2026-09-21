@@ -82,7 +82,7 @@ void RoundedRectangle::draw_both() noexcept
 
 void RoundedRectangle::draw_fill() noexcept
 {
-    Draw::sdf_rounded_rectangle(top_left_absolute_position(), effect_);
+    Draw::sdf_rounded_rectangle_fill(top_left_absolute_position(), effect_);
 }
 
 
