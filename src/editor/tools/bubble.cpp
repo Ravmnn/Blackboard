@@ -3,13 +3,11 @@
 #include <rlgl.h>
 
 #include <blackboard/draw.hpp>
-#include <blackboard/debug/logger.hpp>
 
 
 
 
 using
-bb::debug::Logger,
 bb::rendering::Stencil,
 bb::editor::StrokePoint,
 bb::editor::Bubble;
@@ -147,6 +145,6 @@ void Bubble::draw_ellipse() noexcept
 {
     Stencil::enable();
         Stencil::begin_write(GL_ALWAYS, 1, GL_REPLACE);
-        Draw::sdf_stretched_ellipse(position_, stretch, effect_);
+        Draw::sdf_stretched_ellipse(stretch, effect_);
     Stencil::disable();
 }

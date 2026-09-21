@@ -74,19 +74,17 @@ void RoundedRectangle::draw_self() noexcept
 
 void RoundedRectangle::draw_both() noexcept
 {
-    effect_.enable();
-    Draw::rounded_rectangle(top_left_absolute_position(), size, radius, color);
-    effect_.disable();
+    Draw::sdf_rounded_rectangle(effect_);
 }
 
 
 void RoundedRectangle::draw_fill() noexcept
 {
-    Draw::sdf_rounded_rectangle_fill(top_left_absolute_position(), effect_);
+    Draw::sdf_rounded_rectangle_fill(effect_);
 }
 
 
 void RoundedRectangle::draw_outline() noexcept
 {
-    Draw::sdf_rounded_rectangle_outline(top_left_absolute_position(), effect_);
+    Draw::sdf_rounded_rectangle_outline(effect_);
 }

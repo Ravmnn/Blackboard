@@ -28,88 +28,88 @@ struct SectionTriangle
 class Draw
 {
 public:
-    static void sdf_rounded_rectangle(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    static void sdf_rounded_rectangle(rendering::RoundedRectangleEffect& effect) noexcept
     {
         effect.enable();
-        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        rounded_rectangle(effect.position, effect.size, effect.radius, effect.color);
         effect.disable();
     }
 
 
-    static void sdf_rounded_rectangle_fill(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    static void sdf_rounded_rectangle_fill(rendering::RoundedRectangleEffect& effect) noexcept
     {
         effect.fill_only.set_value_and_update(true);
         effect.enable();
-        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        rounded_rectangle(effect.position, effect.size, effect.radius, effect.color);
         effect.disable();
         effect.fill_only.set_value_and_update(false);
     }
 
 
-    static void sdf_rounded_rectangle_outline(const Vector2& position, rendering::RoundedRectangleEffect& effect) noexcept
+    static void sdf_rounded_rectangle_outline(rendering::RoundedRectangleEffect& effect) noexcept
     {
         effect.outline_only.set_value_and_update(true);
         effect.enable();
-        rounded_rectangle(position, effect.size, effect.radius, effect.color);
+        rounded_rectangle(effect.position, effect.size, effect.radius, effect.color);
         effect.disable();
         effect.outline_only.set_value_and_update(false);
     }
 
 
-    static void sdf_ellipse(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    static void sdf_ellipse(rendering::EllipseEffect& effect) noexcept
     {
         effect.enable();
-        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        ellipse(effect.position, effect.size.value.x, effect.size.value.y, effect.color);
         effect.disable();
     }
 
 
-    static void sdf_ellipse_fill(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    static void sdf_ellipse_fill(rendering::EllipseEffect& effect) noexcept
     {
         effect.fill_only.set_value_and_update(true);
         effect.enable();
-        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        ellipse(effect.position, effect.size.value.x, effect.size.value.y, effect.color);
         effect.disable();
         effect.fill_only.set_value_and_update(false);
     }
 
 
-    static void sdf_ellipse_outline(const Vector2& position, rendering::EllipseEffect& effect) noexcept
+    static void sdf_ellipse_outline(rendering::EllipseEffect& effect) noexcept
     {
         effect.outline_only.set_value_and_update(true);
         effect.enable();
-        ellipse(position, effect.size.value.x, effect.size.value.y, effect.color);
+        ellipse(effect.position, effect.size.value.x, effect.size.value.y, effect.color);
         effect.disable();
         effect.outline_only.set_value_and_update(false);
     }
 
 
-    static void sdf_stretched_ellipse(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    static void sdf_stretched_ellipse(const float stretch, rendering::EllipseEffect& effect) noexcept
     {
         const Vector2 old_size = effect.size;
 
         effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
-        sdf_ellipse(position, effect);
+        sdf_ellipse(effect);
         effect.size.set_value_and_update(old_size);
     }
 
 
-    static void sdf_stretched_ellipse_fill(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    static void sdf_stretched_ellipse_fill(const float stretch, rendering::EllipseEffect& effect) noexcept
     {
         const Vector2 old_size = effect.size;
 
         effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
-        sdf_ellipse_fill(position, effect);
+        sdf_ellipse_fill(effect);
         effect.size.set_value_and_update(old_size);
     }
 
 
-    static void sdf_stretched_ellipse_outline(const Vector2& position, const float stretch, rendering::EllipseEffect& effect) noexcept
+    static void sdf_stretched_ellipse_outline(const float stretch, rendering::EllipseEffect& effect) noexcept
     {
         const Vector2 old_size = effect.size;
 
         effect.size.set_value_and_update({ effect.size.value.x + stretch, effect.size.value.y });
-        sdf_ellipse_outline(position, effect);
+        sdf_ellipse_outline(effect);
         effect.size.set_value_and_update(old_size);
     }
 
@@ -118,27 +118,31 @@ public:
 
     static void rounded_rectangle(const Rectangle& rectangle, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
     {
-        rounded_rectangle({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, color, resolution);
+        rounded_rectangle({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, color, resolution, false);
     }
 
 
     static void rounded_rectangle_outline(const Rectangle& rectangle, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32)
     {
-        rounded_rectangle_outline({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, thickness, color, resolution);
+        rounded_rectangle_outline({ rectangle.x, rectangle.y }, { rectangle.width, rectangle.height }, radius, thickness, color, resolution, false);
     }
 
 
-    static void rounded_rectangle(const Vector2& position, const Vector2& size, const float radius, const Color& color = WHITE, const uint32_t resolution = 32)
+    static void rounded_rectangle(const Vector2& position, const Vector2& size, const float radius, const Color& color = WHITE, const uint32_t resolution = 32, const bool use_center_coordinate = true)
     {
+        // this project uses center coordinates for rectangles instead of top-left, so conversion is necessary when using raylib's API
+
+        const Vector2 final_position = use_center_coordinate ? Vector2{ position.x - size.x / 2, position.y - size.y / 2 } : position;
         const float normalized_radius = math::Rect::get_normalized_radius(size, radius);
-        DrawRectangleRounded({ position.x, position.y, size.x, size.y }, normalized_radius, (int)resolution, color);
+        DrawRectangleRounded({ final_position.x, final_position.y, size.x, size.y }, normalized_radius, (int)resolution, color);
     }
 
 
-    static void rounded_rectangle_outline(const Vector2& position, const Vector2& size, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32)
+    static void rounded_rectangle_outline(const Vector2& position, const Vector2& size, const float radius, const float thickness, const Color& color = WHITE, const uint32_t resolution = 32, const bool use_center_coordinate = true)
     {
+        const Vector2 final_position = use_center_coordinate ? Vector2{ position.x - size.x / 2, position.y - size.y / 2 } : position;
         const float normalized_radius = math::Rect::get_normalized_radius(size, radius);
-        DrawRectangleRoundedLinesEx({ position.x, position.y, size.x, size.y }, normalized_radius, (int)resolution, thickness, color);
+        DrawRectangleRoundedLinesEx({ final_position.x, final_position.y, size.x, size.y }, normalized_radius, (int)resolution, thickness, color);
     }
 
 

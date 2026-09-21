@@ -3,6 +3,7 @@
 #include <blackboard/drawable.hpp>
 #include <blackboard/bounds.hpp>
 #include <blackboard/animation/interpolation.hpp>
+#include <blackboard/rendering/effects/rounded_rectangle.hpp>
 #include <blackboard/editor/effects/selection.hpp>
 
 
@@ -20,8 +21,15 @@ class Selection;
 class SelectionBody : public Updateable, public Drawable, public Bounds
 {
 private:
+    static constexpr float IdleSize = 20;
+    static constexpr float IdleRadius = 7;
+    static constexpr float ActiveRadius = 4;
+    static constexpr float OutlineThickness = 2;
+
+
     animation::ExponentialInterpolation<Vector2> rectangle_position_;
     animation::ExponentialInterpolation<Vector2> rectangle_size_;
+    animation::ExponentialInterpolation<float> rectangle_radius_;
 
     animation::ExponentialInterpolation<float> effect_spacing_animation_;
 
@@ -29,8 +37,7 @@ private:
     Color rectangle_color_ = ColorAlpha(RED, 0.3);
     Color rectangle_outline_color_ = ColorAlpha(RED, 0.7);
 
-    static constexpr float IdleSize = 20;
-    static constexpr float Radius = 5;
+    rendering::RoundedRectangleEffect outline_effect_;
 
 
 public:
