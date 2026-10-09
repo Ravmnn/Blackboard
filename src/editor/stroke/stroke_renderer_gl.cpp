@@ -71,8 +71,12 @@ void StrokeRendererGL::draw_stroke_mesh_gl(StrokeMeshGL& mesh) noexcept
 
 void StrokeRendererGL::draw_stroke_mesh_gl_coverage(StrokeMeshGL& mesh) noexcept
 {
+    const bool should_fade = mesh.source ? mesh.source->fade : false;
+
     rlSetBlendFactorsSeparate(RL_ZERO, RL_ZERO, RL_ONE, RL_ONE, RL_FUNC_ADD, RL_FUNC_ADD);
-    BeginBlendMode(BLEND_CUSTOM_SEPARATE);
+
+    if (!should_fade)
+        BeginBlendMode(BLEND_CUSTOM_SEPARATE);
 
     coverage_.begin_render();
     draw_stroke_mesh_gl_immediate(mesh);
