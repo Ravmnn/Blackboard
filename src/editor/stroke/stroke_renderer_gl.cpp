@@ -99,6 +99,8 @@ void StrokeRendererGL::draw_stroke_mesh_gl_color(StrokeMeshGL& mesh) noexcept
 
 void StrokeRendererGL::draw_stroke_mesh_gl_immediate(StrokeMeshGL& mesh) noexcept
 {
+    effect.fade.set_value_and_update(mesh.source ? mesh.source->fade : false);
+
     effect.enable();
     mesh.draw();
     effect.disable();

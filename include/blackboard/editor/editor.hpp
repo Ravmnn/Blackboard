@@ -119,7 +119,7 @@ private:
     void draw_statistics() const noexcept;
 
 
-    std::unique_ptr<StrokeMesh> brush_stroke_mesh() noexcept {
+    std::unique_ptr<StrokeMesh> brush_stroke_mesh() const noexcept {
         return stroke_mesh_generator.generate_mesh(draw_environment.brush.stroke());
     }
 

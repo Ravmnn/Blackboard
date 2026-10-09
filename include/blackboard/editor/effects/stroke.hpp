@@ -20,6 +20,7 @@ public:
     rendering::EffectProperty<float> smoothness_min;
     rendering::EffectProperty<float> smoothness_max;
     rendering::EffectProperty<float> smoothness_thickness_influence;
+    rendering::EffectProperty<int> fade;
 
 
     StrokeEffect() noexcept;

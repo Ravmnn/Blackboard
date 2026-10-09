@@ -48,7 +48,7 @@ private:
     void update_strokes_to_remove() noexcept;
 
     void add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept;
-    void remove_strokes_from_remove_queue() noexcept;
+    void remove_strokes_in_remove_queue() noexcept;
 
 
     void on_got_inactive() noexcept override;

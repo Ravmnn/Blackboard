@@ -49,7 +49,7 @@ void Eraser::update_strokes_to_remove() noexcept
 
 void Eraser::on_got_inactive() noexcept
 {
-    remove_strokes_from_remove_queue();
+    remove_strokes_in_remove_queue();
 }
 
 
@@ -73,15 +73,14 @@ Vector2 Eraser::position() const noexcept
 
 void Eraser::add_stroke_to_remove_queue(StrokeMesh& stroke) noexcept
 {
-    for (auto& mesh_node : stroke)
-        mesh_node.color().a = 150;
+    stroke.fade = true;
 
     if (!std::ranges::contains(strokes_to_remove_, &stroke))
         strokes_to_remove_.push_back(&stroke);
 }
 
 
-void Eraser::remove_strokes_from_remove_queue() noexcept
+void Eraser::remove_strokes_in_remove_queue() noexcept
 {
     for (auto& stroke : strokes_to_remove_)
         editor().remove_stroke(*stroke);

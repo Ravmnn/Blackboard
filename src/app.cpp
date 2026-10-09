@@ -34,9 +34,7 @@ bb::App;
 
 
 
-// TODO: optimize more
-// TODO: fix eraser not changing strokes colors (would need rebuilding the mesh gl of the stroke, so maybe adding a vertex attribute to fade?)
-// TODO: replace tools rendering by shader
+// TODO: lazy rendering
 // TODO: color wheel: making it disappear don't disable the buttons
 
 

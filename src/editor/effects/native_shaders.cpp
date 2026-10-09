@@ -50,6 +50,7 @@ uniform float u_smoothness;
 uniform float u_smoothness_min;
 uniform float u_smoothness_max;
 uniform float u_smoothness_thickness_influence;
+uniform int u_fade;
 
 
 in vec2 position;
@@ -68,6 +69,9 @@ void main()
     final_smoothness = clamp(final_smoothness, u_smoothness_min, u_smoothness_max);
 
     float fade = smoothstep(0.0, final_smoothness, border_distance);
+
+    if (u_fade >= 1)
+        fade /= 2;
 
     vec4 final_color = color;
     final_color.a = mix(0, final_color.a, fade);

@@ -18,7 +18,8 @@ StrokeEffect::StrokeEffect() noexcept :
     smoothness(shader(), "u_smoothness", 0.2),
     smoothness_min(shader(), "u_smoothness_min", 0.0),
     smoothness_max(shader(), "u_smoothness_max", 0.9),
-    smoothness_thickness_influence(shader(), "u_smoothness_thickness_influence", 3)
+    smoothness_thickness_influence(shader(), "u_smoothness_thickness_influence", 3),
+    fade(shader(), "u_fade", 0)
 {
     use_raylib_batch_system = false;
 }
@@ -36,4 +37,5 @@ void StrokeEffect::update() noexcept
     smoothness_min.update();
     smoothness_max.update();
     smoothness_thickness_influence.update();
+    fade.update();
 }

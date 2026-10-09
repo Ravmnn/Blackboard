@@ -173,6 +173,9 @@ public:
     using std::vector<StrokeMeshNode>::vector;
 
 
+    bool fade = false;
+
+
     void set_color(const Color& color) noexcept;
     void set_alpha(uint8_t alpha) noexcept;
 };
