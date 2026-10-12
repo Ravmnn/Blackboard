@@ -28,9 +28,22 @@ FrameBuffer::FrameBuffer(const uint32_t width, const uint32_t height, const uint
 {
     width_ = width;
     height_ = height;
-    msaa_samples_ = msaa_samples;
+    requested_msaa_samples_ = msaa_samples;
 
+    initialize_actual_msaa_samples(use_depth, use_stencil);
     load(use_depth, use_stencil);
+}
+
+
+void FrameBuffer::initialize_actual_msaa_samples(const bool use_depth, const bool use_stencil) noexcept
+{
+    std::initializer_list<uint32_t> formats { GL_RGB8 };
+
+    if (use_depth && use_stencil) formats = { GL_RGB8, GL_DEPTH24_STENCIL8 };
+    else if (use_depth) formats = { GL_RGB8, GL_DEPTH_COMPONENT24 };
+    else if (use_stencil) formats = { GL_RGB8, GL_STENCIL_INDEX8 };
+
+    actual_msaa_samples_ = pick_samples(requested_msaa_samples_, formats);
 }
 
 
@@ -123,7 +136,7 @@ void FrameBuffer::load_render_buffer(uint32_t& buffer_id, const uint32_t format,
 
     glGenRenderbuffers(1, &buffer_id);
     glBindRenderbuffer(GL_RENDERBUFFER, buffer_id);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, msaa_samples_, format, (int)width(), (int)height());
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, actual_msaa_samples_, format, (int)width(), (int)height());
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, buffer_id);
 
     disable_frame_buffer();
@@ -201,4 +214,45 @@ RenderTexture FrameBuffer::to_render_texture() const noexcept
     texture.depth.mipmaps = 1;
 
     return texture;
+}
+
+
+
+
+uint32_t FrameBuffer::pick_samples(const uint32_t requested, const std::initializer_list<GLenum>& formats) noexcept
+{
+    if (requested == 0)
+        return 0;
+
+    for (GLint candidate : supported_samples(*formats.begin()))
+    {
+        if ((uint32_t)candidate > requested)
+            continue;
+
+        bool in_all = true;
+        for (GLenum f : formats)
+        {
+            auto v = supported_samples(f);
+            in_all &= std::find(v.begin(), v.end(), candidate) != v.end();
+        }
+
+        if (in_all)
+            return (uint32_t)candidate;
+    }
+
+    return 0;
+}
+
+
+std::vector<int> FrameBuffer::supported_samples(const uint32_t format) noexcept
+{
+    int count = 0;
+    glGetInternalformativ(GL_RENDERBUFFER, format, GL_NUM_SAMPLE_COUNTS, 1, &count);
+
+    std::vector<int> samples(count);
+
+    if (count > 0)
+        glGetInternalformativ(GL_RENDERBUFFER, format, GL_SAMPLES, count, samples.data());
+
+    return samples; // descrescent order
 }

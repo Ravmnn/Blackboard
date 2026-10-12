@@ -90,6 +90,8 @@ void Editor::log_canvas_framebuffer_status() noexcept
     const std::string status_string = GlToString::frame_buffer_status(status);
     const std::string message = std::format("Canvas framebuffer status: {0} ({1:x} = {1})", status_string, status);
 
+    Logger::info(std::format("Requested MSAA sample: {}", canvas_->frame_buffer().requested_msaa_samples()));
+    Logger::info(std::format("Actual MSAA sample: {}", canvas_->frame_buffer().actual_msaa_samples()));
     Logger::info(message);
 }
 

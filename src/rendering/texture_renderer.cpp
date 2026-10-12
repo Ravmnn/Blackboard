@@ -45,7 +45,7 @@ void TextureRenderer::end_render() noexcept
 
 void TextureRenderer::resize(const Vector2& size) noexcept
 {
-    frame_buffer_ = std::make_unique<FrameBuffer>(size, frame_buffer_->msaa_samples(), frame_buffer_->has_depth_buffer(), frame_buffer_->has_stencil_buffer());
+    frame_buffer_ = std::make_unique<FrameBuffer>(size, frame_buffer_->requested_msaa_samples(), frame_buffer_->has_depth_buffer(), frame_buffer_->has_stencil_buffer());
 }
 
 

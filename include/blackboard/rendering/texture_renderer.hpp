@@ -21,9 +21,9 @@ protected:
 
 
 public:
-    TextureRenderer(uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
-    TextureRenderer(const Vector2& size, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
-    TextureRenderer(uint32_t width, uint32_t height, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
+    TextureRenderer(uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
+    TextureRenderer(const Vector2& size, uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
+    TextureRenderer(uint32_t width, uint32_t height, uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
 
 
     void begin_render() noexcept override;

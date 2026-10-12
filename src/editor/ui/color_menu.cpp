@@ -48,7 +48,7 @@ void ColorMenu::show(const Vector2& position) noexcept
 
     set_radius(ShownRadius);
     set_children_opacity(ShownOpacity);
-    set_children_ignore_interaction(false);
+    set_children_ignore_input(false);
 
     visible = true;
     is_shown_ = true;
@@ -61,7 +61,7 @@ void ColorMenu::hide() noexcept
 {
     set_radius(HiddenRadius);
     set_children_opacity(HiddenOpacity);
-    set_children_ignore_interaction(true);
+    set_children_ignore_input(true);
     trigger_children_leaved();
 
     is_shown_ = false;

@@ -55,8 +55,8 @@ protected:
         for_each_children<ui::Shape>([opacity](ui::Shape* const child) { child->set_both_opacity(opacity); });
     }
 
-    void set_children_ignore_interaction(const bool ignore) noexcept {
-        for_each_children<ui::Button>([ignore](ui::Button* const child) { child->ignore_event_triggering = ignore; });
+    void set_children_ignore_input(const bool ignore) noexcept {
+        for_each_children<ui::Button>([ignore](ui::Button* const child) { child->ignore_input = ignore; });
     }
 
     void trigger_children_leaved() noexcept {

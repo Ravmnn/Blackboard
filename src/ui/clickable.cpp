@@ -32,9 +32,6 @@ void Clickable::update_interaction() noexcept
     was_hover_ = hover_;
     hover_ = caught_mouse_input && is_mouse_over();
 
-    if (ignore_event_triggering)
-        return;
-
     if (was_hover_ && !hover_)
         leaved.trigger();
 

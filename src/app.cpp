@@ -34,8 +34,8 @@ bb::App;
 
 
 
+// TODO: add statistics IMGUI window, containing info like, stroke mesh count, etc.
 // TODO: lazy rendering
-// TODO: color wheel: making it disappear don't disable the buttons
 
 
 

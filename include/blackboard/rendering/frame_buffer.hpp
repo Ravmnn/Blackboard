@@ -28,15 +28,16 @@ private:
     uint32_t width_ = 0;
     uint32_t height_ = 0;
 
-    uint16_t msaa_samples_ = 1;
+    uint16_t requested_msaa_samples_ = 0;
+    uint16_t actual_msaa_samples_ = 0;
 
     int frame_buffer_gl_status_ = 0;
 
 
 public:
-    FrameBuffer(uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
-    FrameBuffer(const Vector2& size, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
-    FrameBuffer(uint32_t width, uint32_t height, uint16_t msaa_samples = 1, bool use_depth = false, bool use_stencil = false) noexcept;
+    FrameBuffer(uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
+    FrameBuffer(const Vector2& size, uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
+    FrameBuffer(uint32_t width, uint32_t height, uint16_t msaa_samples = 0, bool use_depth = false, bool use_stencil = false) noexcept;
 
 
     ~FrameBuffer() override { unload(); }
@@ -48,7 +49,8 @@ public:
 
     [[nodiscard]] uint32_t width() const noexcept { return width_; }
     [[nodiscard]] uint32_t height() const noexcept { return height_; }
-    [[nodiscard]] uint16_t msaa_samples() const noexcept { return msaa_samples_; }
+    [[nodiscard]] uint16_t requested_msaa_samples() const noexcept { return requested_msaa_samples_; }
+    [[nodiscard]] uint16_t actual_msaa_samples() const noexcept { return actual_msaa_samples_; }
 
     [[nodiscard]] uint32_t frame_buffer_id() const noexcept { return frame_buffer_; }
     [[nodiscard]] uint32_t color_render_buffer_id() const noexcept { return color_render_buffer_; }
@@ -66,7 +68,13 @@ public:
     [[nodiscard]] RenderTexture to_render_texture() const noexcept;
 
 
+    static uint32_t pick_samples(uint32_t requested, const std::initializer_list<GLenum>& formats) noexcept;
+    static std::vector<int> supported_samples(uint32_t format) noexcept;
+
+
 private:
+    void initialize_actual_msaa_samples(bool use_depth, bool use_stencil) noexcept;
+
     void load() noexcept { load(has_depth_buffer(), has_stencil_buffer()); }
 
     void load(bool load_depth, bool load_stencil) noexcept;
