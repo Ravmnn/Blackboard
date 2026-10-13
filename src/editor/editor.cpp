@@ -93,11 +93,6 @@ void Editor::log_canvas_framebuffer_status() noexcept
     Logger::info(message);
     Logger::info(std::format("Requested canvas MSAA sample: {}", canvas_->frame_buffer().requested_msaa_samples()));
     Logger::info(std::format("Actual canvas MSAA sample: {}", canvas_->frame_buffer().actual_msaa_samples()));
-
-    // auto supported_color = canvas_->frame_buffer().supported_samples(GL_RGB8);
-    // auto supported_depth = canvas_->frame_buffer().supported_samples(GL_DEPTH_COMPONENT24);
-    // auto supported_stencil = canvas_->frame_buffer().supported_samples(GL_STENCIL_INDEX8);
-    // auto supported_both = canvas_->frame_buffer().supported_samples(GL_DEPTH24_STENCIL8);
 }
 
 

@@ -12,6 +12,7 @@
 #include <blackboard/debug/imgui_style_set.hpp>
 #include <blackboard/debug/profiler_imgui.hpp>
 #include <blackboard/debug/logger_imgui.hpp>
+#include <blackboard/debug/system_info_imgui.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
@@ -26,6 +27,7 @@ bb::debug::Logger,
 bb::debug::ImGuiStyleSet,
 bb::debug::ProfilerImGui,
 bb::debug::LoggerImGui,
+bb::debug::SystemInfoImGui,
 bb::rendering::WindowRenderer,
 bb::ui::Context,
 bb::editor::Editor,
@@ -178,6 +180,7 @@ void App::update_keybindings() noexcept
 {
     if (IsKeyPressed(KEY_F1)) ProfilerImGui::is_open = !ProfilerImGui::is_open;
     if (IsKeyPressed(KEY_F2)) LoggerImGui::is_open = !LoggerImGui::is_open;
+    if (IsKeyPressed(KEY_F3)) SystemInfoImGui::is_open = !SystemInfoImGui::is_open;
 }
 
 
@@ -209,5 +212,6 @@ void App::draw_imgui() noexcept
     rlImGuiBegin();
     ProfilerImGui::draw(*Profiler::root());
     LoggerImGui::draw();
+    SystemInfoImGui::draw();
     rlImGuiEnd();
 }

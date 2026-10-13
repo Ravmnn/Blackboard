@@ -25,6 +25,9 @@ public:
 
 
     static void selectable_readonly_multi_line_text(const std::string& id, const std::string& text, const ImVec2& size = { -FLT_MIN, -FLT_MIN }) noexcept;
+
+
+    static void separator(const std::string& title) noexcept;
 };
 
 

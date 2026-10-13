@@ -59,3 +59,14 @@ void ImGuiWidget::selectable_readonly_multi_line_text(const std::string& id, con
     ImGui::InputTextMultiline(std::format("##{}", id).c_str(), buffer.data(), buffer.size(), size, ImGuiInputTextFlags_ReadOnly);
     ImGui::PopStyleColor();
 }
+
+
+
+
+void ImGuiWidget::separator(const std::string& title) noexcept
+{
+    ImGui::PushFont(nullptr, 20);
+    ImGui::Text("%s", title.c_str());
+    ImGui::Separator();
+    ImGui::PopFont();
+}

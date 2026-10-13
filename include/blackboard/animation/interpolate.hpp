@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 
 #include <raylib.h>
@@ -22,7 +23,7 @@ public:
         constexpr float Epsilon = 0.001f;
         const float factor = 1.0f - powf(smoothing, GetFrameTime() * speed);
 
-        return std::abs(target - start) <= Epsilon ? target : lerp(start, target, factor);
+        return std::abs(target - start) <= Epsilon ? target : std::lerp(start, target, factor);
     }
 
 
@@ -58,7 +59,7 @@ public:
 
     static float linear(const float start, const float target, const float t) noexcept
     {
-        return lerp(start, target, t);
+        return std::lerp(start, target, t);
     }
 
 

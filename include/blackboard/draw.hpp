@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cmath>
 
 #include <blackboard/math/rect.hpp>
 #include <blackboard/rendering/effects/rounded_rectangle.hpp>

@@ -1,5 +1,7 @@
 #include <blackboard/debug/profiler_imgui.hpp>
 
+#include <iomanip>
+
 #include <implot.h>
 
 #include <blackboard/debug/imgui_style_set.hpp>
