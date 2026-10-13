@@ -15,28 +15,14 @@ cc = meson.get_compiler('cpp')
 
 math_lib = cc.find_library('m', required: true)
 
+project_dep = declare_dependency(include_directories: include_directories('include'))
 
-project_dep = declare_dependency(
-    include_directories: include_directories('include')
-)
+raylib_dep = subproject('raylib').get_variable('raylib_dep')
+imgui_dep = subproject('imgui').get_variable('imgui_dep')
+platform_folders_dep = subproject('platform_folders').get_variable('platform_folders_dep')
+hwinfo_dep = subproject('hwinfo').get_variable('hwinfo_dep')
 
-raylib_dep = dependency('raylib',
-    required: false,
-    fallback: ['raylib', 'raylib_dep']
-)
-
-imgui_dep = dependency('imgui',
-    required: false,
-    fallback: ['imgui', 'imgui_dep']
-)
-
-platform_folders_dep = dependency('platform_folders',
-    required: false,
-    fallback: ['platform_folders', 'platform_folders_dep']
-)
-
-
-global_deps = [math_lib, project_dep, raylib_dep, imgui_dep, platform_folders_dep]
+global_deps = [math_lib, project_dep, raylib_dep, imgui_dep, platform_folders_dep, hwinfo_dep]
 
 
 
