@@ -21,6 +21,7 @@ private:
     static void draw_mainboard() noexcept;
     static void draw_cpu() noexcept;
     static void draw_gpu() noexcept;
+    static void draw_graphics() noexcept;
     static void draw_memory() noexcept;
     static void draw_disks() noexcept;
 };

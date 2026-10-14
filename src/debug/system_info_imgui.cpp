@@ -8,11 +8,14 @@
 #include <hwinfo/hwinfo.h>
 
 #include <blackboard/debug/imgui_widget.hpp>
+#include <blackboard/rendering/frame_buffer.hpp>
 
 
 
 
-using bb::debug::SystemInfoImGui;
+using
+bb::debug::SystemInfoImGui,
+bb::rendering::FrameBuffer;
 
 
 
@@ -80,6 +83,10 @@ void SystemInfoImGui::draw() noexcept
         ImGui::NewLine();
         ImGui::NewLine();
 
+        draw_graphics();
+        ImGui::NewLine();
+        ImGui::NewLine();
+
         draw_memory();
         ImGui::NewLine();
         ImGui::NewLine();
@@ -90,6 +97,8 @@ void SystemInfoImGui::draw() noexcept
 
     ImGuiWidget::end_window();
 }
+
+
 
 
 void SystemInfoImGui::draw_computer() noexcept
@@ -107,6 +116,8 @@ void SystemInfoImGui::draw_computer() noexcept
 }
 
 
+
+
 void SystemInfoImGui::draw_os() noexcept
 {
     ImGuiWidget::separator("Operating System");
@@ -121,6 +132,8 @@ void SystemInfoImGui::draw_os() noexcept
 }
 
 
+
+
 void SystemInfoImGui::draw_mainboard() noexcept
 {
     ImGuiWidget::separator("Mainboard");
@@ -133,6 +146,8 @@ void SystemInfoImGui::draw_mainboard() noexcept
     optional_text("Manufacturer", board->vendor);
     optional_text("BIOS version", board->firmware_version);
 }
+
+
 
 
 void SystemInfoImGui::draw_cpu() noexcept
@@ -158,6 +173,8 @@ void SystemInfoImGui::draw_cpu() noexcept
         ImGui::Unindent();
     }
 }
+
+
 
 
 void SystemInfoImGui::draw_gpu() noexcept
@@ -187,6 +204,22 @@ void SystemInfoImGui::draw_gpu() noexcept
 }
 
 
+void SystemInfoImGui::draw_graphics() noexcept
+{
+    ImGuiWidget::separator("Graphics");
+
+    ImGui::Text("Supported Multisampling Values:");
+    ImGui::Indent();
+    text("Color", FrameBuffer::supported_samples(GL_RGB8));
+    text("Depth", FrameBuffer::supported_samples(GL_DEPTH_COMPONENT24));
+    text("Stencil", FrameBuffer::supported_samples(GL_STENCIL_INDEX8));
+    text("Depth + Stencil", FrameBuffer::supported_samples(GL_DEPTH24_STENCIL8));
+    ImGui::Unindent();
+}
+
+
+
+
 void SystemInfoImGui::draw_memory() noexcept
 {
     ImGuiWidget::separator("Memory");
@@ -197,6 +230,8 @@ void SystemInfoImGui::draw_memory() noexcept
 
     text("Total", memory->total);
 }
+
+
 
 
 void SystemInfoImGui::draw_disks() noexcept
