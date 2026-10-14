@@ -29,7 +29,13 @@ public:
 
 
     operator T() const noexcept { return current; }
-    T& operator=(const T& value) noexcept { return target = value; }
+    T& operator=(const T& value) noexcept
+    {
+        if (immediate)
+            return current = target = value;
+
+        return target = value;
+    }
 
 
     virtual void set_value_immediately(const T& value) noexcept { current = target = value; }

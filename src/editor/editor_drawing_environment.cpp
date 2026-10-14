@@ -101,5 +101,5 @@ void EditorDrawingEnvironment::on_right_button_drag_start() noexcept
 
 void EditorDrawingEnvironment::on_middle_button_click() noexcept
 {
-    editor.color_menu->toggle(GetMousePosition());
+    editor.color_menu->toggle(MousePositionProvider::screen().screen_mouse_position());
 }

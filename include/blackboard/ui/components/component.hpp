@@ -59,7 +59,7 @@ public:
 
     [[nodiscard]] uint8_t stencil_id() const noexcept;
 
-    void set_absolute_position(const Vector2& position) noexcept { relative_position.target = position - (parent ? parent->absolute_position() : Vector2{}); }
+    void set_absolute_position(const Vector2& position) noexcept { relative_position = position - (parent ? parent->absolute_position() : Vector2{}); }
 
 
     [[nodiscard]] Rectangle relative_bounding_box() const noexcept { return bounding_box(); }
