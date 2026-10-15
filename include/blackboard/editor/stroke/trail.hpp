@@ -25,10 +25,11 @@ public:
 
     StrokePoint origin;
     float decay;
+    float fraction_decay;
     bool emit = true;
 
 
-    explicit Trail(const Camera2D& camera, const StrokePoint& origin, float decay) noexcept;
+    explicit Trail(const Camera2D& camera, const StrokePoint& origin, float decay = 1, float fraction_decay = 0) noexcept;
 
 
     void update() noexcept override;

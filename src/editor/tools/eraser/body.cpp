@@ -17,7 +17,8 @@ EraserBody::EraserBody(Eraser& eraser) noexcept :
 {
     outline_thickness.set_value_immediately(1.0);
 
-    trail.decay = 5;
+    trail.decay = 1;
+    trail.fraction_decay = 0.3;
     sync_trail_color = false;
 
     eraser.changed_in.subscribe([this]() noexcept { on_eraser_changed_in(); }, "editor::EraserBody::eraser_changed_in_callback");

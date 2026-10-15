@@ -40,7 +40,7 @@ void BrushBody::update_trail() noexcept
 
 void BrushBody::update_thickness() noexcept
 {
-    float target_thickness = brush.current_thickness();
+    float target_thickness = brush.current_thickness() + 2;
     target_thickness = (float)(target_thickness == 0 ? brush.thickness : target_thickness / 2.0);
 
     if (!brush.active())

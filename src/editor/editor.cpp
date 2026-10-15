@@ -8,8 +8,10 @@
 #include <blackboard/debug/logger.hpp>
 #include <blackboard/ui/context.hpp>
 #include <blackboard/editor/ui/color_menu.hpp>
+#include <blackboard/editor/stroke/stroke_cleaner.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_collider.hpp>
 #include <blackboard/editor/stroke/stroke_mesh_gl_builder.hpp>
+#include <memory>
 
 
 
@@ -40,7 +42,7 @@ Editor::Editor(Context& ui_context) noexcept :
 
     mouse_late_mode_indicator_(*canvas_, *this),
 
-    stroke_mesh_generator(1),
+    stroke_mesh_generator(3),
 // TODO: solve bad cap rendering
     draw_environment(*this),
     selection_environment(*this),
@@ -290,6 +292,15 @@ void Editor::draw_vanish_animations() noexcept
 
 
 
+std::unique_ptr<StrokeMesh> Editor::brush_stroke_mesh() const noexcept
+ {
+    const Stroke clean_stroke = StrokeCleaner().clean(draw_environment.brush.stroke());
+    return stroke_mesh_generator.generate_mesh(clean_stroke);
+}
+
+
+
+
 void Editor::set_current_environment(EditorEnvironment& environment) noexcept
 {
     if (current_environment_)
@@ -338,7 +349,8 @@ StrokeMeshNode* Editor::get_stroke_mesh_node_under_point(const Vector2& point) n
 
 void Editor::add_stroke(const Stroke& stroke) noexcept
 {
-    std::unique_ptr<StrokeMesh> mesh = stroke_mesh_generator.generate_mesh(stroke);
+    const Stroke clean_stroke = StrokeCleaner().clean(stroke);
+    std::unique_ptr<StrokeMesh> mesh = stroke_mesh_generator.generate_mesh(clean_stroke);
 
     if (!mesh)
         return;

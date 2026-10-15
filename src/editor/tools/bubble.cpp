@@ -25,7 +25,7 @@ Bubble::Bubble(const Camera2D& camera, const float thickness) noexcept :
     color(WHITE, 5),
     outline_color(WHITE, 5),
 
-    trail(camera, StrokePoint({}, 0), 10)
+    trail(camera, StrokePoint({}, 0), 0.8, 0.5)
 {
     stretch.max = 45;
 }
@@ -94,7 +94,7 @@ StrokePoint Bubble::create_stroke_point() const noexcept
 {
     return StrokePoint{
         .position = position_,
-        .thickness = half_thickness * 2,
+        .thickness = half_thickness * 1.75f, // stroke thickness seems to have a different meter from other places
         .color = color,
         .outline_thickness = 0
     };
