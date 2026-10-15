@@ -16,7 +16,7 @@ Brush::Brush(EditorEnvironment& environment, const float thickness) noexcept : T
     stroke_({}),
     color_(environment.editor.palette.current_color()),
     thickness(thickness),
-    cursor(2),
+    cursor(1.01),
     body(*this)
 {}
 

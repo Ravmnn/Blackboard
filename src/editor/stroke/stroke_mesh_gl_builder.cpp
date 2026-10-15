@@ -50,10 +50,10 @@ void StrokeMeshGLBuilder::add_cap_vertices_from_stroke(std::vector<StrokeMeshGLV
 {
     for (const auto& current : mesh)
     {
-        if (current.is_begin() && current.is_end())
+        if ((current.is_begin() && current.is_end()) || current.curvature() >= cap_curvature)
             add_circle_vertices_from_stroke_node(vertices, current);
 
-        else if (current.is_extremity() || current.curvature() >= cap_curvature)
+        else if (current.is_extremity())
             add_cap_vertices_from_stroke_node(vertices, current);
     }
 }

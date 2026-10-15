@@ -39,7 +39,7 @@ void LazyCursor::update_position() noexcept
 {
     last_position_ = current_position_;
 
-    if (immediate)
+    if (is_immediate())
         current_position_ = target_position;
 
     const Vector2 direction = Vector2Normalize(target_position - current_position_);
@@ -51,7 +51,7 @@ void LazyCursor::update_position() noexcept
 
 void LazyCursor::update_smooth_velocity() noexcept
 {
-    if (immediate)
+    if (is_immediate())
     {
         smooth_speed_ = 0;
         return;

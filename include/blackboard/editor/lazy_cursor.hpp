@@ -55,6 +55,11 @@ public:
 
     [[nodiscard]] bool is_too_slow() const noexcept { return current_speed() < 1; };
 
+    [[nodiscard]] bool is_immediate() const noexcept { return immediate || laziness <= 1; };
+
+
+    void reset_smooth_speed() noexcept { smooth_speed_ = 0; }
+
 
 private:
     void update_position() noexcept;
