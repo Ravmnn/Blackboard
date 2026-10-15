@@ -23,6 +23,7 @@ bb::rendering::TextureRenderer,
 bb::ui::Context,
 bb::ui::Component,
 bb::editor::StrokeMesh,
+bb::editor::StrokeMeshNode,
 bb::editor::StrokeMeshCollider,
 bb::editor::Editor;
 
@@ -39,8 +40,8 @@ Editor::Editor(Context& ui_context) noexcept :
 
     mouse_late_mode_indicator_(*canvas_, *this),
 
-    stroke_mesh_generator(6),
-
+    stroke_mesh_generator(1),
+// TODO: solve bad cap rendering
     draw_environment(*this),
     selection_environment(*this),
 
@@ -318,6 +319,16 @@ StrokeMesh* Editor::get_stroke_intersecting_segment(const Segment& segment) noex
     for (auto& stroke : meshes)
         if (StrokeMeshCollider::stroke_intersects_with_segment(*stroke->source, segment))
             return stroke->source.get();
+
+    return nullptr;
+}
+
+
+StrokeMeshNode* Editor::get_stroke_mesh_node_under_point(const Vector2& point) noexcept
+{
+    for (auto& stroke : meshes)
+        if (auto* node = StrokeMeshCollider::get_stroke_mesh_node_colliding_with_point(*stroke->source, point); node)
+            return node;
 
     return nullptr;
 }

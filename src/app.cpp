@@ -13,6 +13,7 @@
 #include <blackboard/debug/profiler_imgui.hpp>
 #include <blackboard/debug/logger_imgui.hpp>
 #include <blackboard/debug/system_info_imgui.hpp>
+#include <blackboard/debug/inspector_imgui.hpp>
 #include <blackboard/editor/editor.hpp>
 
 
@@ -28,6 +29,7 @@ bb::debug::ImGuiStyleSet,
 bb::debug::ProfilerImGui,
 bb::debug::LoggerImGui,
 bb::debug::SystemInfoImGui,
+bb::debug::InspectorImGui,
 bb::rendering::WindowRenderer,
 bb::ui::Context,
 bb::editor::Editor,
@@ -98,6 +100,8 @@ void App::initialize_imgui() noexcept
     ImPlot::CreateContext();
 
     ImGuiStyleSet::setup_style();
+
+    InspectorImGui::editor = editor;
 
     Logger::info("ImGui context created", true);
 }
@@ -181,6 +185,7 @@ void App::update_keybindings() noexcept
     if (IsKeyPressed(KEY_F1)) ProfilerImGui::is_open = !ProfilerImGui::is_open;
     if (IsKeyPressed(KEY_F2)) LoggerImGui::is_open = !LoggerImGui::is_open;
     if (IsKeyPressed(KEY_F3)) SystemInfoImGui::is_open = !SystemInfoImGui::is_open;
+    if (IsKeyPressed(KEY_F4)) InspectorImGui::is_open = !InspectorImGui::is_open;
 }
 
 
@@ -213,5 +218,6 @@ void App::draw_imgui() noexcept
     ProfilerImGui::draw(*Profiler::root());
     LoggerImGui::draw();
     SystemInfoImGui::draw();
+    InspectorImGui::draw();
     rlImGuiEnd();
 }

@@ -90,6 +90,8 @@ public:
     StrokeMesh* get_stroke_intersecting_segment(const math::Segment& segment) noexcept;
     StrokeMesh* get_stroke_under_mouse() noexcept { return get_stroke_under_point(canvas().mouse_position()); }
 
+    StrokeMeshNode* get_stroke_mesh_node_under_point(const Vector2& point) noexcept;
+
 
     void add_stroke(const Stroke& stroke) noexcept;
     void remove_stroke(const StrokeMesh& mesh) noexcept;

@@ -1,9 +1,7 @@
 #include <blackboard/debug/system_info_imgui.hpp>
 
 #include <format>
-#include <optional>
 #include <string>
-#include <string_view>
 
 #include <hwinfo/hwinfo.h>
 
@@ -22,22 +20,6 @@ bb::rendering::FrameBuffer;
 
 namespace
 {
-
-
-template <typename T>
-void text(std::string_view label, const T& value)
-{
-    const std::string formatted = std::format("{}", value);
-    ImGui::Text("%.*s: %s", static_cast<int>(label.size()), label.data(), formatted.c_str());
-}
-
-
-template <typename T>
-void optional_text(std::string_view label, const std::optional<T>& value)
-{
-    if (value)
-        text(label, *value);
-}
 
 
 template <typename T>
@@ -109,10 +91,10 @@ void SystemInfoImGui::draw_computer() noexcept
     if (report_error("Computer", computer))
         return;
 
-    optional_text("Manufacturer", computer->vendor);
-    optional_text("Product family", computer->family);
-    optional_text("Model", computer->model);
-    text("Chassis", hwinfo::to_string(computer->chassis));
+    ImGuiWidget::optional_text_value("Manufacturer", computer->vendor);
+    ImGuiWidget::optional_text_value("Product family", computer->family);
+    ImGuiWidget::optional_text_value("Model", computer->model);
+    ImGuiWidget::text_value("Chassis", hwinfo::to_string(computer->chassis));
 }
 
 
@@ -126,9 +108,9 @@ void SystemInfoImGui::draw_os() noexcept
     if (report_error("Operating system", os))
         return;
 
-    text("Name", os->name);
-    text("Version", os->version);
-    text("Architecture", os->architecture);
+    ImGuiWidget::text_value("Name", os->name);
+    ImGuiWidget::text_value("Version", os->version);
+    ImGuiWidget::text_value("Architecture", os->architecture);
 }
 
 
@@ -142,9 +124,9 @@ void SystemInfoImGui::draw_mainboard() noexcept
     if (report_error("Mainboard", board))
         return;
 
-    optional_text("Model", board->name);
-    optional_text("Manufacturer", board->vendor);
-    optional_text("BIOS version", board->firmware_version);
+    ImGuiWidget::optional_text_value("Model", board->name);
+    ImGuiWidget::optional_text_value("Manufacturer", board->vendor);
+    ImGuiWidget::optional_text_value("BIOS version", board->firmware_version);
 }
 
 
@@ -168,8 +150,8 @@ void SystemInfoImGui::draw_cpu() noexcept
     {
         ImGui::Text("CPU package %u", cpu.socket);
         ImGui::Indent();
-        text("Model", cpu.model);
-        text("Cores / threads", std::format("{} / {}", cpu.physical_cores, cpu.logical_cores));
+        ImGuiWidget::text_value("Model", cpu.model);
+        ImGuiWidget::text_value("Cores / threads", std::format("{} / {}", cpu.physical_cores, cpu.logical_cores));
         ImGui::Unindent();
     }
 }
@@ -195,10 +177,10 @@ void SystemInfoImGui::draw_gpu() noexcept
     {
         ImGui::Text("GPU %u", gpu.index);
         ImGui::Indent();
-        text("Model", gpu.name);
-        text("Manufacturer", gpu.vendor);
-        optional_text("Driver", gpu.driver_version);
-        optional_text("VRAM", gpu.dedicated_memory);
+        ImGuiWidget::text_value("Model", gpu.name);
+        ImGuiWidget::text_value("Manufacturer", gpu.vendor);
+        ImGuiWidget::optional_text_value("Driver", gpu.driver_version);
+        ImGuiWidget::optional_text_value("VRAM", gpu.dedicated_memory);
         ImGui::Unindent();
     }
 }
@@ -210,10 +192,10 @@ void SystemInfoImGui::draw_graphics() noexcept
 
     ImGui::Text("Supported Multisampling Values:");
     ImGui::Indent();
-    text("Color", FrameBuffer::supported_samples(GL_RGB8));
-    text("Depth", FrameBuffer::supported_samples(GL_DEPTH_COMPONENT24));
-    text("Stencil", FrameBuffer::supported_samples(GL_STENCIL_INDEX8));
-    text("Depth + Stencil", FrameBuffer::supported_samples(GL_DEPTH24_STENCIL8));
+    ImGuiWidget::text_value("Color", FrameBuffer::supported_samples(GL_RGB8));
+    ImGuiWidget::text_value("Depth", FrameBuffer::supported_samples(GL_DEPTH_COMPONENT24));
+    ImGuiWidget::text_value("Stencil", FrameBuffer::supported_samples(GL_STENCIL_INDEX8));
+    ImGuiWidget::text_value("Depth + Stencil", FrameBuffer::supported_samples(GL_DEPTH24_STENCIL8));
     ImGui::Unindent();
 }
 
@@ -228,7 +210,7 @@ void SystemInfoImGui::draw_memory() noexcept
     if (report_error("Memory", memory))
         return;
 
-    text("Total", memory->total);
+    ImGuiWidget::text_value("Total", memory->total);
 }
 
 
@@ -252,8 +234,8 @@ void SystemInfoImGui::draw_disks() noexcept
     {
         ImGui::Text("Disk %u", disk.index);
         ImGui::Indent();
-        text("Disk", disk.model.value_or(std::format("Disk {}", disk.index)));
-        text("Size", disk.size);
+        ImGuiWidget::text_value("Disk", disk.model.value_or(std::format("Disk {}", disk.index)));
+        ImGuiWidget::text_value("Size", disk.size);
         ImGui::Unindent();
     }
 }
