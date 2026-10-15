@@ -49,8 +49,13 @@ void StrokeMeshGLBuilder::add_vertices_from_stroke(std::vector<StrokeMeshGLVerte
 void StrokeMeshGLBuilder::add_cap_vertices_from_stroke(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMesh& mesh) const noexcept
 {
     for (const auto& current : mesh)
-         if (current.is_extremity() || current.curvature() >= cap_curvature)
+    {
+        if (current.is_begin() && current.is_end())
+            add_circle_vertices_from_stroke_node(vertices, current);
+
+        else if (current.is_extremity() || current.curvature() >= cap_curvature)
             add_cap_vertices_from_stroke_node(vertices, current);
+    }
 }
 
 
@@ -75,6 +80,15 @@ void StrokeMeshGLBuilder::add_vertices_from_stroke_node(std::vector<StrokeMeshGL
     vertices.emplace_back(current, next.position(), 1);
     vertices.emplace_back(current, current.edge.bottom, 0);
     vertices.emplace_back(current, next.edge.bottom, 0);
+}
+
+
+void StrokeMeshGLBuilder::add_circle_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& node) noexcept
+{
+    const std::vector<SectionTriangle> triangles = Draw::calculate_circle_section_triangles(node.position(), node.half_thickness(), 50);
+
+    for (const auto& triangle : triangles)
+        add_triangle_vertices(vertices, node, triangle);
 }
 
 

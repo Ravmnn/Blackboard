@@ -27,6 +27,15 @@ StrokePointInterpolation::StrokePointInterpolation(const std::vector<StrokePoint
 
 
 
+StrokeSample::StrokeSample(const Vector2& position, const float thickness, const Color& color, const float outline_thickness, const Color& outline_color) noexcept :
+    position(position),
+    thickness(thickness),
+    color(color),
+    outline_thickness(outline_thickness),
+    outline_color(outline_color)
+{}
+
+
 StrokeSample::StrokeSample(const StrokePointInterpolation& segment, const int index, const int max_index) noexcept :
     interpolation(segment),
     index(index),
@@ -51,13 +60,22 @@ float StrokeSample::calculate_curvature() const noexcept
 
 float StrokeSample::calculate_curvature(const Vector2& previous, const Vector2& current, const Vector2& next) noexcept
 {
-    const Vector2 d1 = Vector2Normalize(current - previous);
-    const Vector2 d2 = Vector2Normalize(next - current);
+    const Vector2 a = current - previous;
+    const Vector2 b = next - current;
 
-    float dot = Vector2DotProduct(d1, d2);
-    dot = std::clamp(dot, -1.0f, 1.0f);
+    const float la2 = a.x*a.x + a.y*a.y;
+    const float lb2 = b.x*b.x + b.y*b.y;
 
-    return acosf(dot);
+    if (la2 < 1e-12f || lb2 < 1e-12f)
+        return 0.0f;   // segmento degenerado
+
+    const float cross = a.x * b.y - a.y * b.x;       // ∝ sen(θ)
+    const float dot   = a.x * b.x + a.y * b.y;       // ∝ cos(θ)
+
+    const float signedAngle = atan2f(cross, dot);    // (-π, π]
+    const float turn        = fabsf(signedAngle);    // [0, π]
+
+    return turn;
 }
 
 

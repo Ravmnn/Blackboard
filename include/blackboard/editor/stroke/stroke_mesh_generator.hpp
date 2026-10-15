@@ -29,6 +29,8 @@ public:
 
 
 private:
+    [[nodiscard]] static std::unique_ptr<StrokeMesh> generate_single_point_mesh(const Stroke& stroke) noexcept;
+
     static std::vector<StrokePoint> remove_close_points(const std::vector<StrokePoint>& points) noexcept;
     static std::vector<StrokePoint> add_ghost_points(const std::vector<StrokePoint>& points) noexcept;
     [[nodiscard]] std::vector<StrokeSample> create_samples(const std::vector<StrokePoint>& points) const noexcept;

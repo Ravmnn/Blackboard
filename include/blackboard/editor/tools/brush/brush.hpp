@@ -68,7 +68,7 @@ private:
     void update_when_active() noexcept override;
     void update_cursor() noexcept;
 
-    void add_stroke_point() noexcept;
+    void add_stroke_point(bool forced = false) noexcept;
     void modify_previous_points_thickness(float thickness) noexcept;
     [[nodiscard]] StrokePoint create_stroke_point() const noexcept;
 
@@ -81,6 +81,8 @@ private:
     [[nodiscard]] float distance_to_last_point() const noexcept { return Vector2Distance(stroke_.points.back(), cursor.position()); }
 
 
+protected:
+    void on_got_active() noexcept override;
     void on_got_inactive() noexcept override;
 };
 

@@ -38,6 +38,9 @@ void Brush::update() noexcept
 
 void Brush::update_when_active() noexcept
 {
+    if (got_active.triggered())
+        return;
+
     add_stroke_point();
 }
 
@@ -50,9 +53,9 @@ void Brush::update_cursor() noexcept
 }
 
 
-void Brush::add_stroke_point() noexcept
+void Brush::add_stroke_point(const bool forced) noexcept
 {
-    if (cursor.is_too_slow())
+    if (!forced && editor().canvas().mouse_speed() <= 0)
         return;
 
     stroke_.points.push_back(create_stroke_point());
@@ -79,6 +82,12 @@ StrokePoint Brush::create_stroke_point() const noexcept
 }
 
 
+
+
+void Brush::on_got_active() noexcept
+{
+    add_stroke_point(true);
+}
 
 
 void Brush::on_got_inactive() noexcept

@@ -34,11 +34,26 @@ std::unique_ptr<StrokeMesh> StrokeMeshGenerator::generate_mesh(const Stroke& str
     if (stroke.points.empty())
         return nullptr;
 
+    if (stroke.points.size() == 1)
+        return generate_single_point_mesh(stroke);
+
     const std::vector<StrokePoint> new_points = add_ghost_points(stroke.points);
     const std::vector<StrokeSample> samples = create_samples(new_points);
     const std::vector<StrokeEdge> edges = create_edges(samples);
 
     return create_mesh(samples, edges);
+}
+
+
+std::unique_ptr<StrokeMesh> StrokeMeshGenerator::generate_single_point_mesh(const Stroke& stroke) noexcept
+{
+    const auto point = stroke.points.front();
+
+    return create_mesh({
+        StrokeSample(point.position, point.thickness, point.color, point.outline_thickness, point.outline_color)
+    }, {
+        StrokeEdge({ point.position }, { point.position })
+    });
 }
 
 
@@ -159,7 +174,7 @@ std::unique_ptr<StrokeMesh> StrokeMeshGenerator::create_mesh(const std::vector<S
     for (size_t i = 0; i < samples.size(); i++)
         mesh->emplace_back(samples[i], edges[i]);
 
-    if (mesh->size() >= 2)
+    if (!mesh->empty())
     {
         mesh->front().sample.is_begin = true;
         mesh->back().sample.is_end = true;

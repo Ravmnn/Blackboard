@@ -52,8 +52,8 @@ class StrokeSample
 {
 public:
     StrokePointInterpolation interpolation;
-    int index;
-    int max_index;
+    int index = 0;
+    int max_index = 0;
 
     Vector2 position;
     float thickness;
@@ -67,6 +67,7 @@ public:
 
 
     StrokeSample() = default;
+    StrokeSample(const Vector2& position, float thickness, const Color& color, float outline_thickness = 0, const Color& outline_color = WHITE) noexcept;
     StrokeSample(const StrokePointInterpolation& segment, int index, int max_index) noexcept;
 
 

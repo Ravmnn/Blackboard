@@ -19,10 +19,6 @@ namespace bb::editor
 
 
 
-class StrokeMesh;
-class StrokeMeshNode;
-
-
 struct StrokeMeshGLVertex
 {
     Vector2 position;

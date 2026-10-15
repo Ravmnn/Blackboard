@@ -28,6 +28,7 @@ private:
     void add_cap_vertices_from_stroke(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMesh& mesh) const noexcept;
 
     static void add_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& current, const StrokeMeshNode& next) noexcept;
+    static void add_circle_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& node) noexcept;
     static void add_cap_vertices_from_stroke_node(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& node) noexcept;
 
     static void add_triangle_vertices(std::vector<StrokeMeshGLVertex>& vertices, const StrokeMeshNode& node, const SectionTriangle& triangle) noexcept;
