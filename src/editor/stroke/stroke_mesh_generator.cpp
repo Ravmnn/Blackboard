@@ -73,7 +73,7 @@ std::vector<StrokePoint> StrokeMeshGenerator::add_ghost_points(const std::vector
 
 std::vector<StrokeSample> StrokeMeshGenerator::create_samples(const std::vector<StrokePoint>& points) const noexcept
 {
-    const size_t size = points.size() - 3;
+    const size_t size = points.size() - 2;
 
     std::vector<StrokeSample> samples;
     samples.reserve(size * samples_per_segment + 1);

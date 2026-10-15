@@ -118,12 +118,9 @@ private:
     void draw_debug_strokes() noexcept;
 
     void draw_vanish_animations() noexcept;
-    void draw_statistics() const noexcept;
 
 
-    std::unique_ptr<StrokeMesh> brush_stroke_mesh() const noexcept {
-        return stroke_mesh_generator.generate_mesh(draw_environment.brush.stroke());
-    }
+    [[nodiscard]] std::unique_ptr<StrokeMesh> brush_stroke_mesh() const noexcept;
 
 
     void on_environment_changed() noexcept;

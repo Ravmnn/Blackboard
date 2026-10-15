@@ -15,7 +15,7 @@ namespace bb::editor
 class StrokeMeshGLBuilder
 {
 public:
-    float cap_curvature = 0.2;
+    float cap_curvature = 0.5;
     bool load_gl_data_automatically = true;
 
 
