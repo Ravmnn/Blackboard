@@ -1,3 +1,9 @@
+build_*/
+
 .*/
 .clangd
 .clang-tidy
+
+AppDir
+squashfs-root
+*.AppImage

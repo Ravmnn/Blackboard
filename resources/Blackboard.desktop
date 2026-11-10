@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Blackboard
+GenericName=Infinite Canvas Editor
+Comment=Infinite canvas editor for sketches and diagrams
+
+Exec=bboard %F
+Icon=icon
+
+Terminal=false
+StartupNotify=true
+
+Categories=Graphics;Office;
+Keywords=whiteboard;drawing;canvas;diagram;notes;vector;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <blackboard/average.hpp>
 #include <blackboard/stopwatch.hpp>
 

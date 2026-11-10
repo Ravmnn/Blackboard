@@ -1,6 +1,7 @@
 #pragma once
 
 #include <format>
+#include <vector>
 
 #include <raylib.h>
 
@@ -61,5 +62,34 @@ struct std::formatter<Color> : std::formatter<uint8_t>
         *out++ = ')';
 
         return out;
+    }
+};
+
+
+
+
+template<>
+struct std::formatter<std::vector<int>>
+{
+    constexpr auto parse(auto& ctx)
+    {
+        return ctx.begin();
+    }
+
+    auto format(const std::vector<int>& v, auto& ctx) const
+    {
+        auto out = ctx.out();
+
+        out = std::format_to(out, "[");
+
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            if (i)
+                out = std::format_to(out, ", ");
+
+            out = std::format_to(out, "{}", v[i]);
+        }
+
+        return std::format_to(out, "]");
     }
 };
