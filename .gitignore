@@ -7,3 +7,5 @@ build_*/
 AppDir
 squashfs-root
 *.AppImage
+
+imgui.ini
