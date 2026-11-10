@@ -22,7 +22,7 @@ class Brush : public Tool
 private:
     Stroke stroke_;
 
-    int point_thickness_back_iterating_amount_ = 7;
+    int point_thickness_back_iterating_amount_ = 12;
 
     float current_thickness_ = 0;
     float min_thickness_ = 5;

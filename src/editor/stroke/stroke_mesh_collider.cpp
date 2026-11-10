@@ -52,8 +52,11 @@ StrokeMeshNode* StrokeMeshCollider::get_stroke_mesh_node_colliding_with_point(St
 
 StrokeMeshNode* StrokeMeshCollider::get_stroke_mesh_node_segment_colliding_with_point(StrokeMesh& stroke, const Vector2& point) noexcept
 {
-    if (stroke.size() < 2)
+    if (stroke.empty())
         return nullptr;
+
+    if (stroke.size() == 1 && Collisions::point_inside_circle(point, stroke[0].position(), stroke[0].half_thickness()))
+        return stroke.data();
 
     for (size_t i = 0; i < stroke.size() - 1; i++)
         if (Segment::is_point_in_segment({ stroke[i].position(), stroke[i + 1].position() }, point, stroke[i].half_thickness()))
@@ -65,8 +68,11 @@ StrokeMeshNode* StrokeMeshCollider::get_stroke_mesh_node_segment_colliding_with_
 
 StrokeMeshNode* StrokeMeshCollider::get_stroke_mesh_node_intersecting_with_segment(StrokeMesh& stroke, const math::Segment& segment) noexcept
 {
-    if (stroke.size() < 2)
+    if (stroke.empty())
         return nullptr;
+
+    if (stroke.size() == 1 && Segment::is_point_in_segment(segment, stroke[0].position(), stroke[0].half_thickness()))
+        return stroke.data();
 
     for (size_t i = 0; i < stroke.size() - 1; i++)
         if (Segment::intersects({ stroke[i].position(), stroke[i + 1].position() }, segment))

@@ -15,7 +15,7 @@ class StrokeCleaner
 {
 public:
     float minimum_distance = 15;
-    float uniformization_strength = 2;
+    float uniformization_strength = 1;
     uint16_t passes = 2;
 
 

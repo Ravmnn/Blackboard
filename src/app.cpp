@@ -40,6 +40,7 @@ bb::App;
 
 // TODO: add statistics IMGUI window, containing info like, stroke mesh count, etc.
 // TODO: lazy rendering
+// TODO: eraser should work with dots
 
 
 

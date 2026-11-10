@@ -1,6 +1,7 @@
 #include <blackboard/editor/stroke/stroke_renderer_rl.hpp>
 
 #include <blackboard/math/collisions.hpp>
+#include <blackboard/draw.hpp>
 #include <blackboard/editor/stroke/stroke_mesh.hpp>
 
 
@@ -36,6 +37,12 @@ void StrokeRendererRL::draw_stroke_mesh(const StrokeMesh& mesh) noexcept
 
     if (mesh.empty())
         return;
+
+    if (mesh.size() == 1)
+    {
+        Draw::circle(mesh[0].position(), mesh[0].half_thickness());
+        return;
+    }
 
     draw_edges_with_caps(mesh);
     draw_extreme_caps(mesh);

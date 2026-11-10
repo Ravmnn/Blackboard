@@ -57,7 +57,12 @@ size_t Selection::selected_mesh_nodes_for_stroke(const StrokeMesh& mesh) noexcep
 
 bool Selection::can_add_stroke_to_selection_list(const StrokeMesh& mesh) noexcept
 {
-    return (float)selected_mesh_nodes_for_stroke(mesh) / (float)mesh.size() >= required_selection_ratio &&
+    const auto selected_nodes = (float)selected_mesh_nodes_for_stroke(mesh);
+
+    if (mesh.size() == 1 && selected_nodes > 0)
+        return true;
+
+    return selected_nodes / (float)mesh.size() >= required_selection_ratio &&
         !std::ranges::contains(selection_environment.in_selection_strokes_, &mesh);
 }
 
